@@ -8,19 +8,23 @@ import twitter4j.Status;
 import twitter4j.User;
 import twitter4j.UserList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class JavatterStreamImplTest {
 
     @Test
     public void testOnStatus(@Mocked Status status1, @Mocked Status status2) throws Exception {
-        new Expectations(status1){{
-            status1.getId(); result = 10;
-            status1.getText(); result="test";
+        new Expectations(status1) {{
+            status1.getId();
+            result = 10;
+            status1.getText();
+            result = "test";
         }};
-        new Expectations(status2){{
-            status2.getId(); result = 11;
-            status2.getText(); result="test2";
+        new Expectations(status2) {{
+            status2.getId();
+            result = 11;
+            status2.getText();
+            result = "test2";
         }};
 
 
@@ -72,13 +76,17 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testOnProfileUpdate(@Mocked User user1, @Mocked User user2) throws Exception {
-        new Expectations(user1){{
-            user1.getId(); result = 10;
-            user1.getScreenName(); result="test";
+        new Expectations(user1) {{
+            user1.getId();
+            result = 10;
+            user1.getScreenName();
+            result = "test";
         }};
-        new Expectations(user2){{
-            user2.getId(); result = 11;
-            user2.getScreenName(); result="test2";
+        new Expectations(user2) {{
+            user2.getId();
+            result = 11;
+            user2.getScreenName();
+            result = "test2";
         }};
 
         JavatterStreamImpl streamA = new JavatterStreamImpl();
@@ -115,11 +123,13 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testBlockAndUnBlock(@Mocked User user1, @Mocked User user2) throws Exception {
-        new Expectations(user1){{
-            user1.getScreenName(); result="test";
+        new Expectations(user1) {{
+            user1.getScreenName();
+            result = "test";
         }};
-        new Expectations(user2){{
-            user2.getScreenName(); result="test2";
+        new Expectations(user2) {{
+            user2.getScreenName();
+            result = "test2";
         }};
 
         JavatterStreamImpl stream = new JavatterStreamImpl();
@@ -137,15 +147,19 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testFavoriteAndUnFavorite(@Mocked User user1, @Mocked User user2, @Mocked Status status) throws Exception {
-        new Expectations(status){{
-            status.getId(); result = 10;
-            status.getText(); result="test";
+        new Expectations(status) {{
+            status.getId();
+            result = 10;
+            status.getText();
+            result = "test";
         }};
-        new Expectations(user1){{
-            user1.getScreenName(); result="test";
+        new Expectations(user1) {{
+            user1.getScreenName();
+            result = "test";
         }};
-        new Expectations(user2){{
-            user2.getScreenName(); result="test2";
+        new Expectations(user2) {{
+            user2.getScreenName();
+            result = "test2";
         }};
 
         JavatterStreamImpl stream = new JavatterStreamImpl();
@@ -165,11 +179,13 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testFollowAndUnFollow(@Mocked User user1, @Mocked User user2) throws Exception {
-        new Expectations(user1){{
-            user1.getScreenName(); result="test";
+        new Expectations(user1) {{
+            user1.getScreenName();
+            result = "test";
         }};
-        new Expectations(user2){{
-            user2.getScreenName(); result="test2";
+        new Expectations(user2) {{
+            user2.getScreenName();
+            result = "test2";
         }};
 
         JavatterStreamImpl stream = new JavatterStreamImpl();
@@ -187,8 +203,9 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testDirectMessage(@Mocked DirectMessage message) throws Exception {
-        new Expectations(){{
-            message.getText(); result="test";
+        new Expectations() {{
+            message.getText();
+            result = "test";
         }};
 
         JavatterStreamImpl stream = new JavatterStreamImpl();
@@ -199,14 +216,17 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testUserList(@Mocked User user1, @Mocked User user2, @Mocked UserList userList) throws Exception {
-        new Expectations(user1){{
-            user1.getScreenName(); result="test";
+        new Expectations(user1) {{
+            user1.getScreenName();
+            result = "test";
         }};
-        new Expectations(user2){{
-            user1.getScreenName(); result="test2";
+        new Expectations(user2) {{
+            user1.getScreenName();
+            result = "test2";
         }};
-        new Expectations(userList){{
-            userList.getName(); result="AAA";
+        new Expectations(userList) {{
+            userList.getName();
+            result = "AAA";
         }};
 
         JavatterStreamImpl stream = new JavatterStreamImpl();
