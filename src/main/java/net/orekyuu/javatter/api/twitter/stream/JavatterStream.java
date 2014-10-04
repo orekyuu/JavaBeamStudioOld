@@ -14,16 +14,6 @@ import java.util.function.Consumer;
 public interface JavatterStream {
 
     /**
-     * ユーザーストリームを開始します。
-     */
-    void start();
-
-    /**
-     * ユーザーストリームを終了します。
-     */
-    void shutdown();
-
-    /**
      * 例外が発生した時の動作を追加します。<br>
      * Consumerには発生した例外が入力されます。
      *
