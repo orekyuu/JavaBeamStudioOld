@@ -1,7 +1,9 @@
 package net.orekyuu.javatter.api.twitter;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * クライアントに認証されているユーザーのレジスタ
@@ -9,7 +11,7 @@ import java.util.function.Predicate;
 public class ClientUserRegister {
 
     private static ClientUserRegister instance = new ClientUserRegister();
-
+    private final List<ClientUser> users=new LinkedList<>();
     private ClientUserRegister () {
 
     }
@@ -27,7 +29,7 @@ public class ClientUserRegister {
      * @param user 登録を行うユーザー
      */
     public void registerUser(ClientUser user) {
-
+    	users.add(user);
     }
 
     /**
@@ -35,7 +37,7 @@ public class ClientUserRegister {
      * @return 登録されているユーザーのリスト
      */
     public List<ClientUser> registeredUserList() {
-        return null;
+        return new LinkedList<>(users);
     }
 
     /**
@@ -43,7 +45,7 @@ public class ClientUserRegister {
      * @return ユーザー数
      */
     public int registeredUserCount() {
-        return 0;
+        return  users.size();
     }
 
     /**
@@ -51,6 +53,7 @@ public class ClientUserRegister {
      * @param condition ユーザーの削除条件
      */
     public void removeUsers(Predicate<ClientUser> condition) {
+    	users.removeIf(condition);
     }
 
     /**
@@ -59,6 +62,6 @@ public class ClientUserRegister {
      * @return 条件にヒットしたユーザーのリスト
      */
     public List<ClientUser> getUsers(Predicate<ClientUser> condition) {
-        return null;
+        return users.stream().filter(condition).collect(Collectors.toList());
     }
 }
