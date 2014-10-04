@@ -62,6 +62,6 @@ public class ClientUserRegister {
      * @return 条件にヒットしたユーザーのリスト
      */
     public List<ClientUser> getUsers(Predicate<ClientUser> condition) {
-        return new LinkedList<>(users.stream().filter(condition).collect(Collectors.toList()));
+        return users.stream().filter(condition).collect(Collectors.toList());
     }
 }
