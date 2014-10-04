@@ -4,10 +4,7 @@ import mockit.Mock;
 import mockit.MockUp;
 import org.junit.Before;
 import org.junit.Test;
-import twitter4j.DirectMessage;
-import twitter4j.Status;
-import twitter4j.User;
-import twitter4j.UserList;
+import twitter4j.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -101,8 +98,8 @@ public class JavatterStreamImplTest {
 
         JavatterStreamImpl streamB = new JavatterStreamImpl();
         streamB.addOnStatus(s -> {
-            assertEquals(s.getId(), 10);
-            assertEquals(s.getText(), "test");
+            assertEquals(s.getId(), 20);
+            assertEquals(s.getText(), "test2");
             callCount++;
         });
         streamB.onStatus(status2);
@@ -163,7 +160,7 @@ public class JavatterStreamImplTest {
 
         JavatterStreamImpl streamB = new JavatterStreamImpl();
         streamB.addOnProfileUpdate(s -> {
-            assertEquals(s.getId(), 20);
+            assertEquals(s.getId(), 11);
             assertEquals(s.getScreenName(), "test2");
             callCount++;
         });
@@ -174,21 +171,45 @@ public class JavatterStreamImplTest {
 
     @Test
     public void testOnDeletionNotice() throws Exception {
+        StatusDeletionNotice noticeA = new MockUp<StatusDeletionNotice>() {
+            @Mock
+            public long getUserId() {
+                return 1;
+            }
+
+            @Mock
+            public long getStatusId() {
+                return 2;
+            }
+        }.getMockInstance();
+
+        StatusDeletionNotice noticeB = new MockUp<StatusDeletionNotice>() {
+            @Mock
+            public long getUserId() {
+                return 3;
+            }
+
+            @Mock
+            public long getStatusId() {
+                return 4;
+            }
+        }.getMockInstance();
+
         JavatterStreamImpl streamA = new JavatterStreamImpl();
-        streamA.addOnDeletionNotice((userID, statusID) -> {
-            assertEquals(userID, Long.valueOf(1));
-            assertEquals(statusID, Long.valueOf(2));
+        streamA.addOnDeletionNotice(statusDeletionNotice -> {
+            assertEquals(statusDeletionNotice.getUserId(), 1);
+            assertEquals(statusDeletionNotice.getStatusId(), 2);
             callCount++;
-        }).addOnDeletionNotice((a, b) -> callCount++);
-        streamA.onDeletionNotice(1, 2);
+        }).addOnDeletionNotice((a) -> callCount++);
+        streamA.onDeletionNotice(noticeA);
 
         JavatterStreamImpl streamB = new JavatterStreamImpl();
-        streamB.addOnDeletionNotice((userID, statusID) -> {
-            assertEquals(userID, Long.valueOf(3));
-            assertEquals(statusID, Long.valueOf(4));
+        streamB.addOnDeletionNotice(statusDeletionNotice -> {
+            assertEquals(statusDeletionNotice.getUserId(), 3);
+            assertEquals(statusDeletionNotice.getStatusId(), 4);
             callCount++;
         });
-        streamB.onDeletionNotice(3, 4);
+        streamB.onDeletionNotice(noticeB);
         assertEquals(callCount, 3);
     }
 
@@ -273,9 +294,9 @@ public class JavatterStreamImplTest {
                     assertEquals(list.getName(), "AAA");
                     callCount++;
                 })
-                .addOnUserListUpdate((u1, u2) -> {
+                .addOnUserListUpdate((u1, list) -> {
                     assertEquals(u1.getScreenName(), "test");
-                    assertEquals(u2.getScreenName(), "test2");
+                    assertEquals(list.getName(), "AAA");
                     callCount++;
                 })
                 .addOnUserListSubscripton((u1, u2, list) -> {

@@ -1,9 +1,6 @@
 package net.orekyuu.javatter.api.twitter.stream;
 
-import twitter4j.DirectMessage;
-import twitter4j.Status;
-import twitter4j.User;
-import twitter4j.UserList;
+import twitter4j.*;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -43,13 +40,12 @@ public interface JavatterStream {
 
     /**
      * ツイートが削除された時の動作を追加します。<br>
-     * BiConsumerの第1引数にはツイートのIDが入力されます。<br>
-     * BiConsumerの第2引数にはユーザーのIDが入力されます。
+     * ConsumerにはStatusDeletionNoticeが入力されます。
      *
      * @param deletionNotice 削除通知時のイベント
      * @return JavatterStream
      */
-    JavatterStream addOnDeletionNotice(BiConsumer<Long, Long> deletionNotice);
+    JavatterStream addOnDeletionNotice(Consumer<StatusDeletionNotice> deletionNotice);
 
     /**
      * 新しいツイートがきた時の動作を追加します。<br>
@@ -139,7 +135,7 @@ public interface JavatterStream {
      * @param userListUpdateConsumer ユーザーリストに追加された時のイベント
      * @return JavatterStream
      */
-    JavatterStream addOnUserListUpdate(BiConsumer<User, User> userListUpdateConsumer);
+    JavatterStream addOnUserListUpdate(BiConsumer<User, UserList> userListUpdateConsumer);
 
     /**
      * ユーザーリストがフォローされた時の動作を追加します。<br>
