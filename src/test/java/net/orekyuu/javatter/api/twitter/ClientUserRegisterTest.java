@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.api.twitter;
 
-import mockit.Expectations;
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Mocked;
 import org.junit.Test;
 
@@ -58,17 +59,27 @@ public class ClientUserRegisterTest {
 
     @Test
     //正常に削除が行えているか
-    public void testRemoveUsers(@Mocked ClientUser user1, @Mocked ClientUser user2, @Mocked ClientUser user3)
-            throws Exception {
-        new Expectations(user1) {{
-            user1.getName(); result = "orekyuu";
-        }};
-        new Expectations(user2) {{
-            user2.getName(); result = "orehachi";
-        }};
-        new Expectations(user3) {{
-            user3.getName(); result = "nanaore";
-        }};
+    public void testRemoveUsers() throws Exception {
+        ClientUser user1 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "orekyuu";
+            }
+        }.getMockInstance();
+
+        ClientUser user2 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "orehachi";
+            }
+        }.getMockInstance();
+
+        ClientUser user3 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "nanaore";
+            }
+        }.getMockInstance();
 
         ClientUserRegister register = ClientUserRegister.getInstance();
 
@@ -102,17 +113,28 @@ public class ClientUserRegisterTest {
 
     @Test
     //正常に抽出が行えるか
-    public void testGetUsers(@Mocked ClientUser user1, @Mocked ClientUser user2, @Mocked ClientUser user3)
+    public void testGetUsers()
         throws Exception {
-        new Expectations(user1) {{
-            user1.getName(); result = "orekyuu";
-        }};
-        new Expectations(user2) {{
-            user2.getName(); result = "orehachi";
-        }};
-        new Expectations(user3) {{
-            user3.getName(); result = "nanaore";
-        }};
+        ClientUser user1 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "orekyuu";
+            }
+        }.getMockInstance();
+
+        ClientUser user2 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "orehachi";
+            }
+        }.getMockInstance();
+
+        ClientUser user3 = new MockUp<ClientUser>() {
+            @Mock
+            public String getName() {
+                return "nanaore";
+            }
+        }.getMockInstance();
 
         ClientUserRegister.getInstance().removeUsers(s -> true);//一度空にしておく
         ClientUserRegister register = ClientUserRegister.getInstance();
