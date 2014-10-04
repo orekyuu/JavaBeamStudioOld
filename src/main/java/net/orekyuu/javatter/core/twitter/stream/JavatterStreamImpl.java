@@ -13,16 +13,6 @@ import java.util.function.Consumer;
 public class JavatterStreamImpl implements JavatterStream, UserStreamListener {
 
     @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void shutdown() {
-
-    }
-
-    @Override
     public JavatterStream addOnException(Consumer<Exception> exceptionConsumer) {
         return this;
     }
