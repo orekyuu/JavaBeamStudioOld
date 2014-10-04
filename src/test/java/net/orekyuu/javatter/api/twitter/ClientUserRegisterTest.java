@@ -26,6 +26,7 @@ public class ClientUserRegisterTest {
     //正常にユーザーを登録できているか
     public void testRegisterUser(@Mocked ClientUser user1, @Mocked ClientUser user2) throws Exception {
         ClientUserRegister register = ClientUserRegister.getInstance();
+        register.removeUsers(s -> true);//一度空にしておく
         register.registerUser(user1);
         assertEquals(register.registeredUserCount(), 1);
         register.registerUser(user2);
@@ -40,6 +41,7 @@ public class ClientUserRegisterTest {
         users.add(user1);
         users.add(user2);
 
+        ClientUserRegister.getInstance().removeUsers(s -> true);//一度空にしておく
         users.forEach(ClientUserRegister.getInstance()::registerUser);
 
         List<ClientUser> clientUsers = ClientUserRegister.getInstance().registeredUserList();
@@ -70,6 +72,7 @@ public class ClientUserRegisterTest {
 
         ClientUserRegister register = ClientUserRegister.getInstance();
 
+        ClientUserRegister.getInstance().removeUsers(s -> true);//一度空にしておく
         //全削除
         register.registerUser(user1);
         register.registerUser(user2);
@@ -111,6 +114,7 @@ public class ClientUserRegisterTest {
             user3.getName(); result = "nanaore";
         }};
 
+        ClientUserRegister.getInstance().removeUsers(s -> true);//一度空にしておく
         ClientUserRegister register = ClientUserRegister.getInstance();
         register.registerUser(user1);
         register.registerUser(user2);
