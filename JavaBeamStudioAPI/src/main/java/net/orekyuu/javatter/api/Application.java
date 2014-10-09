@@ -9,7 +9,7 @@ import javafx.stage.Stage;
  */ 
 public interface Application {
 	/**
-	 * アプリケーション開始時に呼び出されます。<br>
+	 * アプリケーション開始時に呼び出されます。<br> 
 	 * このメソッドはJavaFXアプリケーションスレッドで呼び出されます。
 	 * 
 	 * @param args

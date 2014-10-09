@@ -12,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		Class<GlobalAccess> clazz = GlobalAccess.class;
-		Field f= clazz.getDeclaredField("application");
+		Field f= clazz.getDeclaredField("application"); 
 		f.setAccessible(true);
 		f.set(GlobalAccess.getInstance(), new ApplicationImpl());		
 	}

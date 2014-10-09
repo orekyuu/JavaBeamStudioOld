@@ -8,8 +8,8 @@ public class GlobalAccess {
 		
 	}
 	/**
-	 * Application��Ԃ��܂��B
-	 * @return �N���C�A���g�ɗB��̃A�v���P�[�V������Ԃ��܂�
+	 * Application アプリケーションを返します。
+	 * @return  Application
 	 */
 	public Application getApplication(){
 		return application;
