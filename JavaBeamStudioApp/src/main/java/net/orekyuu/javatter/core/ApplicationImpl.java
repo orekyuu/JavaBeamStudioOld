@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core;
+package net.orekyuu.javatter.core; 
 
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.Application;

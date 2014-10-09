@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.api;
+package net.orekyuu.javatter.api; 
 
 public class GlobalAccess {
 	private static final GlobalAccess instance = new GlobalAccess();
@@ -8,8 +8,8 @@ public class GlobalAccess {
 		
 	}
 	/**
-	 * Application‚ğ•Ô‚µ‚Ü‚·B
-	 * @return ƒNƒ‰ƒCƒAƒ“ƒg‚É—Bˆê‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ•Ô‚µ‚Ü‚·
+	 * Applicationï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+	 * @return ï¿½Nï¿½ï¿½ï¿½Cï¿½Aï¿½ï¿½ï¿½gï¿½É—Bï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½
 	 */
 	public Application getApplication(){
 		return application;
