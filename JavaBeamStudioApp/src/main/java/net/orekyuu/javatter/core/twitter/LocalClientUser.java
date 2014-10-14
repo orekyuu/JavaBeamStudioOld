@@ -48,7 +48,7 @@ public class LocalClientUser implements ClientUser {
         table.tokenSecret = token.getTokenSecret();
         try {
             makeFile(DATABASE_NAME);
-            connectionSource = makeConnectionSource(DATABASE_NAME);
+            connectionSource = makeConnectionSource();
             Dao<TokenTable, ?> dao = setUpDataBase(connectionSource);
             dao.create(table);
         } catch (SQLException | IOException e) {
@@ -74,7 +74,7 @@ public class LocalClientUser implements ClientUser {
         LinkedList<ClientUser> users = new LinkedList<>();
         ConnectionSource connectionSource = null;
         try {
-            connectionSource = makeConnectionSource(DATABASE_NAME);
+            connectionSource = makeConnectionSource();
             Dao<TokenTable, ?> dao = setUpDataBase(connectionSource);
             dao.queryForAll().stream()
                     .map(t -> new LocalClientUser(new AccessToken(t.token, t.tokenSecret)))
@@ -110,11 +110,8 @@ public class LocalClientUser implements ClientUser {
 
     }
 
-    private static ConnectionSource makeConnectionSource(String source) throws SQLException {
-
-        File file = new File(source);
-        String absolutePath = file.getAbsolutePath().replace('\\', '/');
-        return new JdbcPooledConnectionSource("jdbc:sqlite:" + absolutePath);
+    private static ConnectionSource makeConnectionSource() throws SQLException {
+        return new JdbcPooledConnectionSource("jdbc:sqlite:" + DATABASE_NAME);
     }
 
     private static Dao<TokenTable, ?> setUpDataBase(ConnectionSource connctionSource) throws SQLException {
