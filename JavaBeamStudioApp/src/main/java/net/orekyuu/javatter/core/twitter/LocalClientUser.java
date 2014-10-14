@@ -113,7 +113,7 @@ public class LocalClientUser implements ClientUser {
     private static ConnectionSource makeConnectionSource(String source) throws SQLException {
 
         File file = new File(source);
-        String absolutePath = file.getAbsolutePath();
+        String absolutePath = file.getAbsolutePath().replace('\\', '/');
         return new JdbcPooledConnectionSource("jdbc:sqlite:" + absolutePath);
     }
 
