@@ -20,7 +20,7 @@ public class Main extends Application {
         Class<GlobalAccess> clazz = GlobalAccess.class;
         Field f = clazz.getDeclaredField("application");
         f.setAccessible(true);
-        f.set(GlobalAccess.getInstance(), new ApplicationImpl());
+        f.set(GlobalAccess.getInstance(), new ApplicationImpl(this));
     }
 
     private void setupApplication(Stage stage) throws ExecutionException, InterruptedException {
