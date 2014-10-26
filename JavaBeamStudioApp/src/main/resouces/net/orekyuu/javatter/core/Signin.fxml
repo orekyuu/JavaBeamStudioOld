@@ -25,6 +25,6 @@
         <Font size="16.0" />
       </font>
     </Text>
-    <PasswordField id="password" fx:id="pincode" prefWidth="-1.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0" />
+    <TextField fx:id="pincode" prefWidth="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0" />
   </children>
 </AnchorPane>
