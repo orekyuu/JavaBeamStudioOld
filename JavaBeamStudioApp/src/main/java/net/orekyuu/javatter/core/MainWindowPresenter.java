@@ -5,8 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 
 import java.net.URL;
@@ -37,5 +40,21 @@ public class MainWindowPresenter implements Initializable {
     public void removeColumn(ActionEvent actionEvent) {
         if (hbox.getChildren().size() != 0)
             hbox.getChildren().remove(hbox.getChildren().size() - 1);
+    }
+
+    public void openConfig() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            Parent parent = loader.load(getClass().getResourceAsStream("config.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("設定");
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionDialogBuilder.create(e);
+        }
     }
 }
