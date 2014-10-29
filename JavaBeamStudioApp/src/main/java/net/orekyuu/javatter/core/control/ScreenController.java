@@ -61,27 +61,21 @@ public class ScreenController extends StackPane {
      */
     public void setScreen(String name) {
         if (screens.get(name) != null) {
-            DoubleProperty opacity = opacityProperty();
+            DoubleProperty xProperty = translateXProperty();
             if (!getChildren().isEmpty()) {
-                Timeline fade = new Timeline(
-                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                        new KeyFrame(new Duration(500), e -> {
+                Timeline fade = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(xProperty, 0.0)), new KeyFrame(new Duration(130), e -> {
                             getChildren().remove(0);
                             getChildren().add(0, screens.get(name));
-                            Timeline fadeIn = new Timeline(
-                                    new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                                    new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0))
+                            Timeline fadeIn = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(xProperty, widthProperty().get() * -1)), new KeyFrame(new Duration(130), new KeyValue(xProperty, 0.0))
                             );
                             fadeIn.play();
-                        }, new KeyValue(opacity, 0.0))
+                }, new KeyValue(xProperty, widthProperty().get()))
                 );
                 fade.play();
             } else {
-                setOpacity(0.0);
+                setLayoutX(widthProperty().get() * -1);
                 getChildren().add(screens.get(name));
-                Timeline fadeIn = new Timeline(
-                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                        new KeyFrame(new Duration(500), new KeyValue(opacity, 1.0))
+                Timeline fadeIn = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(xProperty, widthProperty().get() * -1)), new KeyFrame(new Duration(130), new KeyValue(xProperty, 0.0))
                 );
                 fadeIn.play();
             }
