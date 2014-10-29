@@ -3,6 +3,7 @@ package net.orekyuu.javatter.core.config;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import net.orekyuu.javatter.core.control.ScreenController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +13,8 @@ import java.util.ResourceBundle;
  */
 public class ConfigPresenter implements Initializable {
 
+    @FXML
+    private ScreenController screen;
     @FXML
     private TextField searchField;
 

@@ -3,6 +3,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
+<?import net.orekyuu.javatter.core.control.ScreenController?>
 <?import javafx.scene.layout.*?>
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1"
@@ -17,7 +18,11 @@
                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
           </children>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" >
+            <children>
+                <ScreenController fx:id="screen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"/>
+            </children>
+        </AnchorPane>
       </items>
     </SplitPane>
   </children>
