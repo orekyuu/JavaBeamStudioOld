@@ -1,8 +1,12 @@
 package net.orekyuu.javatter.core.control;
 
 /**
- * Created by orekyuuPC on 2014/10/29.
+ * ScreenControllerに設定するViewのコントローラー
  */
 public interface ControlledScreen {
+    /**
+     * FXMLロード時に呼び出されます。
+     * @param screenController Screenを操作するためのController
+     */
     void setScreenParent(ScreenController screenController);
 }

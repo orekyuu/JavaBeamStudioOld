@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by orekyuuPC on 2014/10/29.
+ * ページ遷移機能のあるNode
  */
 public class ScreenController extends StackPane {
     private Map<String, Node> screens = new HashMap<>();
@@ -26,14 +26,24 @@ public class ScreenController extends StackPane {
         screens.put(name, node);
     }
 
+    /**
+     * nameに割り当てられているNodeを返します。
+     * @param name name
+     * @return nameに割り当てられているNode
+     */
     public Node getNode(String name) {
         return screens.get(name);
     }
 
-    public void loadScreen(String name, String resouce) {
+    /**
+     * Nodeを読み込みます。
+     * @param name name
+     * @param resource fxmlのパス
+     */
+    public void loadScreen(String name, String resource) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            Parent loadScreen = loader.load(Main.class.getResourceAsStream(resouce));
+            Parent loadScreen = loader.load(Main.class.getResourceAsStream(resource));
             ControlledScreen screen = loader.getController();
             screen.setScreenParent(this);
             addScreen(name, loadScreen);
@@ -42,6 +52,10 @@ public class ScreenController extends StackPane {
         }
     }
 
+    /**
+     * 表示するノードを変更します。
+     * @param name name
+     */
     public void setScreen(String name) {
         if (screens.get(name) != null) {
             DoubleProperty opacity = opacityProperty();
@@ -73,6 +87,10 @@ public class ScreenController extends StackPane {
         }
     }
 
+    /**
+     * Nodeを削除します。
+     * @param name name
+     */
     public void unloadScreen(String name) {
         screens.remove(name);
     }
