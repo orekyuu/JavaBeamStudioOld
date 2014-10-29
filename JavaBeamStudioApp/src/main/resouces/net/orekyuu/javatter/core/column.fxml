@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<TitledPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <graphic>
+        <HBox>
+            <children>
+                <MenuButton mnemonicParsing="false" text="カラム選択">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1"/>
+                        <MenuItem mnemonicParsing="false" text="Action 2"/>
+                    </items>
+                </MenuButton>
+                <MenuButton mnemonicParsing="false" text="アカウント">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1"/>
+                        <MenuItem mnemonicParsing="false" text="Action 2"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </graphic>
+    <content>
+        <ListView prefHeight="200.0" prefWidth="200.0"/>
+    </content>
+</TitledPane>
