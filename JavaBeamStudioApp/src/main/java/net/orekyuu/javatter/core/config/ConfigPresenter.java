@@ -5,7 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import net.orekyuu.javatter.core.control.ScreenController;
+import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.control.ControllablePane;
+import net.orekyuu.javatter.core.control.animator.ScrollAnimator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +20,7 @@ public class ConfigPresenter implements Initializable {
     @FXML
     private TreeView<String> tree;
     @FXML
-    private ScreenController screen;
+    private ControllablePane controllablePane;
     @FXML
     private TextField searchField;
 
@@ -30,12 +32,14 @@ public class ConfigPresenter implements Initializable {
         tree.setRoot(root);
         tree.setShowRoot(false);
 
-        screen.loadScreen("基本設定", "Account.fxml");
-        screen.loadScreen("アカウント", "Account.fxml");
+        controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("Account.fxml"));
+        controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
+        controllablePane.setAnimator(new ScrollAnimator(140));
+        controllablePane.setNode("基本設定");
 
         tree.getSelectionModel().selectedItemProperty().addListener(e -> {
             String name = tree.getSelectionModel().getSelectedItem().getValue();
-            screen.setScreen(name);
+            controllablePane.setNode(name);
         });
     }
 }

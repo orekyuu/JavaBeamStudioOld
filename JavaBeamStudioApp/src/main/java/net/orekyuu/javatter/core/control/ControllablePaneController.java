@@ -3,10 +3,10 @@ package net.orekyuu.javatter.core.control;
 /**
  * ScreenControllerに設定するViewのコントローラー
  */
-public interface ControlledScreen {
+public interface ControllablePaneController {
     /**
      * FXMLロード時に呼び出されます。
      * @param screenController Screenを操作するためのController
      */
-    void setScreenParent(ScreenController screenController);
+    void setNodeParent(ControllablePane screenController);
 }
