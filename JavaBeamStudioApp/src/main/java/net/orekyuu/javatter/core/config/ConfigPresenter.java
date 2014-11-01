@@ -32,7 +32,7 @@ public class ConfigPresenter implements Initializable {
         tree.setRoot(root);
         tree.setShowRoot(false);
 
-        controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("Account.fxml"));
+        controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
         controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
         controllablePane.setAnimator(new ScrollAnimator(140));
         controllablePane.setNode("基本設定");
