@@ -179,7 +179,6 @@ public class LocalClientUser implements ClientUser {
                 try {
                     connectionSource.close();
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
