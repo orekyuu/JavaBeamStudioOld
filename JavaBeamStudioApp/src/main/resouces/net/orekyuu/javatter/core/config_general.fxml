@@ -4,32 +4,34 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="net.orekyuu.javatter.core.config.GeneralConfigPresenter">
     <children>
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="システム">
             <font>
                 <Font size="24.0"/>
             </font>
         </Text>
-        <CheckBox mnemonicParsing="false" text="ツイート時に確認を行う">
-            <VBox.margin>
+        <CheckBox fx:id="checkTweet" mnemonicParsing="false" text="ツイート時に確認を行う">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
-        <CheckBox mnemonicParsing="false" text="リプライ時に確認を行う">
-            <VBox.margin>
+        <CheckBox fx:id="checkReply" mnemonicParsing="false" text="リプライ時に確認を行う">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
-        <CheckBox mnemonicParsing="false" text="リツイート時に確認を行う">
-            <VBox.margin>
+        <CheckBox fx:id="checkRT" mnemonicParsing="false" text="リツイート時に確認を行う">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
-        <CheckBox mnemonicParsing="false" text="お気に入り時に確認を行う">
-            <VBox.margin>
+        <CheckBox fx:id="checkFav" mnemonicParsing="false" text="お気に入り時に確認を行う">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
@@ -43,35 +45,20 @@
                 <Insets left="20.0"/>
             </VBox.margin>
         </Label>
-        <ChoiceBox prefWidth="150.0">
-            <VBox.margin>
+        <ChoiceBox fx:id="nameDisplayType" prefWidth="150.0">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </ChoiceBox>
-        <CheckBox mnemonicParsing="false" text="URLの展開">
-            <VBox.margin>
+        <CheckBox fx:id="isExpandURL" mnemonicParsing="false" text="URLの展開">
+        <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="テーマ">
-            <font>
-                <Font size="24.0"/>
-            </font>
-        </Text>
-        <Label maxHeight="1.7976931348623157E308" text="背景色：">
-            <VBox.margin>
-                <Insets left="20.0"/>
-            </VBox.margin>
-        </Label>
-        <ColorPicker>
-            <VBox.margin>
-                <Insets left="20.0"/>
-            </VBox.margin>
-        </ColorPicker>
         <HBox>
             <children>
-                <Button mnemonicParsing="false" text="保存"/>
-                <Button mnemonicParsing="false" text="キャンセル"/>
+                <Button onAction="#save" mnemonicParsing="false" text="保存"/>
+                <Button onAction="#cancel" mnemonicParsing="false" text="キャンセル"/>
             </children>
             <VBox.margin>
                 <Insets left="20.0" top="50.0"/>

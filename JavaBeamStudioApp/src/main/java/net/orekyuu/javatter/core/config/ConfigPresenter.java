@@ -24,6 +24,8 @@ public class ConfigPresenter implements Initializable {
     @FXML
     private TextField searchField;
 
+    public static final String db_name = "config.db";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TreeItem<String> root = new TreeItem<>();
