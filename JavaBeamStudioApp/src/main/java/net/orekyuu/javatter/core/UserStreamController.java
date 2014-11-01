@@ -16,21 +16,14 @@ public class UserStreamController implements JavatterColumn {
 	@FXML
 	private ListView<String> userStreamList;
 	private ObservableList<String> observableList = 
-			FXCollections.observableArrayList();
-	private ClientUser clientUser;
-	
-	 void setStreamList(){
-		 clientUser.getStream().addOnStatus(t->{
+			FXCollections.observableArrayList();	
+	@Override
+	public void setClientUser(ClientUser clientUser) {
+		clientUser.getStream().addOnStatus(t->{
 			observableList.add(null);
 			userStreamList.setItems(observableList);
 			userStreamList.setCellFactory(null);
 		 });
-	 }
-	
-	
-	@Override
-	public void setClientUser(ClientUser clientUser) {
-		this.clientUser=clientUser;
 	}
 
 }
