@@ -1,10 +1,14 @@
 package net.orekyuu.javatter.core.config;
 
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Pane;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.control.ControllablePane;
 import net.orekyuu.javatter.core.control.animator.ScrollAnimator;
@@ -18,6 +22,8 @@ import java.util.ResourceBundle;
 public class ConfigPresenter implements Initializable {
 
     @FXML
+    private Pane indicatorPane;
+    @FXML
     private TreeView<String> tree;
     @FXML
     private ControllablePane controllablePane;
@@ -28,20 +34,33 @@ public class ConfigPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TreeItem<String> root = new TreeItem<>();
-        root.getChildren().add(new TreeItem<>("基本設定"));
-        root.getChildren().add(new TreeItem<>("アカウント"));
-        tree.setRoot(root);
-        tree.setShowRoot(false);
+        Service configLoadService = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() {
+                        TreeItem<String> root = new TreeItem<>();
+                        root.getChildren().add(new TreeItem<>("基本設定"));
+                        root.getChildren().add(new TreeItem<>("アカウント"));
+                        tree.setShowRoot(false);
+                        Platform.runLater(() -> tree.setRoot(root));
 
-        controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
-        controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
-        controllablePane.setAnimator(new ScrollAnimator(140));
-        controllablePane.setNode("基本設定");
+                        controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
+                        controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
+                        controllablePane.setAnimator(new ScrollAnimator(140));
+                        Platform.runLater(() -> controllablePane.setNode("基本設定"));
 
-        tree.getSelectionModel().selectedItemProperty().addListener(e -> {
-            String name = tree.getSelectionModel().getSelectedItem().getValue();
-            controllablePane.setNode(name);
-        });
+                        tree.getSelectionModel().selectedItemProperty().addListener(e -> {
+                            String name = tree.getSelectionModel().getSelectedItem().getValue();
+                            controllablePane.setNode(name);
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        configLoadService.start();
+        configLoadService.setOnSucceeded(e -> indicatorPane.setVisible(false));
     }
 }
