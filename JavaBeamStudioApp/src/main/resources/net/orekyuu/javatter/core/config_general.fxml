@@ -16,22 +16,22 @@
             </font>
         </Text>
         <CheckBox fx:id="checkTweet" mnemonicParsing="false" text="ツイート時に確認を行う">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
         <CheckBox fx:id="checkReply" mnemonicParsing="false" text="リプライ時に確認を行う">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
         <CheckBox fx:id="checkRT" mnemonicParsing="false" text="リツイート時に確認を行う">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
         <CheckBox fx:id="checkFav" mnemonicParsing="false" text="お気に入り時に確認を行う">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>
@@ -46,12 +46,12 @@
             </VBox.margin>
         </Label>
         <ChoiceBox fx:id="nameDisplayType" prefWidth="150.0">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </ChoiceBox>
         <CheckBox fx:id="isExpandURL" mnemonicParsing="false" text="URLの展開">
-        <VBox.margin>
+            <VBox.margin>
                 <Insets left="20.0"/>
             </VBox.margin>
         </CheckBox>

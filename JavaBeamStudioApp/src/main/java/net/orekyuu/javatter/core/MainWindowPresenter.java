@@ -47,6 +47,7 @@ public class MainWindowPresenter implements Initializable {
         try {
             Parent parent = loader.load(getClass().getResourceAsStream("config.fxml"));
             Scene scene = new Scene(parent);
+            scene.getStylesheets().add(Main.class.getResource("javabeamstudio.css").toExternalForm());
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("設定");
