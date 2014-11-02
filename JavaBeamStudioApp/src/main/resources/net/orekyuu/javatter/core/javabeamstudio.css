@@ -24,3 +24,13 @@ Button.add{
 Button.delete{
 	-fx-graphic:url("./pict/delete.png");
 }
+
+StackPane.indicator {
+    -fx-background-color: black;
+    -fx-opacity: 0.2;
+}
+
+.progress-indicator {
+    -fx-progress-color: white;
+    -fx-opacity: 1.0;
+}

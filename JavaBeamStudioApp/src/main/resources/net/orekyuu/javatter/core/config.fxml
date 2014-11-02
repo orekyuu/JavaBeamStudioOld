@@ -37,8 +37,8 @@
             </SplitPane>
             <StackPane fx:id="indicatorPane" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0"
                        AnchorPane.rightAnchor="-1.0"
-                       AnchorPane.topAnchor="1.0" style="-fx-background-color: black" opacity="0.2">
-                <ProgressIndicator style="-fx-progress-color: white" opacity="1.0" prefHeight="52.0" prefWidth="46.0"
+                       AnchorPane.topAnchor="1.0" styleClass="indicator">
+                <ProgressIndicator prefHeight="52.0" prefWidth="46.0"
                                    maxHeight="52.0" maxWidth="46.0" progress="-1"/>
             </StackPane>
         </StackPane>
