@@ -4,11 +4,14 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
-  <children>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <children>
     <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="認証済みアカウント一覧" />
-    <ListView prefHeight="238.0" prefWidth="579.9998779296875" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0" />
-    <Button fx:id="addAcount" mnemonicParsing="false" prefWidth="428.0" styleClass="add" text="新規アカウントの認証" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="162.0" />
-    <Button fx:id="deleteAccount" mnemonicParsing="false" prefHeight="-1.0" prefWidth="-1.0" styleClass="delete" text="アカウントの削除" AnchorPane.bottomAnchor="85.0" AnchorPane.rightAnchor="10.0" />
+        <ListView prefHeight="238.0" maxWidth="Infinity" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="10.0"
+                  AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0"/>
+        <Button fx:id="addAcount" mnemonicParsing="false" styleClass="add" text="新規アカウントの認証"
+                AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="162.0"/>
+        <Button fx:id="deleteAccount" mnemonicParsing="false" prefHeight="-1.0" prefWidth="-1.0" styleClass="delete" text="アカウントの削除" AnchorPane.bottomAnchor="85.0" AnchorPane.rightAnchor="10.0" />
   </children>
 </AnchorPane>
