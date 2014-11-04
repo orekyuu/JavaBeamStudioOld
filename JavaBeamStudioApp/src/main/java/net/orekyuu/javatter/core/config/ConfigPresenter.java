@@ -11,7 +11,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.control.ControllablePane;
-import net.orekyuu.javatter.core.control.animator.ScrollAnimator;
+import net.orekyuu.javatter.core.control.animator.FadeAnimator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,7 +48,7 @@ public class ConfigPresenter implements Initializable {
 
                         controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
                         controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
-                        controllablePane.setAnimator(new ScrollAnimator(140));
+                        controllablePane.setAnimator(new FadeAnimator(240));
                         Platform.runLater(() -> controllablePane.setNode("基本設定"));
 
                         tree.getSelectionModel().selectedItemProperty().addListener(e -> {
