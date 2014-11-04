@@ -1,9 +1,9 @@
-package net.orekyuu.javatter.core.control.animator;
+package net.orekyuu.javatter.api.control.animator;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import net.orekyuu.javatter.core.control.ControllablePane;
+import net.orekyuu.javatter.api.control.ControllablePane;
 
 /**
  * フェードして画面遷移します。

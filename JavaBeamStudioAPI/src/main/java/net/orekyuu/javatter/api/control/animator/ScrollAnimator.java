@@ -1,9 +1,9 @@
-package net.orekyuu.javatter.core.control.animator;
+package net.orekyuu.javatter.api.control.animator;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import net.orekyuu.javatter.core.control.ControllablePane;
+import net.orekyuu.javatter.api.control.ControllablePane;
 
 /**
  * 横にスライドして画面遷移します。

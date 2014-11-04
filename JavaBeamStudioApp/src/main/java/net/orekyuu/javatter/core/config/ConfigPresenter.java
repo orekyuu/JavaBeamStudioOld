@@ -10,8 +10,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.control.ControllablePane;
-import net.orekyuu.javatter.core.control.animator.FadeAnimator;
+import net.orekyuu.javatter.api.control.ControllablePane;
+import net.orekyuu.javatter.api.control.animator.FadeAnimator;
 
 import java.net.URL;
 import java.util.ResourceBundle;

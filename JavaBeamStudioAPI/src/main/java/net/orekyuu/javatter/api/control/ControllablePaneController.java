@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core.control;
+package net.orekyuu.javatter.api.control;
 
 /**
  * ScreenControllerに設定するViewのコントローラー

@@ -1,7 +1,7 @@
-package net.orekyuu.javatter.core.control.animator;
+package net.orekyuu.javatter.api.control.animator;
 
 import javafx.scene.Node;
-import net.orekyuu.javatter.core.control.ControllablePane;
+import net.orekyuu.javatter.api.control.ControllablePane;
 
 /**
  * 画面遷移のアニメーションを提供するインターフェイス

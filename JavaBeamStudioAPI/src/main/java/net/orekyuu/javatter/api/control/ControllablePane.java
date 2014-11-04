@@ -1,11 +1,11 @@
-package net.orekyuu.javatter.core.control;
+package net.orekyuu.javatter.api.control;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
-import net.orekyuu.javatter.core.control.animator.NodeTransitionAnimator;
-import net.orekyuu.javatter.core.control.animator.NullAnimator;
+import net.orekyuu.javatter.api.control.animator.NodeTransitionAnimator;
+import net.orekyuu.javatter.api.control.animator.NullAnimator;
 
 import java.io.IOException;
 import java.io.InputStream;
