@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,6 +61,8 @@ public class AccountController implements Initializable {
     }
 
     public void deleteAccount() {
-
+        LocalClientUser user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();
+        user.delete();
+        accountList.getItems().remove(user);
     }
 }
