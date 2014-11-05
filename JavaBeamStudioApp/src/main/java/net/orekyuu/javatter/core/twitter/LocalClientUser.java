@@ -243,9 +243,9 @@ public class LocalClientUser implements ClientUser {
     @DatabaseTable(tableName = "tokenData")
     private static class TokenTable {
 
-        @DatabaseField(columnName = "token", canBeNull = false)
+        @DatabaseField(columnName = "token", canBeNull = false, unique = true)
         String token;
-        @DatabaseField(columnName = "tokenSecret", canBeNull = false)
+        @DatabaseField(columnName = "tokenSecret", canBeNull = false, unique = true)
         String tokenSecret;
 
     }
