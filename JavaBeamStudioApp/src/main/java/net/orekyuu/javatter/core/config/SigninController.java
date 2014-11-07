@@ -1,10 +1,18 @@
 package net.orekyuu.javatter.core.config;
 
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.control.animator.FadeAnimator;
+import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -17,8 +25,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class SigninController implements Initializable {
+    @FXML
+    private Label error;
+    @FXML
+    private StackPane indicatorPane;
     @FXML
     private TextField pincode;
     @FXML
@@ -29,14 +42,29 @@ public class SigninController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        twitter = TwitterFactory.getSingleton();
-        twitter.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
-        try {
-            token = twitter.getOAuthRequestToken();
-            Desktop.getDesktop().browse(new URL(token.getAuthorizationURL()).toURI());
-        } catch (TwitterException | URISyntaxException | IOException e) {
-            e.printStackTrace();
-        }
+        Service service = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() {
+                        twitter = TwitterFactory.getSingleton();
+                        twitter.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
+                        try {
+                            token = twitter.getOAuthRequestToken();
+                            Desktop.getDesktop().browse(new URL(token.getAuthorizationURL()).toURI());
+                        } catch (TwitterException | URISyntaxException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
+        indicatorPane.setVisible(true);
+        service.setOnSucceeded(e -> indicatorPane.setVisible(false));
+
     }
 
     public void setThisStage(Stage stage) {
@@ -44,13 +72,22 @@ public class SigninController implements Initializable {
     }
 
     public void submit() {
-        try {
-            AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
-            LocalClientUser localClientUser = new LocalClientUser(accessToken);
-            localClientUser.save();
-            stage.close();
-        } catch (TwitterException e) {
-            e.printStackTrace();
-        }
+        CompletableFuture.runAsync(() -> {
+            try {
+                AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
+                LocalClientUser localClientUser = new LocalClientUser(accessToken);
+                localClientUser.save();
+                stage.close();
+                indicatorPane.setVisible(true);
+            } catch (TwitterException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    indicatorPane.setVisible(false);
+                    error.setText("認証に失敗しました");
+                    error.setVisible(true);
+                    System.out.println("failed");
+                });
+            }
+        });
     }
 }
