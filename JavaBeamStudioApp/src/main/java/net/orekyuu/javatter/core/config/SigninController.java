@@ -70,7 +70,6 @@ public class SigninController implements Initializable {
         indicatorPane.setVisible(true);
         CompletableFuture.runAsync(() -> {
             try {
-                Twitter twitter = TwitterFactory.getSingleton();
                 AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
                 LocalClientUser localClientUser = new LocalClientUser(accessToken);
                 localClientUser.save();
