@@ -49,7 +49,10 @@ public class ConfigPresenter implements Initializable {
                         controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
                         controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
                         controllablePane.setAnimator(new FadeAnimator(240));
-                        Platform.runLater(() -> controllablePane.setNode("基本設定"));
+                        Platform.runLater(() -> {
+                            tree.getSelectionModel().selectFirst();
+                            tree.requestFocus();
+                        });
 
                         tree.getSelectionModel().selectedItemProperty().addListener(e -> {
                             String name = tree.getSelectionModel().getSelectedItem().getValue();
