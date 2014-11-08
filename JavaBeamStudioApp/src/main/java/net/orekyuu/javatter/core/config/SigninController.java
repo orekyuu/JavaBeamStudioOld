@@ -42,28 +42,23 @@ public class SigninController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Service service = new Service() {
-            @Override
-            protected Task createTask() {
-                return new Task() {
-                    @Override
-                    protected Object call() {
-                        twitter = TwitterFactory.getSingleton();
-                        twitter.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
-                        try {
-                            token = twitter.getOAuthRequestToken();
-                            Desktop.getDesktop().browse(new URL(token.getAuthorizationURL()).toURI());
-                        } catch (TwitterException | URISyntaxException | IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-                };
-            }
-        };
-        service.start();
         indicatorPane.setVisible(true);
-        service.setOnSucceeded(e -> indicatorPane.setVisible(false));
+        CompletableFuture.runAsync(() -> {
+            try {
+                twitter = new TwitterFactory().getInstance();
+                twitter.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
+                token = twitter.getOAuthRequestToken();
+                Desktop.getDesktop().browse(new URL(token.getAuthorizationURL()).toURI());
+            } catch (TwitterException | URISyntaxException | IOException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    error.setText("認証に失敗しました");
+                    error.setVisible(true);
+                    indicatorPane.setVisible(false);
+                });
+            }
+            Platform.runLater(() -> indicatorPane.setVisible(false));
+        });
 
     }
 
@@ -72,13 +67,17 @@ public class SigninController implements Initializable {
     }
 
     public void submit() {
+        indicatorPane.setVisible(true);
         CompletableFuture.runAsync(() -> {
             try {
+                Twitter twitter = TwitterFactory.getSingleton();
                 AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
                 LocalClientUser localClientUser = new LocalClientUser(accessToken);
                 localClientUser.save();
-                stage.close();
-                indicatorPane.setVisible(true);
+                Platform.runLater(() -> {
+                    stage.close();
+                    indicatorPane.setVisible(true);
+                });
             } catch (TwitterException e) {
                 e.printStackTrace();
                 Platform.runLater(() -> {
