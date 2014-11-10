@@ -10,24 +10,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.TweetCell">
     <children>
-        <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+        <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
         <VBox prefHeight="100.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
             <children>
-                <TextFlow>
+                <TextFlow fx:id="caption">
                     <children>
-                        <Label text="\@screen_name">
+                        <Label fx:id="screen_name" text="\@screen_name">
                             <padding>
                                 <Insets right="20.0" />
                             </padding>
                         </Label>
-                        <Label maxWidth="1.7976931348623157E308" text="name">
+                        <Label fx:id="name" maxWidth="1.7976931348623157E308" text="name">
                             <padding>
                                 <Insets right="20.0" />
                             </padding>
                         </Label>
-                        <Label text="time" textAlignment="RIGHT">
+                        <Label fx:id="time" text="time" textAlignment="RIGHT">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
@@ -37,7 +37,7 @@
                         <Insets bottom="10.0" />
                     </padding>
                 </TextFlow>
-                <Label text="tweet" wrapText="true" />
+                <Label fx:id="tweet_sentence" text="tweet" wrapText="true" />
             </children>
         </VBox>
         <VBox AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
