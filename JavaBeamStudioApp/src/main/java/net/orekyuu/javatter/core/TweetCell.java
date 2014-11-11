@@ -1,45 +1,17 @@
 package net.orekyuu.javatter.core;
 
-import java.net.URL;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
+import java.io.IOException;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.TextFlow;
 import twitter4j.Status;
-import twitter4j.User;
 
-public class TweetCell extends ListCell<Status> implements Initializable {
-
-	@FXML
-	Label screen_name;
-	@FXML
-	Label name;
-	@FXML
-	Label time;
-	@FXML
-	Label tweet_sentence;
-	@FXML
-	ImageView profileimage;
-	@FXML
-	TextFlow caption;
-
+public class TweetCell extends ListCell<Status> {
 	/**
-	 * timeラベル用の時刻フォーマット
+	 * 所定コントローラ
 	 */
-	private String datetimeformatstring;
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		datetimeformatstring = "yyyy/MM/dd HH:mm:ss";
-	}
+	private TweetCellController tweetCellController;
 
 	/**
 	 * アイテムの内容をStatusに従って切り替える
@@ -51,30 +23,29 @@ public class TweetCell extends ListCell<Status> implements Initializable {
 	 */
 	@Override
 	protected void updateItem(Status status, boolean empty) {
-		// 現在はとりあえずの実装です
-
+		// 仮実装2
 		// スーパークラスから必要な機能を継承
 		super.updateItem(status, empty);
 		if (empty) {
 			// 空の場合は表示・描画を行わない
 			setText(null);
 			setGraphic(null);
+			tweetCellController = null;
 		} else {
 			// 空でない場合は
 			// 名前の取得と表示
-			User user = status.getUser();
-			screen_name.setText(user.getScreenName());
-			name.setText(user.getName());
-			// 時間の取得と表示
-			// TODO ゾーンIDの設定
-			ZonedDateTime ztd = status.getCreatedAt().toInstant()
-					.atZone(ZoneId.systemDefault());
-			time.setText(ztd.format(DateTimeFormatter
-					.ofPattern(datetimeformatstring)));
-			tweet_sentence.setText(status.getText());
-			// イメージ設定
-			profileimage.setImage(new Image(user.getProfileImageURL()));
-			// 描画
+			if (getGraphic() != null) {
+				FXMLLoader fxmlLoader = new FXMLLoader();
+				try {
+					Parent parent = (Parent) fxmlLoader.load(Main.class
+							.getResourceAsStream("tweetcell.fxml"));
+					setGraphic(parent);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				tweetCellController = fxmlLoader.getController();
+			}
+			tweetCellController.updateTweetCell(status);
 		}
 	}
 }

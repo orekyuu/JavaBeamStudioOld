@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.TweetCell">
+<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.TweetCellController">
     <children>
         <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
         <VBox prefHeight="100.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
