@@ -32,7 +32,7 @@ public class GeneralConfigHelper {
      * データベースから一般設定の情報を読み込みます。
      * @return 読み込んだコンフィグの情報
      */
-    public static GeneralConfigModel loadConfigFromDB() {
+    public synchronized  static GeneralConfigModel loadConfigFromDB() {
         List<GeneralConfig> configs = loadConfigTableFromDB();
         Map<String, String> map = configs.stream()
                 .collect(Collectors.toMap(GeneralConfig::getConfigName, GeneralConfig::getData));
@@ -72,7 +72,7 @@ public class GeneralConfigHelper {
      * 一般設定をデータベースに保存します。
      * @param model 一般設定の情報
      */
-    public static void saveToDB(GeneralConfigModel model) {
+    public synchronized static void saveToDB(GeneralConfigModel model) {
         JdbcPooledConnectionSource connectionSource = null;
         List<GeneralConfig> configs = toGeneralConfigList(model);
         try {
