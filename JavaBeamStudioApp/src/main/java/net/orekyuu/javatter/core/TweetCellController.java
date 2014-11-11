@@ -18,17 +18,17 @@ import twitter4j.User;
 public class TweetCellController implements Initializable {
 
 	@FXML
-	Label screen_name;
+	private Label screen_name;
 	@FXML
-	Label name;
+	private Label name;
 	@FXML
-	Label time;
+	private Label time;
 	@FXML
-	Label tweet_sentence;
+	private Label tweet_sentence;
 	@FXML
-	ImageView profileimage;
+	private ImageView profileimage;
 	@FXML
-	TextFlow caption;
+	private TextFlow caption;
 
 	/**
 	 * timeラベル用の時刻フォーマット

@@ -23,7 +23,6 @@ public class TweetCell extends ListCell<Status> {
 	 */
 	@Override
 	protected void updateItem(Status status, boolean empty) {
-		// 仮実装2
 		// スーパークラスから必要な機能を継承
 		super.updateItem(status, empty);
 		if (empty) {
