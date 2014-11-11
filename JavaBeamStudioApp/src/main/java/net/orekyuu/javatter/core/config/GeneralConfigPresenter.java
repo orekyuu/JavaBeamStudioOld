@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.core.config;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -10,12 +11,18 @@ import java.util.ResourceBundle;
 
 public class GeneralConfigPresenter implements Initializable {
 
-    public CheckBox checkTweet;
-    public CheckBox checkReply;
-    public CheckBox checkRT;
-    public CheckBox checkFav;
-    public ChoiceBox<String> nameDisplayType;
-    public CheckBox isExpandURL;
+    @FXML
+    private CheckBox checkTweet;
+    @FXML
+    private CheckBox checkReply;
+    @FXML
+    private CheckBox checkRT;
+    @FXML
+    private CheckBox checkFav;
+    @FXML
+    private ChoiceBox<String> nameDisplayType;
+    @FXML
+    private CheckBox isExpandURL;
     private GeneralConfigModel lasted;
 
     @Override
