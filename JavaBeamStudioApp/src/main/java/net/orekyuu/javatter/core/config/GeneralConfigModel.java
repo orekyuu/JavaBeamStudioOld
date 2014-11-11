@@ -6,10 +6,10 @@ import java.util.Map;
  * 一般設定の情報
  */
 public class GeneralConfigModel {
-    private boolean checkTweet = false;
-    private boolean checkReply = false;
-    private boolean checkRT = false;
-    private boolean checkFav = false;
+    private boolean checkTweet = true;
+    private boolean checkReply = true;
+    private boolean checkRT = true;
+    private boolean checkFav = true;
     private String nameDisplayType = NameDisplayType.ID_NAME.name();
     private boolean isExpandURL = true;
 
