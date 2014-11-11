@@ -5,7 +5,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -56,7 +58,10 @@ public class TweetCellController implements Initializable {
 				.atZone(ZoneId.systemDefault());
 		time.setText(ztd.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
 		tweet_sentence.setText(status.getText());
-		// イメージ設定
-		profileimage.setImage(new Image(user.getProfileImageURL()));
+		// イメージ設定(非同期処理)
+		CompletableFuture.runAsync(() -> {
+		    Image img = new Image(user.getProfileImageURL());
+		    Platform.runLater(() -> profileimage.setImage(img));
+		});
 	}
 }
