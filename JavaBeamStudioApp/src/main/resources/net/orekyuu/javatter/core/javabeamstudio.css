@@ -1,0 +1,36 @@
+.validation-error{
+	-fx-border-color: red;
+}
+.validation-success{
+	-fx-border-color: lime;
+}
+.search{
+	-fx-font-size:16px;
+}
+/* Text Classes */
+Text.title{
+	-fx-font-size: 20px;
+}
+Text.item-caption{
+	-fx-font-size: 12px;
+}
+/* Button classes */
+Button.ok{
+	-fx-font-size: 16px;
+}
+Button.add{
+	-fx-graphic:url("./pict/add.png");
+}
+Button.delete{
+	-fx-graphic:url("./pict/delete.png");
+}
+
+StackPane.indicator {
+    -fx-background-color: black;
+    -fx-opacity: 0.2;
+}
+
+.progress-indicator {
+    -fx-progress-color: white;
+    -fx-opacity: 1.0;
+}

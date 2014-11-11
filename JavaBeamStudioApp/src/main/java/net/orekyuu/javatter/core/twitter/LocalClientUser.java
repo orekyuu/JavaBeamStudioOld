@@ -4,6 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.table.TableUtils;
@@ -186,6 +187,35 @@ public class LocalClientUser implements ClientUser {
     }
 
     /**
+     * データベース上からユーザーの認証情報を削除します。
+     */
+    public void delete() {
+        ConnectionSource connectionSource = null;
+        TokenTable table = new TokenTable();
+        table.token = token.getToken();
+        table.tokenSecret = token.getTokenSecret();
+        try {
+            makeFile(DATABASE_NAME);
+            connectionSource = makeConnectionSource();
+            Dao<TokenTable, ?> dao = setUpDataBase(connectionSource);
+            DeleteBuilder<TokenTable, ?> tokenTableDeleteBuilder = dao.deleteBuilder();
+            tokenTableDeleteBuilder.where().eq("token", token.getToken())
+                    .and().eq("tokenSecret", token.getTokenSecret());
+            tokenTableDeleteBuilder.delete();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connectionSource != null) {
+                try {
+                    connectionSource.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
      * ローカルのデータベースからユーザーを読み込みます。
      *
      * @return データベースから読み込んだユーザーのリスト
@@ -243,9 +273,9 @@ public class LocalClientUser implements ClientUser {
     @DatabaseTable(tableName = "tokenData")
     private static class TokenTable {
 
-        @DatabaseField(columnName = "token", canBeNull = false)
+        @DatabaseField(columnName = "token", canBeNull = false, unique = true)
         String token;
-        @DatabaseField(columnName = "tokenSecret", canBeNull = false)
+        @DatabaseField(columnName = "tokenSecret", canBeNull = false, unique = true)
         String tokenSecret;
 
     }
