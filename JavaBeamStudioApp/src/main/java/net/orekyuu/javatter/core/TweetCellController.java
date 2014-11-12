@@ -50,14 +50,17 @@ public class TweetCellController implements Initializable {
      */
     public void updateTweetCell(Status status) {
         User user = status.getUser();
-        screen_name.setText(user.getScreenName());
-        name.setText(user.getName());
 
         // 時間の取得と表示
         ZonedDateTime ztd = status.getCreatedAt().toInstant()
                 .atZone(ZoneId.systemDefault());
-        time.setText(ztd.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        tweet_sentence.setText(status.getText());
+
+        Platform.runLater(() -> {
+            screen_name.setText(user.getScreenName());
+            name.setText(user.getName());
+            time.setText(ztd.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+            tweet_sentence.setText(status.getText());
+        });
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {
             Image img = new Image(user.getProfileImageURL());

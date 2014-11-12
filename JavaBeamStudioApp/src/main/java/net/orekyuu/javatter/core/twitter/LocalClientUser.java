@@ -30,6 +30,7 @@ public class LocalClientUser implements ClientUser {
     private Twitter twitter;
     private JavatterStreamImpl stream;
     private static final String DATABASE_NAME = "users.db";
+    private String name;
 
     public LocalClientUser(AccessToken token) {
         this.token = token;
@@ -39,6 +40,19 @@ public class LocalClientUser implements ClientUser {
     @Override
     public AccessToken getAccessToken() {
         return token;
+    }
+
+    @Override
+    public String getName() {
+        try {
+            if (name == null) {
+                name = twitter.getScreenName();
+            }
+            return name;
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -156,7 +170,7 @@ public class LocalClientUser implements ClientUser {
         twitterStream.addListener(adapter);
         twitterStream.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
         twitterStream.setOAuthAccessToken(getAccessToken());
-        twitterStream.sample();
+        twitterStream.user();
     }
 
     /**

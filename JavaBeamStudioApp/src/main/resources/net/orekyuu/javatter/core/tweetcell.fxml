@@ -44,9 +44,9 @@
             <children>
                 <FlowPane>
                     <children>
-                        <Button mnemonicParsing="false" onAction="#reply" text="Reply" />
-                        <Button mnemonicParsing="false" onAction="#retweet" text="RT" />
-                        <Button mnemonicParsing="false" onAction="#Favolite" text="★" />
+                        <Button mnemonicParsing="false" text="Reply" />
+                        <Button mnemonicParsing="false" text="RT" />
+                        <Button mnemonicParsing="false" text="★" />
                         <MenuButton mnemonicParsing="false" text="MenuButton">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="Action 1" />
