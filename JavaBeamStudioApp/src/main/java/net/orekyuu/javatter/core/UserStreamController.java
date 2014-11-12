@@ -6,8 +6,6 @@ import java.util.ResourceBundle;
 
 
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -30,9 +28,7 @@ public class UserStreamController implements JavatterColumn,Initializable {
 	public void setClientUser(ClientUser clientUser) {
 			
 		clientUser.getStream().addOnStatus(status ->{
-            Platform.runLater(() -> {
-				userStreamList.getItems().add(status);
-            });
+            Platform.runLater(() -> userStreamList.getItems().add(status));
         });
 	}
 	
