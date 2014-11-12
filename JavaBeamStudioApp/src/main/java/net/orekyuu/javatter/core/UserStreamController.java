@@ -1,9 +1,6 @@
 package net.orekyuu.javatter.core;
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
-
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -26,11 +23,10 @@ public class UserStreamController implements JavatterColumn,Initializable {
 	}
 	@Override
 	public void setClientUser(ClientUser clientUser) {
-			
 		clientUser.getStream().addOnStatus(status ->{
-            Platform.runLater(() -> userStreamList.getItems().add(status));
+            Platform.runLater(() -> {
+				userStreamList.getItems().add(0,status);
+            });
         });
 	}
-	
-
 }

@@ -2,6 +2,7 @@ package net.orekyuu.javatter.core;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
@@ -33,7 +34,7 @@ public class TweetCell extends ListCell<Status> {
         } else {
             // 空でない場合は
             // 名前の取得と表示
-            if (getGraphic() != null) {
+            if (getGraphic() == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 try {
                     Parent parent = (Parent) fxmlLoader.load(Main.class
@@ -44,7 +45,7 @@ public class TweetCell extends ListCell<Status> {
                 }
                 tweetCellController = fxmlLoader.getController();
             }
-            tweetCellController.updateTweetCell(status);
+            Platform.runLater(() -> tweetCellController.updateTweetCell(status));
         }
     }
 }
