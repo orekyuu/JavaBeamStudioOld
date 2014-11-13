@@ -46,7 +46,7 @@
                     <children>
                         <Button mnemonicParsing="false" text="Reply" />
                         <Button mnemonicParsing="false" text="RT" />
-                        <Button mnemonicParsing="false" text="★" />
+                        <Button mnemonicParsing="false" onAction="#favorite" text="★" />
                         <MenuButton mnemonicParsing="false" text="MenuButton">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="Action 1" />

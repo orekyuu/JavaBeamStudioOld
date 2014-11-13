@@ -15,18 +15,21 @@ import twitter4j.Status;
  *
  */
 public class UserStreamController implements JavatterColumn,Initializable {
-	@FXML
-	private ListView<Status> userStreamList;
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		userStreamList.setCellFactory(cell->new TweetCell());
-	}
-	@Override
-	public void setClientUser(ClientUser clientUser) {
-		clientUser.getStream().addOnStatus(status ->{
+    @FXML
+    private ListView<Status> userStreamList;
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        userStreamList.setCellFactory(cell->new TweetCell(null));
+    }
+    @Override
+    public void setClientUser(ClientUser clientUser) {
+        clientUser.getStream().addOnStatus(status ->{
             Platform.runLater(() -> {
-				userStreamList.getItems().add(0,status);
+                userStreamList.getItems().add(0,status);
             });
         });
-	}
+
+    }
+
 }

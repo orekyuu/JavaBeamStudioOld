@@ -2,10 +2,10 @@ package net.orekyuu.javatter.core;
 
 import java.io.IOException;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 import twitter4j.Status;
 
 public class TweetCell extends ListCell<Status> {
@@ -13,6 +13,17 @@ public class TweetCell extends ListCell<Status> {
      * 所定コントローラ
      */
     private TweetCellController tweetCellController;
+    private ClientUser clientUser;
+
+    /**
+     * コンストラクタ
+     * @param clientuser
+     *            UserStreamの持つClientUser
+     */
+    TweetCell(ClientUser clientuser) {
+        super();
+        clientUser = clientuser;
+    }
 
     /**
      * アイテムの内容をStatusに従って切り替える
@@ -45,6 +56,7 @@ public class TweetCell extends ListCell<Status> {
                 }
                 tweetCellController = fxmlLoader.getController();
             }
+            tweetCellController.setClientUser(clientUser);
             tweetCellController.updateTweetCell(status);
         }
     }
