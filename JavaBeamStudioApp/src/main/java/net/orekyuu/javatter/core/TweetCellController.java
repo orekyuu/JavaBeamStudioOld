@@ -23,99 +23,132 @@ import twitter4j.User;
 
 public class TweetCellController implements Initializable {
 
-    @FXML
-    private Label screen_name;
-    @FXML
-    private Label name;
-    @FXML
-    private Label time;
-    @FXML
-    private Label tweet_sentence;
-    @FXML
-    private ImageView profileimage;
-    @FXML
-    private TextFlow caption;
+	@FXML
+	private Label screen_name;
+	@FXML
+	private Label name;
+	@FXML
+	private Label time;
+	@FXML
+	private Label tweet_sentence;
+	@FXML
+	private ImageView profileimage;
+	@FXML
+	private TextFlow caption;
 
-    private ClientUser clientUser;
+	private ClientUser clientUser;
 
-    /**
-     * timeラベル用の時刻フォーマット
-     */
-    private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
-    private Status status;
+	/**
+	 * timeラベル用の時刻フォーマット
+	 */
+	private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
+	private Status status;
 
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        // 特になし
-    }
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// 特になし
+	}
 
-    /**
-     * アイテムの内容をStatusに従って切り替える
-     *
-     * @param status
-     *            受け取ったステータス
-     */
-    public void updateTweetCell(Status status) {
-        this.status = status;
-        User user = status.getUser();
+	/**
+	 * アイテムの内容をStatusに従って切り替える
+	 *
+	 * @param status
+	 *            受け取ったステータス
+	 */
+	public void updateTweetCell(Status status) {
+		this.status = status;
+		User user = status.getUser();
 
-        // 時間の取得と表示
-        ZonedDateTime ztd = status.getCreatedAt().toInstant()
-                .atZone(ZoneId.systemDefault());
+		// 時間の取得と表示
+		ZonedDateTime ztd = status.getCreatedAt().toInstant()
+				.atZone(ZoneId.systemDefault());
 
-        Platform.runLater(() -> {
-            screen_name.setText(user.getScreenName());
-            name.setText(user.getName());
-            time.setText(ztd.format(DateTimeFormatter
-                    .ofPattern(DATE_TIME_FORMAT)));
-            tweet_sentence.setText(status.getText());
-        });
-        // イメージ設定(非同期処理)
-        CompletableFuture.runAsync(() -> {
-            Image img = new Image(user.getProfileImageURL());
-            Platform.runLater(() -> profileimage.setImage(img));
-        });
-    }
+		Platform.runLater(() -> {
+			screen_name.setText(user.getScreenName());
+			name.setText(user.getName());
+			time.setText(ztd.format(DateTimeFormatter
+					.ofPattern(DATE_TIME_FORMAT)));
+			tweet_sentence.setText(status.getText());
+		});
+		// イメージ設定(非同期処理)
+		CompletableFuture.runAsync(() -> {
+			Image img = new Image(user.getProfileImageURL());
+			Platform.runLater(() -> profileimage.setImage(img));
+		});
+	}
 
-    /**
-     * clientUserをセットする
-     *
-     * @param status
-     */
-    public void setClientUser(ClientUser clientuser) {
-        clientUser = clientuser;
-    }
+	/**
+	 * clientUserをセットする
+	 *
+	 * @param status
+	 */
+	public void setClientUser(ClientUser clientuser) {
+		clientUser = clientuser;
+	}
 
-    /**
-     * お気に入りボタンから呼び出されるメソッド お気に入りの追加/解除を行う
-     *
-     * @param e
-     *            アクションイベント
-     */
-    @FXML
-    protected void favoriteAction(ActionEvent e) {
-        // Twitterクラスがあれば取得し、なければnullにしておく
-        Twitter twitter = clientUser.getTwitter() != null ? clientUser
-                .getTwitter() : null;
-        if (twitter != null) {
-            // Twitterクラスがあれば
-            if (status.isFavorited()) {
-                // お気に入りにあるなら
-                try {
-                    // お気に入りから解除
-                    twitter.destroyFavorite(status.getId());
-                } catch (TwitterException e1) {
-                    e1.printStackTrace();
-                }
-            } else {
-                // お気に入りにないなら
-                try {
-                    // お気に入りに追加
-                    twitter.createFavorite(status.getId());
-                } catch (TwitterException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+	/**
+	 * お気に入りボタンから呼び出されるメソッド お気に入りの追加/解除を行う
+	 *
+	 * @param e
+	 *            アクションイベント
+	 */
+	@FXML
+	protected void favoriteAction(ActionEvent e) {
+		// Twitterクラスがあれば取得し、なければnullにしておく
+		Twitter twitter = clientUser.getTwitter() != null ? clientUser
+				.getTwitter() : null;
+		if (twitter != null) {
+			// Twitterクラスがあれば
+			if (status.isFavorited()) {
+				// お気に入りにあるなら
+				try {
+					// お気に入りから解除
+					twitter.destroyFavorite(status.getId());
+				} catch (TwitterException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				// お気に入りにないなら
+				try {
+					// お気に入りに追加
+					twitter.createFavorite(status.getId());
+				} catch (TwitterException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	/**
+	 * リツイートボタンから呼び出される。
+	 * リツイートとリツイートの解除を行う。
+	 * 
+	 * @param e
+	 *          アクションイベント
+	 */
+	@FXML
+	protected void retweet(ActionEvent e) {
+		Twitter twitter = clientUser.getTwitter() != null ? clientUser
+				.getTwitter() : null;
+		// Twitterがあれば
+		if (twitter != null) {
+			//RTされたものでなければ
+			if (!status.isRetweeted()) {
+				//RTする
+				try {
+					twitter.retweetStatus(status.getId());
+				} catch (TwitterException e1) {
+					e1.printStackTrace();
+				}
+				//RTされたものならば
+			}else {
+				try {
+					//RTから削除
+					twitter.destroyStatus(status.getId());
+				} catch (TwitterException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
 }
