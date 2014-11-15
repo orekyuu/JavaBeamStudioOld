@@ -1,4 +1,5 @@
 package net.orekyuu.javatter.core;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -14,22 +15,17 @@ import twitter4j.Status;
  * userstreamのコントローラです。
  *
  */
-public class UserStreamController implements JavatterColumn,Initializable {
-    @FXML
-    private ListView<Status> userStreamList;
+public class UserStreamController implements JavatterColumn {
+	@FXML
+	private ListView<Status> userStreamList;
 
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        userStreamList.setCellFactory(cell->new TweetCell(null));
-    }
-    @Override
-    public void setClientUser(ClientUser clientUser) {
-        clientUser.getStream().addOnStatus(status ->{
-            Platform.runLater(() -> {
-                userStreamList.getItems().add(0,status);
-            });
-        });
-
-    }
-
+	@Override
+	public void setClientUser(ClientUser clientUser) {
+		userStreamList.setCellFactory(cell -> new TweetCell(clientUser));
+		clientUser.getStream().addOnStatus(status -> {
+			Platform.runLater(() -> {
+				userStreamList.getItems().add(0, status);
+			});
+		});
+	}
 }
