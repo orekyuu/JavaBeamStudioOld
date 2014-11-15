@@ -21,7 +21,7 @@ public interface ClientUser {
      * ClientUserが所有するTwitterインスタンスを返します。
      * @return Twitter
      */
-    Twitter getTitter();
+    Twitter getTwitter();
 
     /**
      * ClientUserが所有するJavatterUserStreamを返します。
@@ -37,7 +37,7 @@ public interface ClientUser {
      */
     default String getName() {
         try {
-            return getTitter().getScreenName();
+            return getTwitter().getScreenName();
         } catch (TwitterException e) {
             e.printStackTrace();
         }

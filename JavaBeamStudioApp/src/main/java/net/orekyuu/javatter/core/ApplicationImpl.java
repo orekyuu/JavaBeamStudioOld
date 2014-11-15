@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.Application;
+import net.orekyuu.javatter.api.GlobalAccess;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
@@ -42,6 +43,7 @@ public class ApplicationImpl implements Application {
 
     private void loadClientUsers() {
         LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
+        GlobalAccess.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
     }
 
     @Override

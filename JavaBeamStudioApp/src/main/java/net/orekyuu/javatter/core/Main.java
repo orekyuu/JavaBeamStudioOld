@@ -3,6 +3,7 @@ package net.orekyuu.javatter.core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.core.column.ColumnManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,15 +13,20 @@ import java.util.concurrent.ExecutionException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        setupGrobalAccess();
+        setupGlobalAccess();
         setupApplication(stage);
     }
 
-    private void setupGrobalAccess() throws ReflectiveOperationException {
+    private void setupGlobalAccess() throws ReflectiveOperationException {
+        setField("application", new ApplicationImpl(this));
+        setField("columnRegister", new ColumnManager());
+    }
+
+    private void setField(String fieldName, Object value) throws ReflectiveOperationException {
         Class<GlobalAccess> clazz = GlobalAccess.class;
-        Field f = clazz.getDeclaredField("application");
+        Field f = clazz.getDeclaredField(fieldName);
         f.setAccessible(true);
-        f.set(GlobalAccess.getInstance(), new ApplicationImpl(this));
+        f.set(GlobalAccess.getInstance(), value);
     }
 
     private void setupApplication(Stage stage) throws ExecutionException, InterruptedException {
