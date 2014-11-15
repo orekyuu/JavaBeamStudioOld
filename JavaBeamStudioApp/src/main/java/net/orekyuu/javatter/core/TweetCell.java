@@ -54,9 +54,9 @@ public class TweetCell extends ListCell<Status> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                tweetCellController.setClientUser(clientUser);
                 tweetCellController = fxmlLoader.getController();
             }
-            tweetCellController.setClientUser(clientUser);
             tweetCellController.updateTweetCell(status);
         }
     }
