@@ -94,59 +94,50 @@ public class TweetCellController implements Initializable {
 	 */
 	@FXML
 	protected void favoriteAction(ActionEvent e) {
-		// Twitterクラスがあれば取得し、なければnullにしておく
-		Twitter twitter = clientUser.getTwitter() != null ? clientUser
-				.getTwitter() : null;
-		if (twitter != null) {
-			// Twitterクラスがあれば
-			if (status.isFavorited()) {
-				// お気に入りにあるなら
-				try {
-					// お気に入りから解除
-					twitter.destroyFavorite(status.getId());
-				} catch (TwitterException e1) {
-					e1.printStackTrace();
-				}
-			} else {
-				// お気に入りにないなら
-				try {
-					// お気に入りに追加
-					twitter.createFavorite(status.getId());
-				} catch (TwitterException e1) {
-					e1.printStackTrace();
-				}
+		Twitter twitter = clientUser.getTwitter();
+		if (status.isFavorited()) {
+			// お気に入りにあるなら
+			try {
+				// お気に入りから解除
+				twitter.destroyFavorite(status.getId());
+			} catch (TwitterException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			// お気に入りにないなら
+			try {
+				// お気に入りに追加
+				twitter.createFavorite(status.getId());
+			} catch (TwitterException e1) {
+				e1.printStackTrace();
 			}
 		}
 	}
+
 	/**
-	 * リツイートボタンから呼び出される。
-	 * リツイートとリツイートの解除を行う。
+	 * リツイートボタンから呼び出される。 リツイートとリツイートの解除を行う。
 	 * 
 	 * @param e
-	 *          アクションイベント
+	 *            アクションイベント
 	 */
 	@FXML
 	protected void retweet(ActionEvent e) {
-		Twitter twitter = clientUser.getTwitter() != null ? clientUser
-				.getTwitter() : null;
-		// Twitterがあれば
-		if (twitter != null) {
-			//RTされたものでなければ
-			if (!status.isRetweeted()) {
-				//RTする
-				try {
-					twitter.retweetStatus(status.getId());
-				} catch (TwitterException e1) {
-					e1.printStackTrace();
-				}
-				//RTされたものならば
-			}else {
-				try {
-					//RTから削除
-					twitter.destroyStatus(status.getId());
-				} catch (TwitterException e1) {
-					e1.printStackTrace();
-				}
+		Twitter twitter = clientUser.getTwitter();
+		// RTされたものでなければ
+		if (!status.isRetweeted()) {
+			// RTする
+			try {
+				twitter.retweetStatus(status.getId());
+			} catch (TwitterException e1) {
+				e1.printStackTrace();
+			}
+			// RTされたものならば
+		} else {
+			try {
+				// RTから削除
+				twitter.destroyStatus(status.getId());
+			} catch (TwitterException e1) {
+				e1.printStackTrace();
 			}
 		}
 	}
