@@ -21,7 +21,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
-public class TweetCellController implements Initializable {
+public class TweetCellController  {
 
 	@FXML
 	private Label screen_name;
@@ -45,10 +45,6 @@ public class TweetCellController implements Initializable {
 	private long id;
 	private boolean isRetweeted;
 	private boolean isFavorited;
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// 特になし
-	}
 
 	/**
 	 * アイテムの内容をStatusに従って切り替える
