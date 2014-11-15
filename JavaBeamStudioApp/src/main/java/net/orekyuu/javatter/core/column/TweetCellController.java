@@ -74,10 +74,10 @@ public class TweetCellController {
     /**
      * clientUserをセットする
      *
-     * @param status
+     * @param clientUser カラムの持ち主
      */
-    public void setClientUser(ClientUser clientuser) {
-        clientUser = clientuser;
+    public void setClientUser(ClientUser clientUser) {
+        this.clientUser = clientUser;
     }
 
     /**
