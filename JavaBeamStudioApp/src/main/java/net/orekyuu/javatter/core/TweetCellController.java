@@ -42,8 +42,9 @@ public class TweetCellController implements Initializable {
 	 * timeラベル用の時刻フォーマット
 	 */
 	private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
-	private Status status;
-
+	private long id;
+	private boolean isRetweeted;
+	private boolean isFavorited;
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// 特になし
@@ -56,9 +57,11 @@ public class TweetCellController implements Initializable {
 	 *            受け取ったステータス
 	 */
 	public void updateTweetCell(Status status) {
-		this.status = status;
+		id = status.getId();
+		isRetweeted = status.isRetweeted();
+        isFavorited = status.isFavorited();
 		User user = status.getUser();
-
+		
 		// 時間の取得と表示
 		ZonedDateTime ztd = status.getCreatedAt().toInstant()
 				.atZone(ZoneId.systemDefault());
@@ -93,13 +96,13 @@ public class TweetCellController implements Initializable {
 	 *            アクションイベント
 	 */
 	@FXML
-	protected void favoriteAction(ActionEvent e) {
+	protected void favoriten() {
 		Twitter twitter = clientUser.getTwitter();
-		if (status.isFavorited()) {
+		if (isFavorited) {
 			// お気に入りにあるなら
 			try {
 				// お気に入りから解除
-				twitter.destroyFavorite(status.getId());
+				twitter.destroyFavorite(id);
 			} catch (TwitterException e1) {
 				e1.printStackTrace();
 			}
@@ -107,7 +110,7 @@ public class TweetCellController implements Initializable {
 			// お気に入りにないなら
 			try {
 				// お気に入りに追加
-				twitter.createFavorite(status.getId());
+				twitter.createFavorite(id);
 			} catch (TwitterException e1) {
 				e1.printStackTrace();
 			}
@@ -121,13 +124,13 @@ public class TweetCellController implements Initializable {
 	 *            アクションイベント
 	 */
 	@FXML
-	protected void retweet(ActionEvent e) {
+	protected void retweet() {
 		Twitter twitter = clientUser.getTwitter();
 		// RTされたものでなければ
-		if (!status.isRetweeted()) {
+		if (!isRetweeted) {
 			// RTする
 			try {
-				twitter.retweetStatus(status.getId());
+				twitter.retweetStatus(id);
 			} catch (TwitterException e1) {
 				e1.printStackTrace();
 			}
@@ -135,11 +138,10 @@ public class TweetCellController implements Initializable {
 		} else {
 			try {
 				// RTから削除
-				twitter.destroyStatus(status.getId());
+				twitter.destroyStatus(id);
 			} catch (TwitterException e1) {
 				e1.printStackTrace();
 			}
 		}
 	}
-
 }
