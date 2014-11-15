@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.TweetCellController">
+<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.TweetCellController">
     <children>
         <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
         <VBox prefHeight="100.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
@@ -46,7 +46,7 @@
                     <children>
                         <Button mnemonicParsing="false" text="Reply" />
                         <Button mnemonicParsing="false" onAction="#retweet" text="RT" />
-                        <Button mnemonicParsing="false" onAction="#favorite" text="★" />
+                        <Button mnemonicParsing="false" onAction="#favoriten" text="★" />
                         <MenuButton mnemonicParsing="false" text="MenuButton">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="Action 1" />

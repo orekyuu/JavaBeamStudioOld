@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core;
+package net.orekyuu.javatter.core.column;
 
 import java.io.IOException;
 
@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.column.TweetCellController;
 import twitter4j.Status;
 
 public class TweetCell extends ListCell<Status> {
@@ -54,8 +56,8 @@ public class TweetCell extends ListCell<Status> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                tweetCellController.setClientUser(clientUser);
                 tweetCellController = fxmlLoader.getController();
+                tweetCellController.setClientUser(clientUser);
             }
             tweetCellController.updateTweetCell(status);
         }
