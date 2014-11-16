@@ -1,5 +1,7 @@
 package net.orekyuu.javatter.core;
 
+import com.sun.javafx.css.StyleManager;
+import com.sun.javafx.css.Stylesheet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -9,7 +11,10 @@ import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 public class ApplicationImpl implements Application {
 
@@ -27,6 +32,8 @@ public class ApplicationImpl implements Application {
     @Override
     public void onLoad() {
         loadClientUsers();
+        StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
+
     }
 
     @Override
