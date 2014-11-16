@@ -1,7 +1,9 @@
 package net.orekyuu.javatter.core.column;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,11 +14,17 @@ import net.orekyuu.javatter.core.models.StatusModel;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
 public class TweetCellController {
 
+    @FXML
+    private Hyperlink via;
     @FXML
     private ImageView rtSourceUser;
     @FXML
@@ -53,6 +61,7 @@ public class TweetCellController {
         name.setText(s.getOwner().getName());
         time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         tweet_sentence.setText(s.getText());
+        via.setText(s.getViaName());
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {
 
@@ -133,6 +142,14 @@ public class TweetCellController {
             } catch (TwitterException e1) {
                 e1.printStackTrace();
             }
+        }
+    }
+
+    public void openVia() {
+        try {
+            Desktop.getDesktop().browse(new URL(status.getViaLink()).toURI());
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -43,7 +43,7 @@
         </VBox>
         <VBox AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
             <children>
-                <FlowPane>
+                <HBox>
                     <children>
                         <Button mnemonicParsing="false" text="Reply" />
                         <Button mnemonicParsing="false" onAction="#retweet" text="RT" />
@@ -54,8 +54,13 @@
                                 <MenuItem mnemonicParsing="false" text="Action 2" />
                             </items>
                         </MenuButton>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Hyperlink fx:id="via" onAction="#openVia" text="Hyperlink">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin></Hyperlink>
                     </children>
-                </FlowPane>
+                </HBox>
                 <FlowPane />
             </children>
         </VBox>
