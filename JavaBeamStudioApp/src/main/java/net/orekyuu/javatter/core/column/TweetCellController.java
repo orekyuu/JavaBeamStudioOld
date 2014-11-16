@@ -1,18 +1,17 @@
 package net.orekyuu.javatter.core.column;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.cache.IconCache;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
-import net.orekyuu.javatter.core.config.GeneralConfigModel;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.core.models.StatusModel;
 import net.orekyuu.javatter.core.models.UserModel;
@@ -30,6 +29,8 @@ import java.util.concurrent.CompletableFuture;
 public class TweetCellController implements Initializable {
 
     @FXML
+    public TextFlow tweet;
+    @FXML
     private Hyperlink via;
     @FXML
     private ImageView rtSourceUser;
@@ -38,11 +39,7 @@ public class TweetCellController implements Initializable {
     @FXML
     private Label time;
     @FXML
-    private Label tweet_sentence;
-    @FXML
     private ImageView profileimage;
-    @FXML
-    private TextFlow caption;
 
     private ClientUser clientUser;
 
@@ -63,7 +60,8 @@ public class TweetCellController implements Initializable {
         this.status = s;
         name.setText(getConfigFormatName(s.getOwner()));
         time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        tweet_sentence.setText(s.getText());
+        tweet.getChildren().clear();
+        tweet.getChildren().add(new Text(s.getText()));
         via.setText(s.getViaName());
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {

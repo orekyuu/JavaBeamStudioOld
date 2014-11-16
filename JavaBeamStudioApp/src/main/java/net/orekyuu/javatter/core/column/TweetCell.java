@@ -1,15 +1,15 @@
 package net.orekyuu.javatter.core.column;
 
-import java.io.IOException;
-
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.column.TweetCellController;
 import net.orekyuu.javatter.core.models.StatusModel;
-import twitter4j.Status;
+
+import java.io.IOException;
 
 public class TweetCell extends ListCell<StatusModel> {
     /**
@@ -50,9 +50,13 @@ public class TweetCell extends ListCell<StatusModel> {
             if (tweetCellController == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 try {
-                    Parent parent = fxmlLoader.load(Main.class
+                    AnchorPane root = fxmlLoader.load(Main.class
                             .getResourceAsStream("tweetcell.fxml"));
-                    setGraphic(parent);
+                    DoubleBinding binding = Bindings.add(-20.0, getListView().widthProperty());
+                    System.out.println(binding.get() + ", " + getListView().widthProperty());
+                    root.prefWidthProperty().bind(binding);
+                    root.maxWidthProperty().bind(binding);
+                    setGraphic(root);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
