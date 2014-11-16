@@ -6,6 +6,7 @@ import javafx.scene.control.ListView;
 import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.column.TweetCell;
+import net.orekyuu.javatter.core.models.StatusModel;
 import twitter4j.Status;
 
 /**
@@ -13,14 +14,16 @@ import twitter4j.Status;
  */
 public class UserStreamController implements JavatterColumn {
     @FXML
-    private ListView<Status> userStreamList;
+    private ListView<StatusModel> userStreamList;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
         userStreamList.setCellFactory(cell -> new TweetCell(clientUser));
         clientUser.getStream().addOnStatus(status -> {
             Platform.runLater(() -> {
-                userStreamList.getItems().add(0, status);
+                userStreamList.getItems().add(0, StatusModel.Builder.build(status));
+                if(userStreamList.getItems().size() > 10)
+                    userStreamList.getItems().remove(10);
             });
         });
     }

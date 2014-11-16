@@ -8,9 +8,10 @@ import javafx.scene.control.ListCell;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.column.TweetCellController;
+import net.orekyuu.javatter.core.models.StatusModel;
 import twitter4j.Status;
 
-public class TweetCell extends ListCell<Status> {
+public class TweetCell extends ListCell<StatusModel> {
     /**
      * 所定コントローラ
      */
@@ -36,21 +37,20 @@ public class TweetCell extends ListCell<Status> {
      *            空かどうか
      */
     @Override
-    protected void updateItem(Status status, boolean empty) {
+    protected void updateItem(StatusModel status, boolean empty) {
         // スーパークラスから必要な機能を継承
         super.updateItem(status, empty);
         if (empty) {
-            // 空の場合は表示・描画を行わない
             setText(null);
             setGraphic(null);
             tweetCellController = null;
         } else {
             // 空でない場合は
             // 名前の取得と表示
-            if (getGraphic() == null) {
+            if (tweetCellController == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 try {
-                    Parent parent = (Parent) fxmlLoader.load(Main.class
+                    Parent parent = fxmlLoader.load(Main.class
                             .getResourceAsStream("tweetcell.fxml"));
                     setGraphic(parent);
                 } catch (IOException e) {
@@ -59,7 +59,8 @@ public class TweetCell extends ListCell<Status> {
                 tweetCellController = fxmlLoader.getController();
                 tweetCellController.setClientUser(clientUser);
             }
-            tweetCellController.updateTweetCell(status);
+            if(tweetCellController != null)
+                tweetCellController.updateTweetCell(status);
         }
     }
 }
