@@ -28,8 +28,6 @@ public class TweetCellController {
     @FXML
     private ImageView rtSourceUser;
     @FXML
-    private Label screen_name;
-    @FXML
     private Label name;
     @FXML
     private Label time;
@@ -57,7 +55,6 @@ public class TweetCellController {
         StatusModel retweetFrom = status.getRetweetFrom();
         StatusModel s = retweetFrom == null ? status : retweetFrom;
         this.status = s;
-        screen_name.setText(s.getOwner().getScreenName());
         name.setText(s.getOwner().getName());
         time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         tweet_sentence.setText(s.getText());

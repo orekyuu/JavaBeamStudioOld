@@ -13,31 +13,25 @@
 <AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.TweetCellController">
     <children>
         <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+      <Region />
       <ImageView fx:id="rtSourceUser" fitHeight="32.0" fitWidth="32.0" layoutX="10.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
         <VBox prefHeight="100.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
             <children>
-                <TextFlow fx:id="caption">
-                    <children>
-                        <Label fx:id="screen_name" text="\@screen_name">
+            <HBox>
+               <children>
+                        <Label fx:id="name" text="\@screen_name">
                             <padding>
                                 <Insets right="20.0" />
                             </padding>
                         </Label>
-                        <Label fx:id="name" maxWidth="1.7976931348623157E308" text="name">
-                            <padding>
-                                <Insets right="20.0" />
-                            </padding>
-                        </Label>
+                  <Region HBox.hgrow="ALWAYS" />
                         <Label fx:id="time" text="time" textAlignment="RIGHT">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                    </children>
-                    <padding>
-                        <Insets bottom="10.0" />
-                    </padding>
-                </TextFlow>
+               </children>
+            </HBox>
                 <Label fx:id="tweet_sentence" text="tweet" wrapText="true" />
             </children>
         </VBox>
