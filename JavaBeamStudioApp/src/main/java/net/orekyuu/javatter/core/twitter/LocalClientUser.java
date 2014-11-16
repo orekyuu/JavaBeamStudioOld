@@ -181,7 +181,12 @@ public class LocalClientUser implements ClientUser {
         twitterStream.addListener(adapter);
         twitterStream.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
         twitterStream.setOAuthAccessToken(getAccessToken());
-        twitterStream.sample();
+        String sampleStream = System.getProperty("sampleStream");
+        if (sampleStream != null && Boolean.valueOf(sampleStream)) {
+            twitterStream.sample();
+        } else {
+            twitterStream.user();
+        }
     }
 
     /**
