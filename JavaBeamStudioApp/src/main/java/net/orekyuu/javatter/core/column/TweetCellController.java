@@ -18,6 +18,8 @@ import java.util.concurrent.CompletableFuture;
 public class TweetCellController {
 
     @FXML
+    private ImageView rtSourceUser;
+    @FXML
     private Label screen_name;
     @FXML
     private Label name;
@@ -44,14 +46,32 @@ public class TweetCellController {
      */
     public void updateTweetCell(StatusModel status) {
 
-        screen_name.setText(status.getOwner().getScreenName());
-        name.setText(status.getOwner().getName());
-        time.setText(status.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        tweet_sentence.setText(status.getText());
+        StatusModel retweetFrom = status.getRetweetFrom();
+        StatusModel s = retweetFrom == null ? status : retweetFrom;
+        this.status = s;
+        screen_name.setText(s.getOwner().getScreenName());
+        name.setText(s.getOwner().getName());
+        time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        tweet_sentence.setText(s.getText());
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {
-            Image img = IconCache.getImage(status.getOwner().getProfileImageURL());
-            Platform.runLater(() -> profileimage.setImage(img));
+
+            if(retweetFrom == null) {
+                Image img = IconCache.getImage(status.getOwner().getProfileImageURL());
+                Platform.runLater(() -> {
+                    profileimage.setImage(img);
+                    rtSourceUser.setImage(null);
+                    rtSourceUser.setVisible(false);
+                });
+            } else {
+                Image source = IconCache.getImage(status.getOwner().getProfileImageURL());
+                Image img = IconCache.getImage(retweetFrom.getOwner().getProfileImageURL());
+                Platform.runLater(() -> {
+                    profileimage.setImage(img);
+                    rtSourceUser.setImage(source);
+                    rtSourceUser.setVisible(true);
+                });
+            }
         });
     }
 
