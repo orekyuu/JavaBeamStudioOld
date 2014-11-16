@@ -3,6 +3,7 @@ package net.orekyuu.javatter.core.column;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -10,7 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.cache.IconCache;
+import net.orekyuu.javatter.core.config.GeneralConfigHelper;
+import net.orekyuu.javatter.core.config.GeneralConfigModel;
+import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.core.models.StatusModel;
+import net.orekyuu.javatter.core.models.UserModel;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -19,9 +24,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
-public class TweetCellController {
+public class TweetCellController implements Initializable {
 
     @FXML
     private Hyperlink via;
@@ -55,7 +61,7 @@ public class TweetCellController {
         StatusModel retweetFrom = status.getRetweetFrom();
         StatusModel s = retweetFrom == null ? status : retweetFrom;
         this.status = s;
-        name.setText(s.getOwner().getName());
+        name.setText(getConfigFormatName(s.getOwner()));
         time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         tweet_sentence.setText(s.getText());
         via.setText(s.getViaName());
@@ -147,6 +153,23 @@ public class TweetCellController {
             Desktop.getDesktop().browse(new URL(status.getViaLink()).toURI());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    private NameDisplayType nameDisplayType;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        String type = GeneralConfigHelper.loadConfigFromDB().getNameDisplayType();
+        nameDisplayType = NameDisplayType.valueOf(type);
+    }
+
+    private String getConfigFormatName(UserModel user) {
+        switch (nameDisplayType) {
+            case NAME: return user.getName();
+            case ID: return "@" + user.getScreenName();
+            case ID_NAME: return "@" + user.getScreenName() + " / " + user.getName();
+            case NAME_ID: return user.getName() + " / " + "@" + user.getScreenName();
+            default: throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
 }
