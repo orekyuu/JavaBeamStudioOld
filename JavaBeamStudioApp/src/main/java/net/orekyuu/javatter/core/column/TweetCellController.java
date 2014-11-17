@@ -113,53 +113,39 @@ public class TweetCellController implements Initializable {
         entities.addAll(status.getMentions());
         entities.addAll(status.getUrls());
         entities.addAll(status.getMedias());
-        //通常のテキストの位置を探す
-        boolean[] text = new boolean[status.getText().length()];
-        for (TweetEntity e : entities) {
-            for (int i = e.getStart(); i < e.getEnd(); i++) {
-                text[i] = true;
-            }
-        }
-        List<TextEntity> texts = new LinkedList<>();
-        //TextEntityを作成
-        int start = 0;
-        boolean oldFlag = true;
-        for (int i = 0; i < text.length; i++) {
-            if(oldFlag && !text[i])
-                start = i;
-            if(!oldFlag && text[i]) {
-                texts.add(new TextEntity(status.getText().substring(start, i), start, i));
-            }
-            if(text.length - 1 == i && !text[i]) {
-                texts.add(new TextEntity(status.getText().substring(start, i + 1), start, i));
-            }
-
-            oldFlag = text[i];
-        }
-
-        //開始地点で並べ替え
-        entities.addAll(texts);
         entities.sort(Comparator.comparingInt(TweetEntity::getStart));
-
-        //順番にTextFlowに入れていく
+        if(entities.size() == 0) {
+            tweet.getChildren().add(new Text(status.getText()));
+            return;
+        }
+        int start = 0;
         for (TweetEntity entity : entities) {
-            if (entity instanceof TextEntity) {
-                tweet.getChildren().add(new Text(entity.getText()));
-            }
-            if (entity instanceof URLEntity) {
-                Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
-                System.out.println("url: " + entity.toString());
-                hyperlink.setOnAction(this::openBrowser);
-                tweet.getChildren().add(hyperlink);
-            }
-            if (entity instanceof UserMentionEntity) {
-                Hyperlink hyperlink = new Hyperlink("@" + entity.getText());
-                tweet.getChildren().add(hyperlink);
-            }
-            if (entity instanceof HashtagEntity) {
-                Hyperlink hyperlink = new Hyperlink("#" + entity.getText());
-                tweet.getChildren().add(hyperlink);
-            }
+            if (entity.getStart() - start > 0)
+                tweet.getChildren().add(new Text(status.getText().substring(start, entity.getStart())));
+            addTweetEntity(entity);
+            start = entity.getEnd();
+        }
+        TweetEntity last = entities.get(entities.size() - 1);
+        if (status.getText().length() - last.getEnd() > 0)
+            tweet.getChildren().add(new Text(status.getText().substring(last.getEnd(), status.getText().length())));
+    }
+
+    private void addTweetEntity(TweetEntity entity) {
+        if (entity instanceof TextEntity) {
+            tweet.getChildren().add(new Text(entity.getText()));
+        }
+        if (entity instanceof URLEntity) {
+            Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
+            hyperlink.setOnAction(this::openBrowser);
+            tweet.getChildren().add(hyperlink);
+        }
+        if (entity instanceof UserMentionEntity) {
+            Hyperlink hyperlink = new Hyperlink("@" + entity.getText());
+            tweet.getChildren().add(hyperlink);
+        }
+        if (entity instanceof HashtagEntity) {
+            Hyperlink hyperlink = new Hyperlink("#" + entity.getText());
+            tweet.getChildren().add(hyperlink);
         }
     }
 
