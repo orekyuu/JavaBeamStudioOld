@@ -33,23 +33,24 @@
         </HBox>
         <TextFlow fx:id="tweet"/>
         <Region VBox.vgrow="ALWAYS"/>
-            <HBox>
-                <Button mnemonicParsing="false" text="Reply"/>
-                <Button mnemonicParsing="false" onAction="#retweet" text="RT"/>
-                <Button mnemonicParsing="false" onAction="#favoriten" text="★"/>
-                <MenuButton mnemonicParsing="false" text="MenuButton">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1"/>
-                        <MenuItem mnemonicParsing="false" text="Action 2"/>
-                    </items>
-                </MenuButton>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Hyperlink fx:id="via" onAction="#openVia" text="Hyperlink">
-                    <HBox.margin>
-                        <Insets right="10.0"/>
-                    </HBox.margin>
-                </Hyperlink>
-            </HBox>
+        <HBox>
+            <Button mnemonicParsing="false" text="Reply"/>
+            <Button mnemonicParsing="false" onAction="#retweet" text="RT"/>
+            <Button mnemonicParsing="false" onAction="#favoriten" text="★"/>
+            <MenuButton mnemonicParsing="false" text="MenuButton">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Action 1"/>
+                    <MenuItem mnemonicParsing="false" text="Action 2"/>
+                </items>
+            </MenuButton>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Hyperlink fx:id="via" onAction="#openVia" text="Hyperlink">
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+            </Hyperlink>
+        </HBox>
+        <HBox fx:id="imgPreview"/>
         </children>
     </VBox>
 </AnchorPane>

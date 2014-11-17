@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -31,6 +32,8 @@ public class TweetCellController implements Initializable {
 
     @FXML
     public TextFlow tweet;
+    @FXML
+    private HBox imgPreview;
     @FXML
     private AnchorPane root;
     @FXML
@@ -63,7 +66,8 @@ public class TweetCellController implements Initializable {
         this.status = s;
         name.setText(getConfigFormatName(s.getOwner()));
         time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        updateTweetTextFlow(status);
+        updateTweetTextFlow(s);
+        updateImagePreview(s);
         via.setText(s.getViaName());
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {
@@ -85,6 +89,21 @@ public class TweetCellController implements Initializable {
                 });
             }
         });
+    }
+
+    private void updateImagePreview(StatusModel status) {
+        imgPreview.getChildren().clear();
+        List<MediaEntity> medias = status.getMedias();
+        for (MediaEntity e : medias) {
+            ImageView imageView = new ImageView();
+            imageView.setFitWidth(64);
+            imageView.setFitHeight(64);
+            imgPreview.getChildren().add(imageView);
+            CompletableFuture.runAsync(() -> {
+                Image image = new Image(e.getMediaURL());
+                Platform.runLater(() -> imageView.setImage(image));
+            });
+        }
     }
 
     private void updateTweetTextFlow(StatusModel status) {
@@ -129,6 +148,7 @@ public class TweetCellController implements Initializable {
             }
             if (entity instanceof URLEntity) {
                 Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
+                System.out.println("url: " + entity.toString());
                 hyperlink.setOnAction(this::openBrowser);
                 tweet.getChildren().add(hyperlink);
             }
@@ -138,11 +158,6 @@ public class TweetCellController implements Initializable {
             }
             if (entity instanceof HashtagEntity) {
                 Hyperlink hyperlink = new Hyperlink("#" + entity.getText());
-                tweet.getChildren().add(hyperlink);
-            }
-            if (entity instanceof MediaEntity) {
-                Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
-                hyperlink.setOnAction(this::openBrowser);
                 tweet.getChildren().add(hyperlink);
             }
         }
