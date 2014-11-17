@@ -53,7 +53,6 @@ public class TweetCell extends ListCell<StatusModel> {
                     AnchorPane root = fxmlLoader.load(Main.class
                             .getResourceAsStream("tweetcell.fxml"));
                     DoubleBinding binding = Bindings.add(-20.0, getListView().widthProperty());
-                    System.out.println(binding.get() + ", " + getListView().widthProperty());
                     root.prefWidthProperty().bind(binding);
                     root.maxWidthProperty().bind(binding);
                     setGraphic(root);

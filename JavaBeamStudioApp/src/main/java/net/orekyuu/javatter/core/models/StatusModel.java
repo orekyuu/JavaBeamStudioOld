@@ -4,12 +4,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
-import javafx.scene.image.Image;
-import net.orekyuu.javatter.core.cache.IconCache;
-import twitter4j.Status;
+import twitter4j.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -29,6 +29,10 @@ public class StatusModel {
     private final UserModel owner;
     private final boolean isRetweeted;
     private final boolean isFavorited;
+    private final UserMentionEntity[] mentions;
+    private final URLEntity[] urls;
+    private final HashtagEntity[] hashtags;
+    private final MediaEntity[] medias;
 
     private static final Pattern viaNamePattern = Pattern.compile("^<a.*>(.*)</a>$");
     private static final Pattern viaLinkPattern = Pattern.compile("^<a.*href=\"(.*?)\".*>.*</a>$");
@@ -40,6 +44,10 @@ public class StatusModel {
         replyStatusId = status.getInReplyToStatusId();
         String via = status.getSource();
         Matcher matcher = viaNamePattern.matcher(via);
+        mentions = status.getUserMentionEntities();
+        urls = status.getURLEntities();
+        hashtags = status.getHashtagEntities();
+        medias = status.getExtendedMediaEntities();
         if (matcher.find()) {
             viaName = matcher.group(1);
         } else {
@@ -90,20 +98,28 @@ public class StatusModel {
         return owner;
     }
 
-    public static Pattern getViaNamePattern() {
-        return viaNamePattern;
-    }
-
-    public static Pattern getViaLinkPattern() {
-        return viaLinkPattern;
-    }
-
     public boolean isRetweeted() {
         return isRetweeted;
     }
 
     public boolean isFavorited() {
         return isFavorited;
+    }
+
+    public List<UserMentionEntity> getMentions() {
+        return Arrays.asList(mentions);
+    }
+
+    public List<URLEntity> getUrls() {
+        return Arrays.asList(urls);
+    }
+
+    public List<HashtagEntity> getHashtags() {
+        return Arrays.asList(hashtags);
+    }
+
+    public List<MediaEntity> getMedias() {
+        return Arrays.asList(medias);
     }
 
     @Override
@@ -119,6 +135,10 @@ public class StatusModel {
         sb.append(", owner=").append(owner);
         sb.append(", isRetweeted=").append(isRetweeted);
         sb.append(", isFavorited=").append(isFavorited);
+        sb.append(", mentions=").append(Arrays.toString(mentions));
+        sb.append(", urls=").append(Arrays.toString(urls));
+        sb.append(", hashtags=").append(Arrays.toString(hashtags));
+        sb.append(", medias=").append(Arrays.toString(medias));
         sb.append('}');
         return sb.toString();
     }
