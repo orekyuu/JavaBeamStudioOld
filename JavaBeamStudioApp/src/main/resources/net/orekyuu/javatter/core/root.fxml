@@ -10,13 +10,13 @@
             prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="net.orekyuu.javatter.core.MainWindowPresenter">
     <children>
-        <TextArea layoutX="14.0" layoutY="14.0" prefHeight="114.0" prefWidth="345.0" AnchorPane.leftAnchor="14.0"
+        <net.orekyuu.javatter.core.CustomTextArea fx:id="tweetTextArea" layoutX="14.0" layoutY="14.0" prefHeight="114.0" prefWidth="345.0" AnchorPane.leftAnchor="14.0"
                   AnchorPane.rightAnchor="241.0" AnchorPane.topAnchor="14.0">
             <cursor>
                 <Cursor fx:constant="TEXT"/>
             </cursor>
-        </TextArea>
-        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="371.0" layoutY="16.0" pickOnBounds="true"
+        </net.orekyuu.javatter.core.CustomTextArea>
+        <ImageView onMouseClicked="#changeUser" fx:id="clientUserImage" fitHeight="40.0" fitWidth="40.0" layoutX="371.0" layoutY="16.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.rightAnchor="181.0" AnchorPane.topAnchor="16.0">
             <cursor>
                 <Cursor fx:constant="HAND"/>
@@ -24,10 +24,10 @@
         </ImageView>
         <Text layoutX="458.0" layoutY="42.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" strokeType="OUTSIDE"
               strokeWidth="0.0" text="\@orekyuu" AnchorPane.rightAnchor="67.64453125" AnchorPane.topAnchor="26.0"/>
-        <Button layoutX="371.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="85.0" text="ツイート"
+        <Button onAction="#tweet" layoutX="371.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="85.0" text="ツイート"
                 AnchorPane.rightAnchor="144.0" AnchorPane.topAnchor="62.0"/>
-        <Button layoutX="461.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0"
-                text="Javaビーム" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="62.0"/>
+        <Button onAction="#javaBeam" layoutX="461.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0"
+                text="Javaビーム" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="62.0" />
         <MenuButton layoutX="371.0" layoutY="101.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="207.0"
                     text="Actions" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="101.0">
             <items>
@@ -35,7 +35,7 @@
                 <MenuItem mnemonicParsing="false" text="Action 2"/>
             </items>
         </MenuButton>
-        <Text layoutX="281.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="140" textAlignment="CENTER"
+        <Text fx:id="remaining" layoutX="281.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="140" textAlignment="CENTER"
               wrappingWidth="75.0" AnchorPane.rightAnchor="244.0" AnchorPane.topAnchor="146.318359375">
             <font>
                 <Font size="28.0"/>
