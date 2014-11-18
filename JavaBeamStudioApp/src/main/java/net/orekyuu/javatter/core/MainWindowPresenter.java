@@ -34,32 +34,32 @@ public class MainWindowPresenter implements Initializable, EditText {
 	@FXML
 	private ImageView clientUserImage;
 	private static int nowUser = 0;
-	private List<Image> myPrfileImage = new ArrayList<>();
+	private List<Image> myProfileImage = new ArrayList<>();
 	List<ClientUser> users = new ArrayList<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		users.addAll(LocalClientUser.loadClientUsers());
-		Platform.runLater(() -> {
-			try {
-				for (int i = 0; i < users.size(); i++) {
-					myPrfileImage.add(new Image(users.get(i).getTwitter()
-							.verifyCredentials().getProfileImageURL()));
+		if (LocalClientUser.loadClientUsers().size()>0) {
+			users.addAll(LocalClientUser.loadClientUsers());
+			Platform.runLater(() -> {
+				try {
+					for (int i = 0; i < users.size(); i++) {
+						myProfileImage
+								.add(new Image(users.get(i).getTwitter().verifyCredentials().getProfileImageURL()));
+					}
+					clientUserImage.setImage(myProfileImage.get(nowUser));
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				clientUserImage.setImage(myPrfileImage.get(nowUser));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+			});
+		}
 		tweetTextArea.addChangeTextListener(this);
 	}
 
 	public void addColumn(ActionEvent actionEvent) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
-			Node node = loader.load(getClass().getResourceAsStream(
-					"column.fxml"));
+			Node node = loader.load(getClass().getResourceAsStream("column.fxml"));
 			HBox.setHgrow(node, Priority.ALWAYS);
 			hbox.getChildren().add(node);
 		} catch (Exception e) {
@@ -76,12 +76,9 @@ public class MainWindowPresenter implements Initializable, EditText {
 	public void openConfig() {
 		FXMLLoader loader = new FXMLLoader();
 		try {
-			Parent parent = loader.load(getClass().getResourceAsStream(
-					"config.fxml"));
+			Parent parent = loader.load(getClass().getResourceAsStream("config.fxml"));
 			Scene scene = new Scene(parent);
-			scene.getStylesheets().add(
-					Main.class.getResource("javabeamstudio.css")
-							.toExternalForm());
+			scene.getStylesheets().add(Main.class.getResource("javabeamstudio.css").toExternalForm());
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("設定");
@@ -103,18 +100,20 @@ public class MainWindowPresenter implements Initializable, EditText {
 
 	// Javaビームです。
 	public void javaBeam() {
-		new TweetUtil().sendTweet(users.get(nowUser),
-				"Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
+		new TweetUtil().sendTweet(users.get(nowUser), "Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
 	}
 
 	// ImageViewのクリックによりツイートを行うユーザーを変更します。
 	public void changeUser() {
-		if (users.size() - 1 > nowUser) {
-			nowUser++;
-		} else {
-			nowUser = 0;
+		if (!(users.size() == 1 && users.size() == 0)) {
+			if (users.size() - 1 > nowUser) {
+				nowUser++;
+			} else {
+				nowUser = 0;
+			}
+
+			clientUserImage.setImage(myProfileImage.get(nowUser));
 		}
-		clientUserImage.setImage(myPrfileImage.get(nowUser));
 	}
 
 	@Override
