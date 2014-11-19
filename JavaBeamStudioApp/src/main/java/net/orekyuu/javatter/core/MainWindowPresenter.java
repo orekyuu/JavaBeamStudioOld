@@ -10,6 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -18,13 +21,12 @@ import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import net.orekyuu.javatter.api.EditText;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-
 import java.util.List;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class MainWindowPresenter implements Initializable, EditText {
+public class MainWindowPresenter implements Initializable, EditText, OnDropListener {
 	@FXML
 	private HBox hbox;
 	@FXML
@@ -33,13 +35,21 @@ public class MainWindowPresenter implements Initializable, EditText {
 	private Text remaining;
 	@FXML
 	private ImageView clientUserImage;
-	private static int nowUser = 0;
+	@FXML
+	private ImageView tweetImage1;
+	@FXML
+	private ImageView tweetImage2;
+	@FXML
+	private ImageView tweetImage3;
+
+	private static int imageCount = 0;
+	private static int nowUserIndex = 0;
 	private List<Image> myProfileImage = new ArrayList<>();
-	List<ClientUser> users = new ArrayList<>();
+	private List<ClientUser> users = new ArrayList<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		if (LocalClientUser.loadClientUsers().size()>0) {
+		if (LocalClientUser.loadClientUsers().size() > 0) {
 			users.addAll(LocalClientUser.loadClientUsers());
 			Platform.runLater(() -> {
 				try {
@@ -54,6 +64,7 @@ public class MainWindowPresenter implements Initializable, EditText {
 			});
 		}
 		tweetTextArea.addChangeTextListener(this);
+		tweetTextArea.addOnDropListener(this);
 	}
 
 	public void addColumn(ActionEvent actionEvent) {
@@ -93,27 +104,39 @@ public class MainWindowPresenter implements Initializable, EditText {
 	// ツイートの実行
 	public void tweet() {
 		if (getText().length() > 0) {
-			new TweetUtil().sendTweet(users.get(nowUser), getText());
+			new TweetUtil().sendTweet(users.get(nowUserIndex), getText());
 		}
 		setText("");
 	}
 
 	// Javaビームです。
 	public void javaBeam() {
-		new TweetUtil().sendTweet(users.get(nowUser), "Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
+		new TweetUtil().sendTweet(users.get(nowUserIndex), "Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
 	}
 
-	// ImageViewのクリックによりツイートを行うユーザーを変更します。
+	// ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
 	public void changeUser() {
 		if (!(users.size() == 1 && users.size() == 0)) {
-			if (users.size() - 1 > nowUser) {
-				nowUser++;
+			if (users.size() - 1 > nowUserIndex) {
+				nowUserIndex++;
 			} else {
-				nowUser = 0;
+				nowUserIndex = 0;
 			}
 
-			clientUserImage.setImage(myProfileImage.get(nowUser));
+			clientUserImage.setImage(myProfileImage.get(nowUserIndex));
 		}
+	}
+
+	public void getOnDropImage1() {
+
+	}
+
+	public void getOnDropImage2() {
+
+	}
+
+	public void getOnDropImage3() {
+
 	}
 
 	@Override
@@ -131,19 +154,38 @@ public class MainWindowPresenter implements Initializable, EditText {
 	public void onChanged(CharSequence cs, int count) {
 		remaining.setText("" + (140 - count));
 	}
-    public void openConfig() {
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            Parent parent = loader.load(getClass().getResourceAsStream("config.fxml"));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("設定");
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ExceptionDialogBuilder.create(e);
-        }
-    }
+
+	@Override
+	public void onDrop(DragEvent e) {
+		Dragboard dragboard = e.getDragboard();
+		if (dragboard.hasFiles() && imageCount < 3) {
+			e.acceptTransferModes(TransferMode.COPY);
+		}
+	}
+
+	@Override
+	public void onDroped(DragEvent e) {
+		Dragboard dragboard = e.getDragboard();
+		if (dragboard.hasFiles() && imageCount < 3) {
+			switch (imageCount) {
+			case 0:
+				tweetImage1.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
+				imageCount = 1;
+				imageCount = 1;
+				break;
+			case 1:
+				tweetImage2.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
+				imageCount = 2;
+				break;
+			case 2:
+				tweetImage1.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
+				imageCount = 3;
+				break;
+			}
+			e.setDropCompleted(true);
+
+		} else {
+			e.setDropCompleted(false);
+		}
+	}
 }
