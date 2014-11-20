@@ -21,12 +21,15 @@ import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import net.orekyuu.javatter.api.EditText;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+
 import java.util.List;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class MainWindowPresenter implements Initializable, EditText, OnDropListener {
+public class MainWindowPresenter implements Initializable, EditText,
+		OnDropListener {
 	@FXML
 	private HBox hbox;
 	@FXML
@@ -42,10 +45,11 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 	@FXML
 	private ImageView tweetImage3;
 
-	private static int imageCount = 0;
 	private static int nowUserIndex = 0;
 	private List<Image> myProfileImage = new ArrayList<>();
 	private List<ClientUser> users = new ArrayList<>();
+	private List<File> imageFiles = new ArrayList<>();
+	private List<ImageView> appendedImages = new ArrayList<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -54,8 +58,8 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 			Platform.runLater(() -> {
 				try {
 					for (int i = 0; i < users.size(); i++) {
-						myProfileImage
-								.add(new Image(users.get(i).getTwitter().verifyCredentials().getProfileImageURL()));
+						myProfileImage.add(new Image(users.get(i).getTwitter()
+								.verifyCredentials().getProfileImageURL()));
 					}
 					clientUserImage.setImage(myProfileImage.get(nowUser));
 				} catch (Exception e) {
@@ -65,12 +69,16 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 		}
 		tweetTextArea.addChangeTextListener(this);
 		tweetTextArea.addOnDropListener(this);
+		appendedImages.add(tweetImage1);
+		appendedImages.add(tweetImage2);
+		appendedImages.add(tweetImage3);
 	}
 
 	public void addColumn(ActionEvent actionEvent) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
-			Node node = loader.load(getClass().getResourceAsStream("column.fxml"));
+			Node node = loader.load(getClass().getResourceAsStream(
+					"column.fxml"));
 			HBox.setHgrow(node, Priority.ALWAYS);
 			hbox.getChildren().add(node);
 		} catch (Exception e) {
@@ -87,9 +95,12 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 	public void openConfig() {
 		FXMLLoader loader = new FXMLLoader();
 		try {
-			Parent parent = loader.load(getClass().getResourceAsStream("config.fxml"));
+			Parent parent = loader.load(getClass().getResourceAsStream(
+					"config.fxml"));
 			Scene scene = new Scene(parent);
-			scene.getStylesheets().add(Main.class.getResource("javabeamstudio.css").toExternalForm());
+			scene.getStylesheets().add(
+					Main.class.getResource("javabeamstudio.css")
+							.toExternalForm());
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("設定");
@@ -111,7 +122,8 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 
 	// Javaビームです。
 	public void javaBeam() {
-		new TweetUtil().sendTweet(users.get(nowUserIndex), "Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
+		new TweetUtil().sendTweet(users.get(nowUserIndex),
+				"Javaﾋﾞｰﾑｗｗｗｗｗｗｗｗｗｗﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ");
 	}
 
 	// ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
@@ -125,18 +137,6 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 
 			clientUserImage.setImage(myProfileImage.get(nowUserIndex));
 		}
-	}
-
-	public void getOnDropImage1() {
-
-	}
-
-	public void getOnDropImage2() {
-
-	}
-
-	public void getOnDropImage3() {
-
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 	@Override
 	public void onDrop(DragEvent e) {
 		Dragboard dragboard = e.getDragboard();
-		if (dragboard.hasFiles() && imageCount < 3) {
+		if (dragboard.hasFiles() && 3 - imageFiles.size() > 0) {
 			e.acceptTransferModes(TransferMode.COPY);
 		}
 	}
@@ -166,22 +166,20 @@ public class MainWindowPresenter implements Initializable, EditText, OnDropListe
 	@Override
 	public void onDroped(DragEvent e) {
 		Dragboard dragboard = e.getDragboard();
-		if (dragboard.hasFiles() && imageCount < 3) {
-			switch (imageCount) {
-			case 0:
-				tweetImage1.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
-				imageCount = 1;
-				imageCount = 1;
-				break;
-			case 1:
-				tweetImage2.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
-				imageCount = 2;
-				break;
-			case 2:
-				tweetImage1.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
-				imageCount = 3;
-				break;
+		int index;
+		if (dragboard.hasFiles() && 3 - imageFiles.size() > 0) {
+			imageFiles.add(dragboard.getFiles().get(0));
+			// new Image(dragboard.getFiles().get(0).toURI().toString())
+			if(imageFiles.size()==3){ 
+				index=0;
+			}else{
+				index=imageFiles.size();
 			}
+			for (int i = index; i < dragboard.getFiles().size(); i++) {
+				appendedImages.get(i).setImage(
+						new Image(imageFiles.get(i).toURI().toString()));
+			}
+
 			e.setDropCompleted(true);
 
 		} else {
