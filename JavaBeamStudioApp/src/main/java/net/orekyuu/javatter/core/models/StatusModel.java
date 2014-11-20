@@ -4,11 +4,15 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import sun.misc.Cache;
 import twitter4j.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -169,6 +173,30 @@ public class StatusModel {
             } catch (ExecutionException e) {
                 throw new UncheckedExecutionException(e);
             }
+        }
+
+        /**
+         * StatusModelをIDから取得します。<br>
+         * キャッシュになければTwitterから取得し、キャッシュします。
+         * @param statusId id
+         * @param user user
+         * @return StatusModel
+         */
+        public static StatusModel build(long statusId, ClientUser user) {
+            try {
+                HashMap<Status, StatusModel> map = new HashMap<>();
+                cache.putAll(map);
+                for (StatusModel model : map.values()) {
+                    if (model.getStatusId() == statusId) {
+                        return model;
+                    }
+                }
+
+                return build(user.getTwitter().showStatus(statusId));
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }
