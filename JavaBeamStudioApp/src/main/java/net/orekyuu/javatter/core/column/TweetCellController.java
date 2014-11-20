@@ -131,9 +131,6 @@ public class TweetCellController implements Initializable {
     }
 
     private void addTweetEntity(TweetEntity entity) {
-        if (entity instanceof TextEntity) {
-            tweet.getChildren().add(new Text(entity.getText()));
-        }
         if (entity instanceof URLEntity) {
             Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
             hyperlink.setOnAction(this::openBrowser);
@@ -155,34 +152,6 @@ public class TweetCellController implements Initializable {
             Desktop.getDesktop().browse(new URL(link.getText()).toURI());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
-        }
-    }
-
-    private class TextEntity implements TweetEntity {
-
-        private final String text;
-        private final int start;
-        private final int end;
-
-        TextEntity(String text, int start, int end) {
-            this.text = text;
-            this.start = start;
-            this.end = end;
-        }
-
-        @Override
-        public String getText() {
-            return text;
-        }
-
-        @Override
-        public int getStart() {
-            return start;
-        }
-
-        @Override
-        public int getEnd() {
-            return end;
         }
     }
 
