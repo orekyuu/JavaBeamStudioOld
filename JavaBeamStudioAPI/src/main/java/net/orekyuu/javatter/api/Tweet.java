@@ -1,62 +1,62 @@
 package net.orekyuu.javatter.api;
 
 import java.io.File;
-
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
 /**
  * ツイートに関するインターフェース
  */
 public interface Tweet {
-	/**
-	 * ツイートを送信する。
-	 * 
-	 * @param user
-	 *            クライアントユーザー
-	 * @param text
-	 *            送信するテキスト
-	 */
-	public void sendTweet(ClientUser user, String text);
+    /**
+     * ツイートにイメージを添付する<br>
+     * 最大３つまで
+     * 
+     * @param mediaFile
+     *            ファイル
+     * @return 自身のインスタンス
+     */
+    Tweet addMedia(File mediaFile);
 
-	/**
-	 * 
-	 * @param user
-	 *            クライアントユーザー
-	 * @param text
-	 *            送信するテキスト
-	 * @param file
-	 *            添付するイメージファイル
-	 */
-	public void sendImageTweet(ClientUser user, String text, File file);
+    /**
+     * ツイートの実行
+     * 
+     * @return success;
+     */
+    void tweet();
 
-	/**
-	 * ツイートに対してリプライを送信する
-	 * 
-	 * @param user
-	 *            クライアントユーザー
-	 * @param destinationId
-	 *            リプライ元のツイートのid
-	 * @param text
-	 *            送信するテキスト
-	 * @param destinationName
-	 *            送信相手のスクリーンネーム
-	 */
-	public void sendReply(ClientUser user, long destinationId, String text,
-			String destinationName);
+    /**
+     * ツイートを行うクライアントユーザーをセットする
+     * 
+     * @param user
+     *            クライアントユーザー
+     * @return 自身のインスタンス
+     */
+    Tweet setClientUser(ClientUser user);
 
-	/**
-	 * 
-	 * @param user
-	 *            クライアントユーザー
-	 * @param destinationId
-	 *            リプライ元のツイートのid
-	 * @param text
-	 *            送信するテキスト
-	 * @param destinationName
-	 *            送信相手のスクリーンネーム
-	 * @param file
-	 *            添付するイメージファイル
-	 */
-	public void sendImageReply(ClientUser user, long destinationId,
-			String text, String destinationName, File file);
+    /**
+     * リプライ先を設定する
+     * 
+     * @param id
+     *            ステータスID
+     * @return 自身のインスタンス
+     */
+    Tweet setReplyto(long id);
+
+    /**
+     * ツイートするテキストをセット
+     * 
+     * @param s
+     *            テキスト
+     * @return 自身のインスタンス
+     */
+    Tweet setText(String s);
+
+    /**
+     * 
+     * @param callBack
+     *            ツイートコールバック
+     * @return 自身のインスタンス
+     */
+    Tweet setTweetCallBack(TweetCallBack callBack);
+
 }
