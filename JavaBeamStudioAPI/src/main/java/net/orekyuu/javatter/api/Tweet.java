@@ -9,7 +9,7 @@ import net.orekyuu.javatter.api.twitter.ClientUser;
 public interface Tweet {
     /**
      * ツイートにイメージを添付する<br>
-     * 最大３つまで
+     * 最大4つまで
      * 
      * @param mediaFile
      *            ファイル
