@@ -41,13 +41,13 @@ public class MainWindowPresenter implements Initializable, EditText,
     @FXML
     private ImageView clientUserImage;
     @FXML
-    private ImageView tweetImage1;
+    private ImageView tweetImageView1;
     @FXML
-    private ImageView tweetImage2;
+    private ImageView tweetImageView2;
     @FXML
-    private ImageView tweetImage3;
+    private ImageView tweetImageView3;
     @FXML
-    private ImageView tweetImage4;
+    private ImageView tweetImageView4;
     @FXML
     private CustomImageView hoverImageView1;
     @FXML
@@ -61,7 +61,7 @@ public class MainWindowPresenter implements Initializable, EditText,
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users = new ArrayList<>();
     private static List<File> imageFiles = new ArrayList<>();
-    private static List<ImageView> appendedImages = new ArrayList<>();
+    private static List<ImageView> appendedImagesViews = new ArrayList<>();
     private static List<CustomImageView> hoverImageViews = new ArrayList<>();
     private static Image hoverImage;
 
@@ -90,10 +90,10 @@ public class MainWindowPresenter implements Initializable, EditText,
         hoverImageViews.add(hoverImageView2);
         hoverImageViews.add(hoverImageView3);
         hoverImageViews.add(hoverImageView4);
-        appendedImages.add(tweetImage1);
-        appendedImages.add(tweetImage2);
-        appendedImages.add(tweetImage3);
-        appendedImages.add(tweetImage4);
+        appendedImagesViews.add(tweetImageView1);
+        appendedImagesViews.add(tweetImageView2);
+        appendedImagesViews.add(tweetImageView3);
+        appendedImagesViews.add(tweetImageView4);
 
         tweetTextArea.addChangeTextListener(this);
         tweetTextArea.addOnDropListener(this);
@@ -159,7 +159,7 @@ public class MainWindowPresenter implements Initializable, EditText,
             setText("");
             Platform.runLater(() -> {
                 for (int i = 0; i < imageFiles.size(); i++) {
-                    appendedImages.get(i).setImage(null);
+                    appendedImagesViews.get(i).setImage(null);
                 }
                 imageFiles.clear();
             });
@@ -223,7 +223,7 @@ public class MainWindowPresenter implements Initializable, EditText,
             }
             Platform.runLater(() -> {
                 for (int i = imageFilesSize; i < dragboardSize + imageFilesSize; i++) {
-                    appendedImages.get(i).setImage(
+                    appendedImagesViews.get(i).setImage(
                             new Image(imageFiles.get(i).toURI().toString()));
                 }
             });
@@ -268,13 +268,13 @@ public class MainWindowPresenter implements Initializable, EditText,
                 if (view == hoverImageViews.get(i)) {
                     if (i != imageFilesSize - 1) {
                         for (int j = i; j < imageFilesSize - 1; j++) {
-                            appendedImages.get(j + 1).setImage(null);
-                            appendedImages.get(j).setImage(
+                            appendedImagesViews.get(j + 1).setImage(null);
+                            appendedImagesViews.get(j).setImage(
                                     new Image(imageFiles.get(j + 1).toURI()
                                             .toString()));
                         }
                     } else {
-                        appendedImages.get(i).setImage(null);
+                        appendedImagesViews.get(i).setImage(null);
                     }
                     imageFiles.remove(i);
                     view.setImage(null);
