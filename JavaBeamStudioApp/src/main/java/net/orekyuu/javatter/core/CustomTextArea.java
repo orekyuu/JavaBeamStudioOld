@@ -17,27 +17,26 @@ public class CustomTextArea extends TextArea {
     /**
      * コールバックするオブジェクトを指定します。
      * 
-     * @param o
+     * @param CustomTextArea
      *            EditTextを継承したオブジェクト
      */
-    public void addChangeTextListener(Object o) {
-        if (o instanceof EditText) {
-            editTextCallBack = (EditText) o;
-            this.textProperty().addListener((s1, s2, s3) -> {
-                editTextCallBack.onChanged(getText(), getText().length());
-            });
-        }
+    public void addChangeTextListener(EditText editText) {
+
+        editTextCallBack = editText;
+        this.textProperty().addListener((s1, s2, s3) -> {
+            editTextCallBack.onChanged(getText(), getText().length());
+        });
+
     }
 
-    public void addOnDropListener(Object o) {
-        if (o instanceof OnDropListener) {
-            onDropCallBack = (OnDropListener) o;
-            this.setOnDragOver(e -> {
-                onDropCallBack.onDrop(e);
-            });
-            this.setOnDragDropped(e -> {
-                onDropCallBack.onDroped(e);
-            });
-        }
+    public void addOnDropListener(OnDropListener listener) {
+        onDropCallBack = listener;
+        this.setOnDragOver(e -> {
+            onDropCallBack.onDrop(e);
+        });
+        this.setOnDragDropped(e -> {
+            onDropCallBack.onDroped(e);
+        });
     }
+
 }
