@@ -21,7 +21,6 @@ public class CustomTextArea extends TextArea {
      *            EditTextを継承したオブジェクト
      */
     public void addChangeTextListener(EditText editText) {
-
         editTextCallBack = editText;
         this.textProperty().addListener((s1, s2, s3) -> {
             editTextCallBack.onChanged(getText(), getText().length());

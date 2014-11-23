@@ -20,7 +20,6 @@ public interface Tweet {
     /**
      * ツイートの実行
      * 
-     * @return success;
      */
     void tweet();
 

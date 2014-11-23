@@ -1,15 +1,19 @@
 package net.orekyuu.javatter.api;
 
+import twitter4j.TwitterException;
+
 /**
  * ツイートの成功の可否についてのインターフェース
  *
  */
 public interface TweetCallBack {
     /**
-     * 
-     * @param success
-     *            成功したか否かが格納
-     * 
+     *成功時のイベント 
      */
-    void SuccessCallBack(Boolean success);
+    void successCallBack();
+    /**
+     * 失敗時のイベント
+     * @param e TwitterException
+     */
+    void failureCallBack(TwitterException e);
 }

@@ -68,9 +68,7 @@ public class MainWindowPresenter implements Initializable, EditText,
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hoverImage = new Image(
-                new File(
-                        "src\\main\\resources\\net\\orekyuu\\javatter\\core\\pict\\pictDelete.png")
-                        .toURI().toString());
+                Main.class.getResourceAsStream("pict\\pictDelete.png"));
         if (LocalClientUser.loadClientUsers().size() > 0) {
             users.addAll(LocalClientUser.loadClientUsers());
             Platform.runLater(() -> {
@@ -165,7 +163,7 @@ public class MainWindowPresenter implements Initializable, EditText,
             });
         }
     }
-  
+
     // Javaビームです。
     public void javaBeam() {
         new TweetBuilder().setClientUser(users.get(nowUserIndex))
@@ -174,15 +172,10 @@ public class MainWindowPresenter implements Initializable, EditText,
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
     public void changeUser() {
-        if (!(users.size() == 1 && users.size() == 0)) {
-            if (users.size() - 1 > nowUserIndex) {
-                nowUserIndex++;
-            } else {
-                nowUserIndex = 0;
-            }
+        nowUserIndex = (nowUserIndex + 1) % users.size();
 
-            clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-        }
+        clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+
     }
 
     @Override
