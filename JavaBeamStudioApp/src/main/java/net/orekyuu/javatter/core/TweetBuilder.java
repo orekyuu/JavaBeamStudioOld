@@ -12,7 +12,11 @@ import twitter4j.UploadedMedia;
 import net.orekyuu.javatter.api.Tweet;
 import net.orekyuu.javatter.api.TweetCallBack;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-
+/**
+ * ツイートに関するクラス
+ * @author seroriKETC
+ *
+ */
 public class TweetBuilder implements Tweet {
     private List<File> files = new ArrayList<>();
     private ClientUser user;
@@ -20,12 +24,6 @@ public class TweetBuilder implements Tweet {
     private long id = -1;
     private Twitter twitter;
     TweetCallBack tweetCallBack = null;
-
-    @Override
-    public Tweet addMedia(File mediaFile) {
-        files.add(mediaFile);
-        return this;
-    }
 
     @Override
     public void tweet() {
@@ -37,7 +35,7 @@ public class TweetBuilder implements Tweet {
             if (-1 != id) {
                 statusUpdate.setInReplyToStatusId(id);
             }
-            if (files.size() != 0 && user != null) {
+            if (files.size() != 0 && files.size() <= 4 && user != null) {
                 int fileSize = files.size();
                 List<UploadedMedia> media = new ArrayList<>();
                 long[] mediaId = new long[files.size()];
@@ -67,6 +65,12 @@ public class TweetBuilder implements Tweet {
                 }
             }
         });
+    }
+
+    @Override
+    public Tweet addMedia(File mediaFile) {
+        files.add(mediaFile);
+        return this;
     }
 
     @Override
