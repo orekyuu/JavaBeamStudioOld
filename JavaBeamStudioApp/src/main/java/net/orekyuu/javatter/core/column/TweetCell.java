@@ -1,14 +1,17 @@
-package net.orekyuu.javatter.core;
+package net.orekyuu.javatter.core.column;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ListCell;
+import javafx.scene.layout.AnchorPane;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.models.StatusModel;
 
 import java.io.IOException;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.ListCell;
-import net.orekyuu.javatter.api.twitter.ClientUser;
-import twitter4j.Status;
-
-public class TweetCell extends ListCell<Status> {
+public class TweetCell extends ListCell<StatusModel> {
     /**
      * 所定コントローラ
      */
@@ -34,30 +37,33 @@ public class TweetCell extends ListCell<Status> {
      *            空かどうか
      */
     @Override
-    protected void updateItem(Status status, boolean empty) {
+    protected void updateItem(StatusModel status, boolean empty) {
         // スーパークラスから必要な機能を継承
         super.updateItem(status, empty);
         if (empty) {
-            // 空の場合は表示・描画を行わない
             setText(null);
             setGraphic(null);
             tweetCellController = null;
         } else {
             // 空でない場合は
             // 名前の取得と表示
-            if (getGraphic() == null) {
+            if (tweetCellController == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 try {
-                    Parent parent = (Parent) fxmlLoader.load(Main.class
+                    AnchorPane root = fxmlLoader.load(Main.class
                             .getResourceAsStream("tweetcell.fxml"));
-                    setGraphic(parent);
+                    DoubleBinding binding = Bindings.add(-20.0, getListView().widthProperty());
+                    root.prefWidthProperty().bind(binding);
+                    root.maxWidthProperty().bind(binding);
+                    setGraphic(root);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                tweetCellController.setClientUser(clientUser);
                 tweetCellController = fxmlLoader.getController();
+                tweetCellController.setClientUser(clientUser);
             }
-            tweetCellController.updateTweetCell(status);
+            if(tweetCellController != null)
+                tweetCellController.updateTweetCell(status);
         }
     }
 }
