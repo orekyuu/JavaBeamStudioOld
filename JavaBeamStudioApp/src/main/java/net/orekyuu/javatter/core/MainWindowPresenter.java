@@ -18,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.Tweet;
+import net.orekyuu.javatter.api.TweetCallBack;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import net.orekyuu.javatter.api.EditText;
@@ -28,6 +30,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable, EditText,
@@ -143,39 +147,40 @@ public class MainWindowPresenter implements Initializable, EditText,
 
     // ツイートの実行
     public void tweet() {
-        if (getText().length() > 0 && imageFiles.size() == 0) {
-            new TweetBuilder().setClientUser(users.get(nowUserIndex))
-                    .setText(getText()).tweet();
+        Tweet builder = new TweetBuilder()
+                .setText(getText())
+                .setClientUser(users.get(nowUserIndex))
+                .setTweetCallBack(new TweetCallBack() {
+                    @Override
+                    public void successCallBack(Status model) {
+                        System.out.println(model.getText());
+                    }
+
+                    @Override
+                    public void failureCallBack(TwitterException e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setAsync();
+        imageFiles.forEach(builder::addMedia);
+        builder.tweet();
+        Platform.runLater(() -> {
+            appendedImagesViews.forEach(e -> e.setImage(null));
+            imageFiles.clear();
             setText("");
-        } else if (getText().length() > 0 && imageFiles.size() > 0) {
-            TweetBuilder tweetBuilder = new TweetBuilder();
-            for (int i = 0; i < imageFiles.size(); i++) {
-                tweetBuilder.addMedia(imageFiles.get(i));
-            }
-            tweetBuilder.setClientUser(users.get(nowUserIndex))
-                    .setText(getText()).tweet();
-            setText("");
-            Platform.runLater(() -> {
-                for (int i = 0; i < imageFiles.size(); i++) {
-                    appendedImagesViews.get(i).setImage(null);
-                }
-                imageFiles.clear();
-            });
-        }
+        });
     }
 
     // Javaビームです。
     public void javaBeam() {
         new TweetBuilder().setClientUser(users.get(nowUserIndex))
-                .setText("Javabeamです").tweet();
+                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet();
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
     public void changeUser() {
         nowUserIndex = (nowUserIndex + 1) % users.size();
-
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-
     }
 
     @Override
