@@ -1,6 +1,9 @@
 package net.orekyuu.javatter.core;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.NumberBinding;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -18,6 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.Tweet;
 import net.orekyuu.javatter.api.TweetCallBack;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
@@ -34,7 +39,7 @@ import java.util.ResourceBundle;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
-public class MainWindowPresenter implements Initializable, EditText,
+public class MainWindowPresenter implements Initializable,
         OnDropListener, OnHoverListener, OnClickListener {
     @FXML
     private HBox hbox;
@@ -97,8 +102,9 @@ public class MainWindowPresenter implements Initializable, EditText,
         appendedImagesViews.add(tweetImageView3);
         appendedImagesViews.add(tweetImageView4);
 
-        tweetTextArea.addChangeTextListener(this);
         tweetTextArea.addOnDropListener(this);
+        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
+        remaining.textProperty().bind(Bindings.convert(length));
 
         hoverImageViews.forEach(t -> {
             t.addOnHoverListener(this);
@@ -148,7 +154,7 @@ public class MainWindowPresenter implements Initializable, EditText,
     // ツイートの実行
     public void tweet() {
         Tweet builder = new TweetBuilder()
-                .setText(getText())
+                .setText(tweetTextArea.getText())
                 .setClientUser(users.get(nowUserIndex))
                 .setTweetCallBack(new TweetCallBack() {
                     @Override
@@ -167,7 +173,7 @@ public class MainWindowPresenter implements Initializable, EditText,
         Platform.runLater(() -> {
             appendedImagesViews.forEach(e -> e.setImage(null));
             imageFiles.clear();
-            setText("");
+            tweetTextArea.setText("");
         });
     }
 
@@ -179,24 +185,10 @@ public class MainWindowPresenter implements Initializable, EditText,
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
     public void changeUser() {
+        if (users.isEmpty())
+            return;
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-    }
-
-    @Override
-    public void setText(String s) {
-        tweetTextArea.setText(s);
-    }
-
-    @Override
-    public String getText() {
-        return tweetTextArea.getText();
-    }
-
-    // tweetTextAreaに変更があると自動で呼ばれます。
-    @Override
-    public void onChanged(CharSequence cs, int count) {
-        remaining.setText("" + (140 - count));
     }
 
     // ドロップ前
