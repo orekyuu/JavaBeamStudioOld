@@ -52,31 +52,47 @@
         <ImageView fx:id="tweetImage1" fitHeight="64.0" fitWidth="64.0" layoutX="14.0" layoutY="132.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="533.8762893676758"
                    AnchorPane.topAnchor="132.0">
-            <cursor>
-                <Cursor fx:constant="HAND"/>
-            </cursor>
         </ImageView>
         <ImageView fx:id="tweetImage2" fitHeight="64.0" fitWidth="64.0" layoutX="84.0" layoutY="132.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="463.8762893676758"
                    AnchorPane.topAnchor="132.0">
-            <cursor>
-                <Cursor fx:constant="HAND"/>
-            </cursor>
         </ImageView>
         <ImageView fx:id="tweetImage3" fitHeight="64.0" fitWidth="64.0" layoutX="160.0" layoutY="180.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="387.8762893676758"
                    AnchorPane.topAnchor="132.0">
-            <cursor>
-                <Cursor fx:constant="HAND"/>
-            </cursor>
         </ImageView>
-        <ImageView fitHeight="64.0" fitWidth="64.0" layoutX="229.0" layoutY="180.0" pickOnBounds="true"
+        <ImageView fx:id="tweetImage4" fitHeight="64.0" fitWidth="64.0" layoutX="229.0" layoutY="180.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="318.8762893676758"
                    AnchorPane.topAnchor="132.0">
-            <cursor>
+        </ImageView>
+        <net.orekyuu.javatter.core.CustomImageView fx:id="hoverImageView1" fitHeight="64.0" fitWidth="64.0" layoutX="20.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true"
+        		   AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="533.8762893676758"
+                   AnchorPane.topAnchor="132.0" >
+             <cursor>
                 <Cursor fx:constant="HAND"/>
             </cursor>
-        </ImageView>
+        </net.orekyuu.javatter.core.CustomImageView>
+        <net.orekyuu.javatter.core.CustomImageView fx:id="hoverImageView2" fitHeight="64.0" fitWidth="64.0" layoutX="160.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true"
+        		   AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="463.8762893676758"
+                   AnchorPane.topAnchor="132.0" >
+             <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </net.orekyuu.javatter.core.CustomImageView>
+        <net.orekyuu.javatter.core.CustomImageView fx:id="hoverImageView3" fitHeight="64.0" fitWidth="64.0" layoutX="229.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true"
+        		   AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="387.8762893676758"
+                   AnchorPane.topAnchor="132.0" >
+             <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </net.orekyuu.javatter.core.CustomImageView>
+        <net.orekyuu.javatter.core.CustomImageView fx:id="hoverImageView4" fitHeight="64.0" fitWidth="64.0" layoutX="20.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true"
+        		   AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="318.8762893676758"
+                   AnchorPane.topAnchor="132.0" >
+             <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </net.orekyuu.javatter.core.CustomImageView>
         <HBox fx:id="hbox" layoutX="6.0" layoutY="201.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="201.0">
             <cursor>
