@@ -39,7 +39,7 @@ public interface Tweet {
      *            ステータスID
      * @return 自身のインスタンス
      */
-    Tweet setReplyto(long id);
+    Tweet setReplyTo(long id);
 
     /**
      * ツイートするテキストをセット
@@ -57,5 +57,11 @@ public interface Tweet {
      * @return 自身のインスタンス
      */
     Tweet setTweetCallBack(TweetCallBack callBack);
+
+    /**
+     * 非同期ツイートを有効化する
+     * @return 自身のインスタンス
+     */
+    Tweet setAsync();
 
 }

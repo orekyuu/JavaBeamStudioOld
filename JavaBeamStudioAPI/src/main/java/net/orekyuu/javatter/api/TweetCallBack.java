@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.api;
 
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 /**
@@ -10,7 +11,7 @@ public interface TweetCallBack {
     /**
      *成功時のイベント 
      */
-    void successCallBack();
+    void successCallBack(Status model);
     /**
      * 失敗時のイベント
      * @param e TwitterException
