@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core;
 import javafx.scene.input.DragEvent;
 
 /**
- * 画像のD&Dに関する
+ * 画像のD&Dに関するインターフェース
  *
  */
 public interface OnDropListener {
