@@ -34,3 +34,7 @@ StackPane.indicator {
     -fx-progress-color: white;
     -fx-opacity: 1.0;
 }
+
+ImageView.hoverImage {
+    -fx-image: url("./pict/delete.png");
+}

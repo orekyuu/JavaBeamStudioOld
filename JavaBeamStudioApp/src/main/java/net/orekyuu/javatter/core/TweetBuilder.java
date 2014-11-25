@@ -44,7 +44,18 @@ public class TweetBuilder implements Tweet {
         if (-1 != replyStatusID)
             statusUpdate.setInReplyToStatusId(replyStatusID);
 
-        files.forEach(statusUpdate::media);
+        long[] medias = new long[files.size()];
+        int i = 0;
+        for (File file : files) {
+            try {
+                UploadedMedia uploadedMedia = user.getTwitter().uploadMedia(file);
+                medias[i++] = uploadedMedia.getMediaId();
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+        }
+        statusUpdate.setMediaIds(medias);
+
         try {
             Status status = twitter.updateStatus(statusUpdate);
             if (null != tweetCallBack)
@@ -58,6 +69,7 @@ public class TweetBuilder implements Tweet {
 
     @Override
     public Tweet addMedia(File mediaFile) {
+        System.out.println("add media: " + mediaFile.getName());
         files.add(mediaFile);
         return this;
     }

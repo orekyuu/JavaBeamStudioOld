@@ -6,6 +6,7 @@ import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -31,17 +33,14 @@ import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import net.orekyuu.javatter.api.EditText;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
-import java.util.List;
+import java.util.*;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
-public class MainWindowPresenter implements Initializable,
-        OnDropListener, OnHoverListener, OnClickListener {
+public class MainWindowPresenter implements Initializable, OnDropListener {
     @FXML
     private HBox hbox;
     @FXML
@@ -59,26 +58,23 @@ public class MainWindowPresenter implements Initializable,
     @FXML
     private ImageView tweetImageView4;
     @FXML
-    private CustomImageView hoverImageView1;
+    private ImageView hoverImageView1;
     @FXML
-    private CustomImageView hoverImageView2;
+    private ImageView hoverImageView2;
     @FXML
-    private CustomImageView hoverImageView3;
+    private ImageView hoverImageView3;
     @FXML
-    private CustomImageView hoverImageView4;
+    private ImageView hoverImageView4;
 
-    private static int nowUserIndex = 0;
+    private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
-    private static List<File> imageFiles = new ArrayList<>();
-    private static List<ImageView> appendedImagesViews = new ArrayList<>();
-    private static List<CustomImageView> hoverImageViews = new ArrayList<>();
-    private static Image hoverImage;
+    private List<File> imageFiles = new ArrayList<>();
+    private List<ImageView> appendedImagesViews = new ArrayList<>();
+    private List<ImageView> hoverImageViews = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        hoverImage = new Image(
-                Main.class.getResourceAsStream("pict\\pictDelete.png"));
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         Platform.runLater(() -> {
             try {
@@ -91,7 +87,14 @@ public class MainWindowPresenter implements Initializable,
                 e.printStackTrace();
             }
         });
+        initPreviewImageViews();
+        tweetTextArea.addOnDropListener(this);
+        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
+        remaining.textProperty().bind(Bindings.convert(length));
 
+    }
+
+    private void initPreviewImageViews() {
         hoverImageViews.add(hoverImageView1);
         hoverImageViews.add(hoverImageView2);
         hoverImageViews.add(hoverImageView3);
@@ -101,15 +104,22 @@ public class MainWindowPresenter implements Initializable,
         appendedImagesViews.add(tweetImageView3);
         appendedImagesViews.add(tweetImageView4);
 
-        tweetTextArea.addOnDropListener(this);
-        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
-        remaining.textProperty().bind(Bindings.convert(length));
-
-        hoverImageViews.forEach(t -> {
-            t.addOnHoverListener(this);
-            t.addOnClickListener(this);
+        hoverImageViews.forEach(i -> {
+            i.setOnMouseEntered(this::onMouseEnter);
+            i.setOnMouseExited(this::onMouseExit);
         });
+    }
 
+    private void onMouseExit(MouseEvent mouseEvent) {
+        System.out.println("exit");
+        Node node = (Node) mouseEvent.getSource();
+        node.setOpacity(0);
+    }
+
+    private void onMouseEnter(MouseEvent mouseEvent) {
+        System.out.println("enter");
+        Node node = (Node) mouseEvent.getSource();
+        node.setOpacity(1.0);
     }
 
     public void addColumn(ActionEvent actionEvent) {
@@ -218,58 +228,10 @@ public class MainWindowPresenter implements Initializable,
             });
 
             e.setDropCompleted(true);
+            imageFiles.forEach(f -> System.out.println(f.getName()));
 
         } else {
             e.setDropCompleted(false);
         }
     }
-
-    @Override
-    public void onHover(Event e) {
-        CustomImageView view = (CustomImageView) e.getSource();
-        for (int i = 0; i < imageFiles.size(); i++) {
-            if (view == hoverImageViews.get(i)) {
-                Platform.runLater(() -> {
-                    view.setImage(hoverImage);
-                });
-            }
-        }
-    }
-
-    @Override
-    public void onHoverd(Event e) {
-        CustomImageView view = (CustomImageView) e.getSource();
-        for (int i = 0; i < imageFiles.size(); i++) {
-            if (view == hoverImageViews.get(i)) {
-                Platform.runLater(() -> {
-                    view.setImage(null);
-                });
-            }
-        }
-    }
-
-    @Override
-    public void onCLicked(Event e) {
-        CustomImageView view = (CustomImageView) e.getSource();
-        int imageFilesSize = imageFiles.size();
-        Platform.runLater(() -> {
-            for (int i = 0; i < imageFilesSize; i++) {
-                if (view == hoverImageViews.get(i)) {
-                    if (i != imageFilesSize - 1) {
-                        for (int j = i; j < imageFilesSize - 1; j++) {
-                            appendedImagesViews.get(j + 1).setImage(null);
-                            appendedImagesViews.get(j).setImage(
-                                    new Image(imageFiles.get(j + 1).toURI()
-                                            .toString()));
-                        }
-                    } else {
-                        appendedImagesViews.get(i).setImage(null);
-                    }
-                    imageFiles.remove(i);
-                    view.setImage(null);
-                }
-            }
-        });
-    }
-
 }
