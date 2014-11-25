@@ -82,8 +82,8 @@ public class MainWindowPresenter implements Initializable,
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         Platform.runLater(() -> {
             try {
-                for (int i = 0; i < users.size(); i++) {
-                    myProfileImage.add(new Image(users.get(i).getTwitter()
+                for (ClientUser user : users) {
+                    myProfileImage.add(new Image(user.getTwitter()
                             .verifyCredentials().getProfileImageURL()));
                 }
                 clientUserImage.setImage(myProfileImage.get(nowUserIndex));
