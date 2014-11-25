@@ -25,6 +25,7 @@ import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.Tweet;
 import net.orekyuu.javatter.api.TweetCallBack;
+import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import net.orekyuu.javatter.api.EditText;
@@ -68,7 +69,7 @@ public class MainWindowPresenter implements Initializable,
 
     private static int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
-    private List<ClientUser> users = new ArrayList<>();
+    private List<ClientUser> users;
     private static List<File> imageFiles = new ArrayList<>();
     private static List<ImageView> appendedImagesViews = new ArrayList<>();
     private static List<CustomImageView> hoverImageViews = new ArrayList<>();
@@ -78,20 +79,18 @@ public class MainWindowPresenter implements Initializable,
     public void initialize(URL location, ResourceBundle resources) {
         hoverImage = new Image(
                 Main.class.getResourceAsStream("pict\\pictDelete.png"));
-        if (LocalClientUser.loadClientUsers().size() > 0) {
-            users.addAll(LocalClientUser.loadClientUsers());
-            Platform.runLater(() -> {
-                try {
-                    for (int i = 0; i < users.size(); i++) {
-                        myProfileImage.add(new Image(users.get(i).getTwitter()
-                                .verifyCredentials().getProfileImageURL()));
-                    }
-                    clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-                } catch (TwitterException e) {
-                    e.printStackTrace();
+        users = ClientUserRegister.getInstance().getUsers(s -> true);
+        Platform.runLater(() -> {
+            try {
+                for (int i = 0; i < users.size(); i++) {
+                    myProfileImage.add(new Image(users.get(i).getTwitter()
+                            .verifyCredentials().getProfileImageURL()));
                 }
-            });
-        }
+                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+        });
 
         hoverImageViews.add(hoverImageView1);
         hoverImageViews.add(hoverImageView2);
