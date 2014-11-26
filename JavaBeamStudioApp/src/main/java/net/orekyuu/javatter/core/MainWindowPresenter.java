@@ -2,11 +2,8 @@ package net.orekyuu.javatter.core;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.Tweet;
+import net.orekyuu.javatter.api.twitter.Tweet;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -32,6 +29,7 @@ import java.util.*;
 import java.io.File;
 import java.net.URL;
 
+import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable, OnDropListener {

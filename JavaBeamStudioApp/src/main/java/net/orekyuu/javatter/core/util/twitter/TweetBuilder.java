@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core;
+package net.orekyuu.javatter.core.util.twitter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import net.orekyuu.javatter.api.TweetFailed;
-import net.orekyuu.javatter.api.TweetSuccess;
+import net.orekyuu.javatter.api.twitter.TweetFailed;
+import net.orekyuu.javatter.api.twitter.TweetSuccess;
 import twitter4j.*;
-import net.orekyuu.javatter.api.Tweet;
+import net.orekyuu.javatter.api.twitter.Tweet;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 /**
  * ツイートに関するクラス

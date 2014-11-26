@@ -1,7 +1,6 @@
-package net.orekyuu.javatter.api;
+package net.orekyuu.javatter.api.twitter;
 
 import java.io.File;
-import net.orekyuu.javatter.api.twitter.ClientUser;
 
 /**
  * ツイートに関するインターフェース

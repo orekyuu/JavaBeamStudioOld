@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.api;
+package net.orekyuu.javatter.api.twitter;
 
 import twitter4j.Status;
 
