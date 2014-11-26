@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -32,11 +33,11 @@ import java.net.URL;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
 
-public class MainWindowPresenter implements Initializable, OnDropListener {
+public class MainWindowPresenter implements Initializable {
     @FXML
     private HBox hbox;
     @FXML
-    private CustomTextArea tweetTextArea;
+    private TextArea tweetTextArea;
     @FXML
     private Text remaining;
     @FXML
@@ -80,7 +81,8 @@ public class MainWindowPresenter implements Initializable, OnDropListener {
             }
         });
         initPreviewImageViews();
-        tweetTextArea.addOnDropListener(this);
+        tweetTextArea.setOnDragOver(this::onDrop);
+        tweetTextArea.setOnDragDropped(this::onDroped);
         NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
 
@@ -183,7 +185,6 @@ public class MainWindowPresenter implements Initializable, OnDropListener {
     }
 
     // ドロップ前
-    @Override
     public void onDrop(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
         if (dragboard.hasFiles() && imageFiles.size() < 4) {
@@ -192,7 +193,6 @@ public class MainWindowPresenter implements Initializable, OnDropListener {
     }
 
     // ドロップ後
-    @Override
     public void onDroped(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
         int imageFilesSize = imageFiles.size();

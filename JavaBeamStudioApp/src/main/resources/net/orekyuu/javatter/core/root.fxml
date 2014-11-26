@@ -10,12 +10,12 @@
             prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="net.orekyuu.javatter.core.MainWindowPresenter">
     <children>
-        <net.orekyuu.javatter.core.CustomTextArea fx:id="tweetTextArea" layoutX="14.0" layoutY="14.0" prefHeight="114.0" prefWidth="345.0" AnchorPane.leftAnchor="14.0"
+        <TextArea fx:id="tweetTextArea" layoutX="14.0" layoutY="14.0" prefHeight="114.0" prefWidth="345.0" AnchorPane.leftAnchor="14.0"
                   AnchorPane.rightAnchor="241.0" AnchorPane.topAnchor="14.0">
             <cursor>
                 <Cursor fx:constant="TEXT"/>
             </cursor>
-        </net.orekyuu.javatter.core.CustomTextArea>
+        </TextArea>
         <ImageView onMouseClicked="#changeUser" fx:id="clientUserImage" fitHeight="40.0" fitWidth="40.0" layoutX="371.0" layoutY="16.0" pickOnBounds="true"
                    preserveRatio="true" AnchorPane.rightAnchor="181.0" AnchorPane.topAnchor="16.0">
             <cursor>
