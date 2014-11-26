@@ -51,12 +51,18 @@ public interface Tweet {
     Tweet setText(String s);
 
     /**
-     * 
-     * @param callBack
-     *            ツイートコールバック
+     * ツイート失敗時のイベントを設定する
+     * @param callback ツイート失敗時の処理
      * @return 自身のインスタンス
      */
-    Tweet setTweetCallBack(TweetCallBack callBack);
+    Tweet setOnTweetFailed(TweetFailed callback);
+
+    /**
+     * ツイート成功時のイベントを設定する
+     * @param callback ツイート成功時の処理
+     * @return 自身のインスタンス
+     */
+    Tweet setOnTweetSuccess(TweetSuccess callback);
 
     /**
      * 非同期ツイートを有効化する

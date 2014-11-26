@@ -23,21 +23,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.Tweet;
-import net.orekyuu.javatter.api.TweetCallBack;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
-import net.orekyuu.javatter.core.twitter.LocalClientUser;
-import net.orekyuu.javatter.api.EditText;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import java.util.*;
 import java.io.File;
 import java.net.URL;
 
-import twitter4j.Status;
 import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable, OnDropListener {
@@ -165,17 +159,7 @@ public class MainWindowPresenter implements Initializable, OnDropListener {
         Tweet builder = new TweetBuilder()
                 .setText(tweetTextArea.getText())
                 .setClientUser(users.get(nowUserIndex))
-                .setTweetCallBack(new TweetCallBack() {
-                    @Override
-                    public void successCallBack(Status model) {
-                        System.out.println(model.getText());
-                    }
-
-                    @Override
-                    public void failureCallBack(TwitterException e) {
-                        e.printStackTrace();
-                    }
-                })
+                .setOnTweetSuccess(s -> System.out.println(s.getText()))
                 .setAsync();
         imageFiles.forEach(builder::addMedia);
         builder.tweet();

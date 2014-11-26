@@ -3,11 +3,13 @@ package net.orekyuu.javatter.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import net.orekyuu.javatter.api.TweetFailed;
+import net.orekyuu.javatter.api.TweetSuccess;
 import twitter4j.*;
 import net.orekyuu.javatter.api.Tweet;
-import net.orekyuu.javatter.api.TweetCallBack;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 /**
  * ツイートに関するクラス
@@ -19,7 +21,8 @@ public class TweetBuilder implements Tweet {
     private ClientUser user;
     private String text;
     private long replyStatusID = -1;
-    private TweetCallBack tweetCallBack = null;
+    private Optional<TweetFailed> failed = Optional.empty();
+    private Optional<TweetSuccess> success = Optional.empty();
     private boolean isAsync;
     private boolean isTweeted;
 
@@ -58,11 +61,9 @@ public class TweetBuilder implements Tweet {
 
         try {
             Status status = twitter.updateStatus(statusUpdate);
-            if (null != tweetCallBack)
-                tweetCallBack.successCallBack(status);
+            success.ifPresent(s -> s.success(status));
         } catch (TwitterException e) {
-            if (null != tweetCallBack)
-                tweetCallBack.failureCallBack(e);
+            failed.ifPresent(s -> s.failed(e));
             e.printStackTrace();
         }
     }
@@ -93,8 +94,14 @@ public class TweetBuilder implements Tweet {
     }
 
     @Override
-    public Tweet setTweetCallBack(TweetCallBack callBack) {
-        tweetCallBack = callBack;
+    public Tweet setOnTweetFailed(TweetFailed callback) {
+        failed = Optional.of(callback);
+        return this;
+    }
+
+    @Override
+    public Tweet setOnTweetSuccess(TweetSuccess callback) {
+        success = Optional.of(callback);
         return this;
     }
 
