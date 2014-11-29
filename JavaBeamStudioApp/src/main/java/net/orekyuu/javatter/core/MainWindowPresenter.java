@@ -3,7 +3,6 @@ package net.orekyuu.javatter.core;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -177,7 +176,7 @@ public class MainWindowPresenter implements Initializable {
     }
 
     // ドロップ前
-    public void onDrop(DragEvent e) {
+    private void onDrop(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
         long usedPreview = appendedImagesViews.stream()
                 .filter(i -> i.getPreviewFile() != null)
@@ -188,7 +187,7 @@ public class MainWindowPresenter implements Initializable {
     }
 
     // ドロップ後
-    public void onDroped(DragEvent e) {
+    private void onDroped(DragEvent e) {
         List<File> images = appendedImagesViews.stream()
                 .filter(i -> i.getPreviewFile() != null)
                 .map(PreviewImage::getPreviewFile)
