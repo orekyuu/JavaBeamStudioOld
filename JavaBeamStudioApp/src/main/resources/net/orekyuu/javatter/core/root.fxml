@@ -23,8 +23,8 @@
                 <Cursor fx:constant="HAND"/>
             </cursor>
         </ImageView>
-        <Text layoutX="458.0" layoutY="42.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" strokeType="OUTSIDE"
-              strokeWidth="0.0" text="\@orekyuu" AnchorPane.rightAnchor="67.64453125" AnchorPane.topAnchor="26.0"/>
+        <Text fx:id="clientUserName" layoutX="458.0" layoutY="42.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" strokeType="OUTSIDE"
+              strokeWidth="0.0" text="\@user" AnchorPane.rightAnchor="67.64453125" AnchorPane.topAnchor="26.0"/>
         <Button onAction="#tweet" layoutX="371.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="85.0" text="ツイート"
                 AnchorPane.rightAnchor="144.0" AnchorPane.topAnchor="62.0"/>
         <Button onAction="#javaBeam" layoutX="461.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0"

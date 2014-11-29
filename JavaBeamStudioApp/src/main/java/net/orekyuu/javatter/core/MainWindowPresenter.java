@@ -35,6 +35,8 @@ import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable {
     @FXML
+    private Text clientUserName;
+    @FXML
     private HBox hbox;
     @FXML
     private TextArea tweetTextArea;
@@ -74,6 +76,7 @@ public class MainWindowPresenter implements Initializable {
                             .verifyCredentials().getProfileImageURL()));
                 }
                 clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                clientUserName.setText(users.get(nowUserIndex).getName());
             } catch (TwitterException e) {
                 e.printStackTrace();
             }
@@ -170,6 +173,7 @@ public class MainWindowPresenter implements Initializable {
             return;
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+        clientUserName.setText(users.get(nowUserIndex).getName());
     }
 
     // ドロップ前
