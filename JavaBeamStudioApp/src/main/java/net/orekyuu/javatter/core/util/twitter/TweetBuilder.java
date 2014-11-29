@@ -48,11 +48,10 @@ public class TweetBuilder implements Tweet {
             statusUpdate.setInReplyToStatusId(replyStatusID);
 
         long[] medias = new long[files.size()];
-        int i = 0;
-        for (File file : files) {
+        for (int i = 0; i < files.size(); i++) {
             try {
-                UploadedMedia uploadedMedia = user.getTwitter().uploadMedia(file);
-                medias[i++] = uploadedMedia.getMediaId();
+                UploadedMedia uploadedMedia = user.getTwitter().uploadMedia(files.get(i));
+                medias[i] = uploadedMedia.getMediaId();
             } catch (TwitterException e) {
                 e.printStackTrace();
             }
