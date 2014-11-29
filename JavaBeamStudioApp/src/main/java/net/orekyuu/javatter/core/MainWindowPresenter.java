@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,6 +28,7 @@ import net.orekyuu.javatter.api.twitter.ClientUser;
 import java.util.*;
 import java.io.File;
 import java.net.URL;
+import java.util.stream.Collectors;
 
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
@@ -43,13 +43,13 @@ public class MainWindowPresenter implements Initializable {
     @FXML
     private ImageView clientUserImage;
     @FXML
-    private ImageView tweetImageView1;
+    private PreviewImage tweetImageView1;
     @FXML
-    private ImageView tweetImageView2;
+    private PreviewImage tweetImageView2;
     @FXML
-    private ImageView tweetImageView3;
+    private PreviewImage tweetImageView3;
     @FXML
-    private ImageView tweetImageView4;
+    private PreviewImage tweetImageView4;
     @FXML
     private ImageView hoverImageView1;
     @FXML
@@ -62,9 +62,7 @@ public class MainWindowPresenter implements Initializable {
     private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
-    private List<File> imageFiles = new ArrayList<>();
-    private List<ImageView> appendedImagesViews = new ArrayList<>();
-    private List<ImageView> hoverImageViews = new ArrayList<>();
+    private List<PreviewImage> appendedImagesViews = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,6 +87,7 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void initPreviewImageViews() {
+        List<ImageView> hoverImageViews = new LinkedList<>();
         hoverImageViews.add(hoverImageView1);
         hoverImageViews.add(hoverImageView2);
         hoverImageViews.add(hoverImageView3);
@@ -98,25 +97,12 @@ public class MainWindowPresenter implements Initializable {
         appendedImagesViews.add(tweetImageView3);
         appendedImagesViews.add(tweetImageView4);
 
-        hoverImageViews.forEach(i -> {
-            i.setOnMouseEntered(this::onMouseEnter);
-            i.setOnMouseExited(this::onMouseExit);
-        });
+        for (int i = 0; i < appendedImagesViews.size(); i++) {
+            appendedImagesViews.get(i).setHoverImageView(hoverImageViews.get(i));
+        }
     }
 
-    private void onMouseExit(MouseEvent mouseEvent) {
-        System.out.println("exit");
-        Node node = (Node) mouseEvent.getSource();
-        node.setOpacity(0);
-    }
-
-    private void onMouseEnter(MouseEvent mouseEvent) {
-        System.out.println("enter");
-        Node node = (Node) mouseEvent.getSource();
-        node.setOpacity(1.0);
-    }
-
-    public void addColumn(ActionEvent actionEvent) {
+    public void addColumn() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Node node = loader.load(getClass().getResourceAsStream(
@@ -129,7 +115,7 @@ public class MainWindowPresenter implements Initializable {
         }
     }
 
-    public void removeColumn(ActionEvent actionEvent) {
+    public void removeColumn() {
         if (hbox.getChildren().size() != 0)
             hbox.getChildren().remove(hbox.getChildren().size() - 1);
     }
@@ -161,11 +147,13 @@ public class MainWindowPresenter implements Initializable {
                 .setClientUser(users.get(nowUserIndex))
                 .setOnTweetSuccess(s -> System.out.println(s.getText()))
                 .setAsync();
-        imageFiles.forEach(builder::addMedia);
+        appendedImagesViews.stream()
+                .filter(p -> p.getPreviewFile() != null)
+                .map(PreviewImage::getPreviewFile)
+                .forEach(builder::addMedia);
         builder.tweet();
         Platform.runLater(() -> {
-            appendedImagesViews.forEach(e -> e.setImage(null));
-            imageFiles.clear();
+            appendedImagesViews.forEach(e -> e.setPreviewFile(null));
             tweetTextArea.setText("");
         });
     }
@@ -187,33 +175,48 @@ public class MainWindowPresenter implements Initializable {
     // ドロップ前
     public void onDrop(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
-        if (dragboard.hasFiles() && imageFiles.size() < 4) {
+        long usedPreview = appendedImagesViews.stream()
+                .filter(i -> i.getPreviewFile() != null)
+                .count();
+        if (dragboard.hasFiles() && usedPreview < 4) {
             e.acceptTransferModes(TransferMode.COPY);
         }
     }
 
     // ドロップ後
     public void onDroped(DragEvent e) {
+        List<File> images = appendedImagesViews.stream()
+                .filter(i -> i.getPreviewFile() != null)
+                .map(PreviewImage::getPreviewFile)
+                .collect(Collectors.toList());
+
         Dragboard dragboard = e.getDragboard();
-        int imageFilesSize = imageFiles.size();
         int dragboardSize = dragboard.getFiles().size();
-        if (dragboard.hasFiles()
-                && (imageFilesSize < 4 && dragboardSize + imageFilesSize <= 4)) {
-            for (int i = 0; i < dragboardSize; i++) {
-                imageFiles.add(dragboard.getFiles().get(i));
+        if (dragboard.hasFiles() && images.size() < 4) {
+            int addSize = Math.min(4 - images.size(), dragboardSize);
+            for (int i = 0; i < addSize; i++) {
+                images.add(dragboard.getFiles().get(i));
             }
-            Platform.runLater(() -> {
-                for (int i = imageFilesSize; i < dragboardSize + imageFilesSize; i++) {
-                    appendedImagesViews.get(i).setImage(
-                            new Image(imageFiles.get(i).toURI().toString()));
-                }
-            });
+            updateTweetImagePreviews(images);
 
             e.setDropCompleted(true);
-            imageFiles.forEach(f -> System.out.println(f.getName()));
 
         } else {
             e.setDropCompleted(false);
         }
+    }
+
+    private void updateTweetImagePreviews(List<File> images) {
+        //サイズチェック
+        if (images.size() > appendedImagesViews.size()) {
+            throw new IllegalArgumentException("images size > apendedImageViews size. images size: "
+                    + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
+        }
+        Platform.runLater(() -> {
+            appendedImagesViews.forEach(p -> p.setPreviewFile(null));
+            for (int i = 0; i < images.size(); i++) {
+                appendedImagesViews.get(i).setPreviewFile(images.get(i));
+            }
+        });
     }
 }
