@@ -14,24 +14,31 @@ public class MentionsController implements JavatterColumn {
 
     @Override
     public void setClientUser(ClientUser clientUser) {
+        long userId = getUserId(clientUser);
+        mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
+        clientUser.getStream().addOnStatus(
+                status -> {
+                    if (status.getInReplyToUserId() == userId) {
+                        Platform.runLater(() -> {
+                            mentionsList.getItems().add(0,
+                                    StatusModel.Builder.build(status));
+                            if (mentionsList.getItems().size() > 100)
+                                mentionsList.getItems().remove(100);
+                        });
+                    }
+                });
 
+    }
+
+    private long getUserId(ClientUser clientUser) {
+        long userId = 0;
         try {
-            long userId = clientUser.getTwitter().getId();
-
-            mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
-            clientUser.getStream().addOnStatus(
-                    status -> {
-                        if (status.getInReplyToUserId() == userId) {
-                            Platform.runLater(() -> {
-                                mentionsList.getItems().add(0,
-                                        StatusModel.Builder.build(status));
-                                if (mentionsList.getItems().size() > 100)
-                                    mentionsList.getItems().remove(100);
-                            });
-                        }
-                    });
-        } catch (IllegalStateException | TwitterException e) {
+            userId = clientUser.getTwitter().getId();
+            return userId;
+        } catch (TwitterException e) {
             e.printStackTrace();
         }
+        return -1;
     }
+
 }
