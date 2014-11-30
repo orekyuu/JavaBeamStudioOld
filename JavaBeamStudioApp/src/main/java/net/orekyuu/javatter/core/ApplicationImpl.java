@@ -51,6 +51,7 @@ public class ApplicationImpl implements Application {
     private void loadClientUsers() {
         LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
         GlobalAccess.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
+        GlobalAccess.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
     }
 
     @Override
