@@ -68,24 +68,32 @@ public class MainWindowPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         users = ClientUserRegister.getInstance().getUsers(s -> true);
-        Platform.runLater(() -> {
-            try {
-                for (ClientUser user : users) {
-                    myProfileImage.add(new Image(user.getTwitter()
-                            .verifyCredentials().getProfileImageURL()));
+        if(!users.isEmpty()) {
+            Platform.runLater(() -> {
+                try {
+                    for (ClientUser user : users) {
+                        myProfileImage.add(new Image(user.getTwitter()
+                                .verifyCredentials().getProfileImageURL()));
+                    }
+                    clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                    clientUserName.setText(getCurrentUser().get().getName());
+                } catch (TwitterException e) {
+                    e.printStackTrace();
                 }
-                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-                clientUserName.setText(users.get(nowUserIndex).getName());
-            } catch (TwitterException e) {
-                e.printStackTrace();
-            }
-        });
+            });
+        }
         initPreviewImageViews();
         tweetTextArea.setOnDragOver(this::onDrop);
         tweetTextArea.setOnDragDropped(this::onDroped);
         NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
 
+    }
+
+    private Optional<ClientUser> getCurrentUser() {
+        if (users.isEmpty())
+            return Optional.empty();
+        return Optional.of(users.get(nowUserIndex));
     }
 
     private void initPreviewImageViews() {
@@ -144,26 +152,28 @@ public class MainWindowPresenter implements Initializable {
 
     // ツイートの実行
     public void tweet() {
-        Tweet builder = new TweetBuilder()
-                .setText(tweetTextArea.getText())
-                .setClientUser(users.get(nowUserIndex))
-                .setOnTweetSuccess(s -> System.out.println(s.getText()))
-                .setAsync();
-        appendedImagesViews.stream()
-                .filter(p -> p.getPreviewFile() != null)
-                .map(PreviewImage::getPreviewFile)
-                .forEach(builder::addMedia);
-        builder.tweet();
-        Platform.runLater(() -> {
-            appendedImagesViews.forEach(e -> e.setPreviewFile(null));
-            tweetTextArea.setText("");
+        getCurrentUser().ifPresent(user -> {
+            Tweet builder = new TweetBuilder()
+                    .setText(tweetTextArea.getText())
+                    .setClientUser(user)
+                    .setOnTweetSuccess(s -> System.out.println(s.getText()))
+                    .setAsync();
+            appendedImagesViews.stream()
+                    .filter(p -> p.getPreviewFile() != null)
+                    .map(PreviewImage::getPreviewFile)
+                    .forEach(builder::addMedia);
+            builder.tweet();
+            Platform.runLater(() -> {
+                appendedImagesViews.forEach(e -> e.setPreviewFile(null));
+                tweetTextArea.setText("");
+            });
         });
     }
 
     // Javaビームです。
     public void javaBeam() {
-        new TweetBuilder().setClientUser(users.get(nowUserIndex))
-                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet();
+        getCurrentUser().ifPresent(user -> new TweetBuilder().setClientUser(user)
+                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
@@ -172,7 +182,7 @@ public class MainWindowPresenter implements Initializable {
             return;
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
-        clientUserName.setText(users.get(nowUserIndex).getName());
+        clientUserName.setText(getCurrentUser().get().getName());
     }
 
     // ドロップ前
