@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ImageViewerBuilder {
     private String title;
@@ -19,25 +20,31 @@ public class ImageViewerBuilder {
     }
 
     public ImageViewerBuilder setMedia(Image image) {
+        if (image == null)
+            throw new NullPointerException("ImageViewerBuilder:image == null");
         this.image = image;
         return this;
     }
 
     public void show() {
         imageView = new ImageView();
+        if (image == null)
+            throw new NullPointerException("ImageViewerBuilder:image == null");
         Stage stage = new Stage();
         StackPane pane = new StackPane();
         imageView.maxWidth(WIDTH);
         imageView.maxHeight(HEIGHT);
+        imageView.minHeight(0);
+        imageView.maxWidth(0);
+
         fitImage();
         imageView.setImage(image);
-        
+
         pane.getChildren().add(imageView);
         pane.setMaxHeight(WIDTH);
         pane.setMaxWidth(HEIGHT);
-        pane.setMinHeight(WIDTH);
-        pane.setMinWidth(HEIGHT);
-        
+        pane.setMinHeight(0);
+        pane.setMaxWidth(0);
         Scene scene = new Scene(pane, 768, 432);
 
         if (title == null) {
@@ -45,7 +52,7 @@ public class ImageViewerBuilder {
         } else {
             stage.setTitle(title);
         }
-
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
 
