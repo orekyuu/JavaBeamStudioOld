@@ -31,5 +31,6 @@ public interface Application {
      * アプリケーションの再起動を行います。
      */
     void restart();
-
+    
+    CurrentWindow getCurrentWindow();
 }
