@@ -7,25 +7,41 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ *ImageViewerを生成するクラス 
+ *
+ */
 public class ImageViewerBuilder {
     private String title;
     private Image image;
     private final static double WIDTH = 921.6;
     private final static double HEIGHT = 518.4;
     private ImageView imageView;
-
+    
+    /**
+     * 
+     * @param text タイトル
+     * @return 自身のインスタンス
+     */
     public ImageViewerBuilder setTitle(String text) {
         title = text;
         return this;
     }
-
+    /**
+     * 
+     * @param image イメージ
+     * @return 自身のインスタンス
+     */
     public ImageViewerBuilder setMedia(Image image) {
         if (image == null)
             throw new NullPointerException("ImageViewerBuilder:image == null");
         this.image = image;
         return this;
     }
-
+    
+    /**
+     * ImageViewerの表示
+     */
     public void show() {
         imageView = new ImageView();
         if (image == null)
@@ -34,7 +50,7 @@ public class ImageViewerBuilder {
         StackPane pane = new StackPane();
 
         fitImage();
-
+        
         imageView.setImage(image);
 
         pane.getChildren().add(imageView);
