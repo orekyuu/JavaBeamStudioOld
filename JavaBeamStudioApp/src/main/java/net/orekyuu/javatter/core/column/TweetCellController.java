@@ -28,7 +28,6 @@ import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 public class TweetCellController implements Initializable {
 
@@ -66,10 +65,12 @@ public class TweetCellController implements Initializable {
      */
     private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private StatusModel status;
+
     /**
      * アイテムの内容をStatusに従って切り替える
      *
-     * @param status 受け取ったステータス
+     * @param status
+     *            受け取ったステータス
      */
     public void updateTweetCell(StatusModel status) {
 
@@ -84,7 +85,7 @@ public class TweetCellController implements Initializable {
         // イメージ設定(非同期処理)
         CompletableFuture.runAsync(() -> {
 
-            if(retweetFrom == null) {
+            if (retweetFrom == null) {
                 Image img = IconCache.getImage(status.getOwner().getProfileImageURL());
                 Platform.runLater(() -> {
                     profileimage.setImage(img);
@@ -102,7 +103,7 @@ public class TweetCellController implements Initializable {
             }
         });
 
-        //リプライ先
+        // リプライ先
         if (s.getReplyStatusId() != -1) {
             CompletableFuture.runAsync(() -> {
                 StatusModel replyModel = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
@@ -130,7 +131,7 @@ public class TweetCellController implements Initializable {
             Platform.runLater(() -> replyImage.setImage(img));
         });
     }
-
+    
     private void updateImagePreview(StatusModel status) {
         imgPreview.getChildren().clear();
         List<MediaEntity> medias = status.getMedias();
@@ -139,9 +140,14 @@ public class TweetCellController implements Initializable {
             imageView.setFitWidth(64);
             imageView.setFitHeight(64);
             imgPreview.getChildren().add(imageView);
+
             CompletableFuture.runAsync(() -> {
                 Image image = new Image(e.getMediaURL());
                 Platform.runLater(() -> imageView.setImage(image));
+            });
+           
+            imageView.setOnMouseClicked(clickEvent -> {
+                new ImageViewerBuilder().setMedia(imageView.getImage()).show();
             });
         }
     }
@@ -154,7 +160,7 @@ public class TweetCellController implements Initializable {
         entities.addAll(status.getUrls());
         entities.addAll(status.getMedias());
         entities.sort(Comparator.comparingInt(TweetEntity::getStart));
-        if(entities.size() == 0) {
+        if (entities.size() == 0) {
             textFlow.getChildren().add(new Text(status.getText()));
             return;
         }
@@ -198,7 +204,8 @@ public class TweetCellController implements Initializable {
     /**
      * clientUserをセットする
      *
-     * @param clientUser カラムの持ち主
+     * @param clientUser
+     *            カラムの持ち主
      */
     public void setClientUser(ClientUser clientUser) {
         this.clientUser = clientUser;
@@ -265,6 +272,7 @@ public class TweetCellController implements Initializable {
     }
 
     private static NameDisplayType nameDisplayType;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (nameDisplayType == null) {
@@ -277,11 +285,16 @@ public class TweetCellController implements Initializable {
 
     private String getConfigFormatName(UserModel user) {
         switch (nameDisplayType) {
-            case NAME: return user.getName();
-            case ID: return "@" + user.getScreenName();
-            case ID_NAME: return "@" + user.getScreenName() + " / " + user.getName();
-            case NAME_ID: return user.getName() + " / " + "@" + user.getScreenName();
-            default: throw new IllegalArgumentException(nameDisplayType.name());
+        case NAME:
+            return user.getName();
+        case ID:
+            return "@" + user.getScreenName();
+        case ID_NAME:
+            return "@" + user.getScreenName() + " / " + user.getName();
+        case NAME_ID:
+            return user.getName() + " / " + "@" + user.getScreenName();
+        default:
+            throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
 }
