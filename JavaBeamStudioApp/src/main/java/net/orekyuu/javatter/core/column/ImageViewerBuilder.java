@@ -19,7 +19,8 @@ public class ImageViewerBuilder {
     private ImageView imageView;
     
     /**
-     * 
+     * ImageViewerのウインドウにタイトルを付けます。<br>
+     * このメソッドが呼ばれなかった場合デフォルトのタイトルは「プレビュー」です。
      * @param text タイトル
      * @return 自身のインスタンス
      */
@@ -28,7 +29,8 @@ public class ImageViewerBuilder {
         return this;
     }
     /**
-     * 
+     * ImageViewerに表示するImageをセットします。<br>
+     * imageがnullの場合NullPointerExceptionが発生します。
      * @param image イメージ
      * @return 自身のインスタンス
      */
@@ -40,7 +42,8 @@ public class ImageViewerBuilder {
     }
     
     /**
-     * ImageViewerの表示
+     * ImageViewerを表示します。<br>
+     * このメソッドが呼ばれた時、setMediaされていない場合はNullPointerExceptionが発生します。
      */
     public void show() {
         imageView = new ImageView();
