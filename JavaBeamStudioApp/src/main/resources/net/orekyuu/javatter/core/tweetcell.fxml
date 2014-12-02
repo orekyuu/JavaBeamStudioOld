@@ -32,7 +32,7 @@
            <Region VBox.vgrow="ALWAYS" />
            <HBox>
               <children>
-                  <Button mnemonicParsing="false" text="Reply" />
+                  <Button mnemonicParsing="false" onAction="#reply" text="Reply" />
                   <Button mnemonicParsing="false" onAction="#retweet" text="RT" />
                   <Button mnemonicParsing="false" onAction="#favoriten" text="★" />
                   <MenuButton mnemonicParsing="false" text="MenuButton">
