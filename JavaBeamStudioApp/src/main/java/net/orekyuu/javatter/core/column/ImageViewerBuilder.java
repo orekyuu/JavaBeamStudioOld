@@ -10,8 +10,8 @@ import javafx.stage.StageStyle;
 public class ImageViewerBuilder {
     private String title;
     private Image image;
-    private final double WIDTH = 768;
-    private final double HEIGHT = 432;
+    private final static double WIDTH = 921.6;
+    private final static double HEIGHT = 518.4;
     private ImageView imageView;
 
     public ImageViewerBuilder setTitle(String text) {
@@ -32,12 +32,9 @@ public class ImageViewerBuilder {
             throw new NullPointerException("ImageViewerBuilder:image == null");
         Stage stage = new Stage();
         StackPane pane = new StackPane();
-        imageView.maxWidth(WIDTH);
-        imageView.maxHeight(HEIGHT);
-        imageView.minHeight(0);
-        imageView.maxWidth(0);
 
         fitImage();
+
         imageView.setImage(image);
 
         pane.getChildren().add(imageView);
@@ -45,13 +42,10 @@ public class ImageViewerBuilder {
         pane.setMaxWidth(HEIGHT);
         pane.setMinHeight(0);
         pane.setMaxWidth(0);
-        Scene scene = new Scene(pane, 768, 432);
+        Scene scene = new Scene(pane);
 
-        if (title == null) {
-            stage.setTitle("プレビュー");
-        } else {
-            stage.setTitle(title);
-        }
+        String title = this.title != null ? this.title : "プレビュー";
+        stage.setTitle(title);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
@@ -63,11 +57,13 @@ public class ImageViewerBuilder {
     private void fitImage() {
         if (image.getHeight() > HEIGHT) {
             imageView.setFitHeight(HEIGHT);
-            imageView.setFitWidth(image.getWidth() * (HEIGHT / image.getHeight()));
+            imageView.setFitWidth(image.getWidth()
+                    * (HEIGHT / image.getHeight()));
         }
         if (image.getWidth() > WIDTH) {
             imageView.setFitWidth(WIDTH);
-            imageView.setFitHeight(image.getHeight() * (WIDTH / image.getWidth()));
+            imageView.setFitHeight(image.getHeight()
+                    * (WIDTH / image.getWidth()));
         }
     }
 }
