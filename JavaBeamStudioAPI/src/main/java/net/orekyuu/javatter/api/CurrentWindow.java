@@ -29,7 +29,7 @@ public interface CurrentWindow {
     * 指定したユーザーが見つからなかった場合はその旨のlogを表示する。
     * @param screenName 投稿したいユーザーのスクリーンネーム
     */
-   void ChangeUser(String screenName);
+   void changeUser(String screenName);
    /**
     * TextArea内の文字を取得する.
     * @return String

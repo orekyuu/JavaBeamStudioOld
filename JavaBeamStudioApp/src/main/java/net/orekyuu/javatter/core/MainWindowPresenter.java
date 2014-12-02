@@ -270,7 +270,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     @Override
-    public void ChangeUser(String screenName) {
+    public void changeUser(String screenName) {
         boolean unFindedUser = false;
         int currentUser = nowUserIndex;
         if (users.isEmpty()) {
