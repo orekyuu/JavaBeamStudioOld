@@ -32,5 +32,9 @@ public interface Application {
      */
     void restart();
     
+    /**
+     * CurrentWindowを返します。
+     * @return CurrentWindow
+     */
     CurrentWindow getCurrentWindow();
 }
