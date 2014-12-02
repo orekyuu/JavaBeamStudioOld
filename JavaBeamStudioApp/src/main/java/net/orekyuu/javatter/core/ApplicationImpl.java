@@ -79,7 +79,7 @@ public class ApplicationImpl implements Application {
                 && mainWindowPresenter instanceof CurrentWindow) {
             return (CurrentWindow) mainWindowPresenter;
         } else {
-            throw new InternalError("返されるオブジェクトがCurrentWindowを実装していない。もしくは何らかの理由でCurrentWindowがnullになっています。");
+            throw new InternalError("返されるオブジェクトがCurrentWindowを実装していない。もしくは何らかの理由でnullになっています。");
         }
     }
 
