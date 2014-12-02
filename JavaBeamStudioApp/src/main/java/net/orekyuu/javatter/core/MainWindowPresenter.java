@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.twitter.Tweet;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
 
-public class MainWindowPresenter implements Initializable {
+public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private Text clientUserName;
     @FXML
@@ -65,10 +66,14 @@ public class MainWindowPresenter implements Initializable {
     private List<ClientUser> users;
     private List<PreviewImage> appendedImagesViews = new ArrayList<>();
 
+    private boolean isReply = false;
+    private long destinationId;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         users = ClientUserRegister.getInstance().getUsers(s -> true);
-        if(!users.isEmpty()) {
+        if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
                     for (ClientUser user : users) {
@@ -81,19 +86,15 @@ public class MainWindowPresenter implements Initializable {
                     e.printStackTrace();
                 }
             });
+
         }
         initPreviewImageViews();
         tweetTextArea.setOnDragOver(this::onDrop);
         tweetTextArea.setOnDragDropped(this::onDroped);
-        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
+        NumberBinding length = Bindings.subtract(140,
+                Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
 
-    }
-
-    private Optional<ClientUser> getCurrentUser() {
-        if (users.isEmpty())
-            return Optional.empty();
-        return Optional.of(users.get(nowUserIndex));
     }
 
     private void initPreviewImageViews() {
@@ -108,7 +109,8 @@ public class MainWindowPresenter implements Initializable {
         appendedImagesViews.add(tweetImageView4);
 
         for (int i = 0; i < appendedImagesViews.size(); i++) {
-            appendedImagesViews.get(i).setHoverImageView(hoverImageViews.get(i));
+            appendedImagesViews.get(i)
+                    .setHoverImageView(hoverImageViews.get(i));
         }
     }
 
@@ -152,28 +154,36 @@ public class MainWindowPresenter implements Initializable {
 
     // ツイートの実行
     public void tweet() {
-        getCurrentUser().ifPresent(user -> {
-            Tweet builder = new TweetBuilder()
-                    .setText(tweetTextArea.getText())
-                    .setClientUser(user)
-                    .setOnTweetSuccess(s -> System.out.println(s.getText()))
-                    .setAsync();
-            appendedImagesViews.stream()
-                    .filter(p -> p.getPreviewFile() != null)
-                    .map(PreviewImage::getPreviewFile)
-                    .forEach(builder::addMedia);
-            builder.tweet();
-            Platform.runLater(() -> {
-                appendedImagesViews.forEach(e -> e.setPreviewFile(null));
-                tweetTextArea.setText("");
-            });
-        });
+        getCurrentUser()
+                .ifPresent(
+                        user -> {
+                            Tweet builder = new TweetBuilder()
+                                    .setText(tweetTextArea.getText())
+                                    .setClientUser(user)
+                                    .setOnTweetSuccess(
+                                            s -> System.out.println(s.getText()))
+                                    .setAsync();
+                            appendedImagesViews.stream()
+                                    .filter(p -> p.getPreviewFile() != null)
+                                    .map(PreviewImage::getPreviewFile)
+                                    .forEach(builder::addMedia);
+                            if (isReply)
+                                builder.setReplyTo(destinationId);
+                            builder.tweet();
+                            Platform.runLater(() -> {
+                                appendedImagesViews.forEach(e -> e
+                                        .setPreviewFile(null));
+                                tweetTextArea.setText("");
+                            });
+                            isReply = false;
+                        });
     }
 
     // Javaビームです。
     public void javaBeam() {
-        getCurrentUser().ifPresent(user -> new TweetBuilder().setClientUser(user)
-                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
+        getCurrentUser().ifPresent(
+                user -> new TweetBuilder().setClientUser(user)
+                        .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
@@ -189,8 +199,7 @@ public class MainWindowPresenter implements Initializable {
     private void onDrop(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
         long usedPreview = appendedImagesViews.stream()
-                .filter(i -> i.getPreviewFile() != null)
-                .count();
+                .filter(i -> i.getPreviewFile() != null).count();
         if (dragboard.hasFiles() && usedPreview < 4) {
             e.acceptTransferModes(TransferMode.COPY);
         }
@@ -200,8 +209,7 @@ public class MainWindowPresenter implements Initializable {
     private void onDroped(DragEvent e) {
         List<File> images = appendedImagesViews.stream()
                 .filter(i -> i.getPreviewFile() != null)
-                .map(PreviewImage::getPreviewFile)
-                .collect(Collectors.toList());
+                .map(PreviewImage::getPreviewFile).collect(Collectors.toList());
 
         Dragboard dragboard = e.getDragboard();
         int dragboardSize = dragboard.getFiles().size();
@@ -220,10 +228,12 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void updateTweetImagePreviews(List<File> images) {
-        //サイズチェック
+        // サイズチェック
         if (images.size() > appendedImagesViews.size()) {
-            throw new IllegalArgumentException("images size > apendedImageViews size. images size: "
-                    + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
+            throw new IllegalArgumentException(
+                    "images size > apendedImageViews size. images size: "
+                            + images.size() + "appendedImageViews size: "
+                            + appendedImagesViews.size());
         }
         Platform.runLater(() -> {
             appendedImagesViews.forEach(p -> p.setPreviewFile(null));
@@ -232,4 +242,65 @@ public class MainWindowPresenter implements Initializable {
             }
         });
     }
+
+    @Override
+    public void setReply(long id, String destinationName) {
+        isReply = true;
+        destinationId = id;
+        setText(destinationName);
+    }
+
+    @Override
+    public List<File> getappendedImages() {
+        List<File> imageFiles = appendedImagesViews.stream()
+                .filter(p -> p.getPreviewFile() != null)
+                .map(PreviewImage::getPreviewFile).collect(Collectors.toList());
+        if (!imageFiles.isEmpty()) {
+            return null;
+        } else {
+            return imageFiles;
+        }
+    }
+
+    @Override
+    public Optional<ClientUser> getCurrentUser() {
+        if (users.isEmpty())
+            return Optional.empty();
+        return Optional.of(users.get(nowUserIndex));
+    }
+
+    @Override
+    public void ChangeUser(String screenName) {
+        boolean unFindedUser = false;
+        int currentUser = nowUserIndex;
+        if (users.isEmpty()) {
+            while (!users.get(nowUserIndex).getName().equals(screenName)) {
+                nowUserIndex = (nowUserIndex + 1) % users.size();
+                if (nowUserIndex == currentUser) {
+                    unFindedUser = true;
+                    break;
+                }
+            }
+            if (unFindedUser) {
+                // なんらかの理由でユーザーが見つからなかった旨のlogを表示
+                nowUserIndex = currentUser;
+                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                clientUserName.setText(getCurrentUser().get().getName());
+            } else {
+                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                clientUserName.setText(getCurrentUser().get().getName());
+            }
+        }
+    }
+
+    @Override
+    public String getText() {
+        return tweetTextArea.getText();
+    }
+
+    @Override
+    public void setText(String text) {
+        tweetTextArea.setText(text);
+    }
+
 }
