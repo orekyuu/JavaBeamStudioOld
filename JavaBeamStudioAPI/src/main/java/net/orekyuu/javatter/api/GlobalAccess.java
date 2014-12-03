@@ -1,9 +1,12 @@
 package net.orekyuu.javatter.api;
 
+import net.orekyuu.javatter.api.notification.NotificationSender;
+
 public class GlobalAccess {
     private static final GlobalAccess instance = new GlobalAccess();
     private Application application;
     private ColumnRegister columnRegister;
+    private NotificationSender notificationSender;
 
     private GlobalAccess() {
 
@@ -28,5 +31,13 @@ public class GlobalAccess {
      */
     public ColumnRegister getColumnRegister() {
         return columnRegister;
+    }
+
+    /**
+     * 通知を送信するためのオブジェクトを返します。
+     * @return 通知を送信するためのオブジェクト
+     */
+    public NotificationSender getNotificationSender() {
+        return notificationSender;
     }
 }

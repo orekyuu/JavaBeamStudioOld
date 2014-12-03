@@ -10,6 +10,7 @@ import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.GlobalAccess;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
+import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
@@ -71,6 +72,13 @@ public class ApplicationImpl implements Application {
         primaryStage.setTitle("Javaビーム工房");
         primaryStage.centerOnScreen();
         primaryStage.show();
+
+        try {
+            ((NotificationManager) GlobalAccess.getInstance().getNotificationSender())
+                    .initializeNotificationManager();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
