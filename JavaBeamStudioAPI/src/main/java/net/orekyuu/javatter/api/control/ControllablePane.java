@@ -43,7 +43,6 @@ public class ControllablePane extends StackPane {
     //FXMLをロード
     public void loadNode(String id, InputStream resource) {
         try {
-            System.out.println("loadNode");
             FXMLLoader loader = new FXMLLoader();
             Parent loadNode = loader.load(resource);
             Object obj = loader.getController();
