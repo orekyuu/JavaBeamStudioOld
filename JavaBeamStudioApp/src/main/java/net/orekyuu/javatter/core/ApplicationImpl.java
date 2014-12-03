@@ -23,6 +23,7 @@ public class ApplicationImpl implements Application {
 
     private Main main;
     private MainWindowPresenter mainWindowPresenter;
+    private Stage primaryStage;
 
     public ApplicationImpl(Main main) {
         this.main = main;
@@ -55,6 +56,11 @@ public class ApplicationImpl implements Application {
         }
     }
 
+    @Override
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     private void loadClientUsers() {
         LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
         GlobalAccess.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
@@ -63,6 +69,7 @@ public class ApplicationImpl implements Application {
 
     @Override
     public void onCreate(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         FXMLLoader loader = new FXMLLoader();
         try {
             Scene scene = new Scene(loader.load(getClass().getResourceAsStream("root.fxml")));
