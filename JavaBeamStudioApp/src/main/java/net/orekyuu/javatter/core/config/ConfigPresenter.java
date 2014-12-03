@@ -39,11 +39,13 @@ public class ConfigPresenter implements Initializable {
             protected Object call() {
                 TreeItem<String> root = new TreeItem<>();
                 root.getChildren().add(new TreeItem<>("基本設定"));
+                root.getChildren().add(new TreeItem<>("通知設定"));
                 root.getChildren().add(new TreeItem<>("アカウント"));
                 tree.setShowRoot(false);
                 Platform.runLater(() -> tree.setRoot(root));
 
                 controllablePane.loadNode("基本設定", Main.class.getResourceAsStream("config_general.fxml"));
+                controllablePane.loadNode("通知設定", Main.class.getResourceAsStream("NotificationConfig.fxml"));
                 controllablePane.loadNode("アカウント", Main.class.getResourceAsStream("Account.fxml"));
                 controllablePane.setAnimator(new FadeAnimator(240));
                 Platform.runLater(() -> {

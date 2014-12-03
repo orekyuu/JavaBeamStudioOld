@@ -4,9 +4,9 @@ package net.orekyuu.javatter.api.notification;
  * 通知タイプの列挙
  */
 public enum NotificationTypes implements NotificationType {
-    MENTION("メンション通知", "メンション"),
-    FOLLOW("フォロー通知", "フォローされました"),
-    FAVORITE("お気に入り通知", "お気に入りに追加されました");
+    MENTION("メンション", "メンション通知"),
+    FOLLOW("フォローされました", "フォロー通知"),
+    FAVORITE("お気に入りされました", "お気に入り通知");
 
     private final String typeName;
     private final String title;

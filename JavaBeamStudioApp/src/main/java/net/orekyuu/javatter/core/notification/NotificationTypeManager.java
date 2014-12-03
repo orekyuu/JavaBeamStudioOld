@@ -36,6 +36,22 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         return notificationTypes;
     }
 
+    public List<NotificationConfig> getConfigs() {
+        List<NotificationConfig> res = new LinkedList<>();
+        res.addAll(notificationConfigs);
+        for (NotificationType type : notificationTypes) {
+            boolean anyMatch = notificationConfigs.stream()
+                    .anyMatch(conf -> conf.notificationType.equals(type.getTypeName()));
+            if (!anyMatch) {
+                NotificationConfig config = new NotificationConfig();
+                config.setNotice(true);
+                config.setNotificationType(type);
+                res.add(config);
+            }
+        }
+        return res;
+    }
+
     /**
      * 情報を保存する
      * @param configs 保存するコンフィグ情報
