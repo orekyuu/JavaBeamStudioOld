@@ -25,7 +25,7 @@ Button.delete{
 	-fx-graphic:url("./pict/delete.png");
 }
 
-StackPane.indicator {
+.indicator {
     -fx-background-color: black;
     -fx-opacity: 0.2;
 }

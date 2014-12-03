@@ -64,6 +64,6 @@ public class ConfigPresenter implements Initializable {
             }
         };
         configLoadService.start();
-        configLoadService.setOnSucceeded(e -> indicatorPane.setVisible(false));
+        indicatorPane.setVisible(false);
     }
 }

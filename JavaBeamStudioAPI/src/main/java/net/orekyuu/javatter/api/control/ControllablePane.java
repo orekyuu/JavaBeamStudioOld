@@ -3,6 +3,8 @@ package net.orekyuu.javatter.api.control;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import net.orekyuu.javatter.api.control.animator.NodeTransitionAnimator;
 import net.orekyuu.javatter.api.control.animator.NullAnimator;
@@ -20,6 +22,20 @@ public class ControllablePane extends StackPane {
     private Map<String, Node> nodes = new HashMap<>();
     private NodeTransitionAnimator animator = new NullAnimator();
 
+    private Region region = new Region();
+    private ProgressIndicator indicator = new ProgressIndicator();
+
+    public ControllablePane() {
+        region.getStyleClass().add("indicator");
+        indicator.getStyleClass().add("progress-indicator");
+        region.setVisible(false);
+        indicator.setVisible(false);
+        indicator.setScaleX(0.2);
+        indicator.setScaleY(0.2);
+        getChildren().add(indicator);
+        getChildren().add(region);
+    }
+
     public void setAnimator(NodeTransitionAnimator animator) {
         this.animator = animator;
     }
@@ -27,12 +43,15 @@ public class ControllablePane extends StackPane {
     //FXMLをロード
     public void loadNode(String id, InputStream resource) {
         try {
+            System.out.println("loadNode");
             FXMLLoader loader = new FXMLLoader();
             Parent loadNode = loader.load(resource);
             Object obj = loader.getController();
             if (obj instanceof ControllablePaneController) {
                 ControllablePaneController screen = (ControllablePaneController) obj;
                 screen.setNodeParent(this);
+                screen.setProgressNode(indicator, region);
+                screen.setup();
             }
             nodes.put(id, loadNode);
         } catch (IOException e) {
@@ -51,7 +70,7 @@ public class ControllablePane extends StackPane {
             throw new NullPointerException(id + " is not registered.");
         }
 
-        animatePane(getChildren().isEmpty() ? null : getChildren().get(0), nodes.get(id));
+        animatePane(getChildren().size() == 2 ? null : getChildren().get(2), nodes.get(id));
     }
 
     //アニメーションさせる

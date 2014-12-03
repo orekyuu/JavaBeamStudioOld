@@ -27,8 +27,8 @@ public class ScrollAnimator implements NodeTransitionAnimator {
             out.setFromX(0);
             out.setToX(pane.getWidth());
             out.setOnFinished(e -> {
-                pane.getChildren().remove(0);
-                pane.getChildren().add(0, after);
+                pane.getChildren().remove(2);
+                pane.getChildren().add(2, after);
                 TranslateTransition in = new TranslateTransition(new Duration(duration), after);
                 in.setFromX(pane.getWidth() * -1);
                 in.setToX(0);
@@ -36,7 +36,7 @@ public class ScrollAnimator implements NodeTransitionAnimator {
             });
             out.play();
         } else {
-            pane.getChildren().add(after);
+            pane.getChildren().add(2, after);
             TranslateTransition in = new TranslateTransition(new Duration(duration), after);
             in.setFromX(pane.getWidth() * -1);
             in.setToX(0);

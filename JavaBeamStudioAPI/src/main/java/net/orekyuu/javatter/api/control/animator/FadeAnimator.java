@@ -27,8 +27,8 @@ public class FadeAnimator implements NodeTransitionAnimator {
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
             fadeOut.setOnFinished(e -> {
-                pane.getChildren().remove(0);
-                pane.getChildren().add(0, after);
+                pane.getChildren().remove(2);
+                pane.getChildren().add(2, after);
                 FadeTransition fadeIn = new FadeTransition(new Duration(duration), after);
                 fadeIn.setFromValue(0.0);
                 fadeIn.setToValue(1.0);
@@ -37,7 +37,7 @@ public class FadeAnimator implements NodeTransitionAnimator {
             fadeOut.play();
         } else {
             after.setOpacity(0.0);//一瞬1.0のまま表示されるのを防ぐ
-            pane.getChildren().add(after);
+            pane.getChildren().add(2, after);
             FadeTransition fadeIn = new FadeTransition(new Duration(duration), after);
             fadeIn.setFromValue(0.0);
             fadeIn.setToValue(1.0);

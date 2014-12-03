@@ -13,8 +13,8 @@ public class NullAnimator implements NodeTransitionAnimator {
         if (before == null) {
             pane.getChildren().add(after);
         } else {
-            pane.getChildren().remove(0);
-            pane.getChildren().add(0, after);
+            pane.getChildren().remove(2);
+            pane.getChildren().add(2, after);
         }
     }
 }
