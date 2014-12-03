@@ -8,9 +8,9 @@ public class NotificationBuilderTest {
 
     @Test
     public void testCreate() {
-        Notification notification = new NotificationBuilder("Title")
+        Notification notification = new NotificationBuilder(NotificationTypes.FOLLOW)
                 .setMessage("message").setSubTitle("subTitle").build();
-        assertEquals(notification.getTitle().get(), "Title");
+        assertEquals(notification.getTitle().get(), "フォローされました");
         assertEquals(notification.getMessage().get(), "message");
         assertEquals(notification.getSubTitle().get(), "subTitle");
     }
