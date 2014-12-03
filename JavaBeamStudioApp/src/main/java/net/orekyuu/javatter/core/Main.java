@@ -3,7 +3,10 @@ package net.orekyuu.javatter.core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.notification.Notification;
+import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.core.column.ColumnManager;
+import net.orekyuu.javatter.core.notification.NotificationManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,6 +23,7 @@ public class Main extends Application {
     private void setupGlobalAccess() throws ReflectiveOperationException {
         setField("application", new ApplicationImpl(this));
         setField("columnRegister", new ColumnManager());
+        setField("notificationSender", new NotificationManager());
     }
 
     private void setField(String fieldName, Object value) throws ReflectiveOperationException {

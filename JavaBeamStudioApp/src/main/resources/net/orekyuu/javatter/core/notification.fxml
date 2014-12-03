@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.notification.NotificationPopupPresenter">
+    <children>
+        <HBox>
+            <children>
+                <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button mnemonicParsing="false" onAction="#clear" text="x" />
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <ImageView fx:id="subTitleImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+                <Text fx:id="subTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="\@ScreenName / Name" wrappingWidth="201.4453125">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+            </children>
+        </HBox>
+        <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="Notification message" wrappingWidth="300.0" VBox.vgrow="ALWAYS" />
+        <Pane VBox.vgrow="ALWAYS" />
+        <HBox>
+            <children>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Text fx:id="notificationSize" strokeType="OUTSIDE" strokeWidth="0.0" text="0 / 0" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
