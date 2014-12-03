@@ -5,6 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -44,7 +45,7 @@ public class NotificationManager implements NotificationSender {
 
     public void initializeNotificationManager() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(Main.class.getResourceAsStream("notification.fxml"));
+        VBox root = loader.load(Main.class.getResourceAsStream("notification.fxml"));
         presenter = loader.getController();
         presenter.setNotificationQueue(notificationQueue);
         Scene scene = new Scene(root);
@@ -52,9 +53,11 @@ public class NotificationManager implements NotificationSender {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.initStyle(StageStyle.TRANSPARENT);
-        Rectangle2D screen = Screen.getPrimary().getBounds();
-        stage.setX(0);
-        stage.setY(0);
+        Rectangle2D screen = Screen.getPrimary().getVisualBounds();
+
+        stage.setX(screen.getWidth() - root.getPrefWidth());
+        stage.setY(screen.getHeight() - root.getPrefHeight());
+        stage.initOwner(GlobalAccess.getInstance().getApplication().getPrimaryStage());
         stage.show();
 
         setupNotification();

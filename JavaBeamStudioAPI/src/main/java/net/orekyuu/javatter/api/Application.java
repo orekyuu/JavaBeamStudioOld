@@ -31,10 +31,17 @@ public interface Application {
      * アプリケーションの再起動を行います。
      */
     void restart();
-    
+
     /**
      * CurrentWindowを返します。
      * @return CurrentWindow
      */
     CurrentWindow getCurrentWindow();
+
+    /**
+     * アプリケーションのStageを返します。
+     * @return アプリケーションのStage
+     */
+    Stage getPrimaryStage();
+
 }
