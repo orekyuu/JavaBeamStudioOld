@@ -167,15 +167,17 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
                                     .filter(p -> p.getPreviewFile() != null)
                                     .map(PreviewImage::getPreviewFile)
                                     .forEach(builder::addMedia);
-                            if (isReply)
+                            if (isReply){
                                 builder.setReplyTo(destinationId);
+                                isReply = false;
+                            }
                             builder.tweet();
                             Platform.runLater(() -> {
                                 appendedImagesViews.forEach(e -> e
                                         .setPreviewFile(null));
                                 tweetTextArea.setText("");
                             });
-                            isReply = false;
+                            
                         });
     }
 
