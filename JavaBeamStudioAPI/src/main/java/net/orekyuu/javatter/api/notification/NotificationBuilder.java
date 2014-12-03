@@ -7,16 +7,16 @@ import javafx.scene.image.Image;
  */
 public class NotificationBuilder {
 
-    private String title;
+    private NotificationType type;
     private Image subTitleImage;
     private String message;
     private String subTitle;
 
     /**
-     * @param title 通知ポップアップのタイトル
+     * @param type 通知ポップアップのタイプ
      */
-    public NotificationBuilder(String title) {
-        this.title = title;
+    public NotificationBuilder(NotificationType type) {
+        this.type = type;
     }
 
     /**
@@ -54,6 +54,6 @@ public class NotificationBuilder {
      * @return 値が設定されたNotification
      */
     public Notification build() {
-        return new Notification(title, subTitle, subTitleImage, message);
+        return new Notification(type, subTitle, subTitleImage, message);
     }
 }

@@ -8,12 +8,16 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
+import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
+import net.orekyuu.javatter.core.notification.NotificationTypeManager;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ApplicationImpl implements Application {
 
@@ -32,9 +36,12 @@ public class ApplicationImpl implements Application {
     @Override
     public void onLoad() {
         loadClientUsers();
-        StyleManager.getInstance().addUserAgentStylesheet(
-                Main.class.getResource("javabeamstudio.css").toExternalForm());
+        StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
 
+        NotificationTypeRegister notificationTypeRegister = GlobalAccess.getInstance().getNotificationTypeRegister();
+        Arrays.stream(NotificationTypes.values()).forEach(notificationTypeRegister::register);
+
+        ((NotificationTypeManager) notificationTypeRegister).initialize();
     }
 
     @Override
@@ -49,20 +56,16 @@ public class ApplicationImpl implements Application {
     }
 
     private void loadClientUsers() {
-        LocalClientUser.loadClientUsers().stream()
-                .forEach(ClientUserRegister.getInstance()::registerUser);
-        GlobalAccess.getInstance().getColumnRegister()
-                .registerColumn("タイムライン", Main.class, "userstream.fxml");
-        GlobalAccess.getInstance().getColumnRegister()
-                .registerColumn("Mentions", Main.class, "mentions.fxml");
+        LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
+        GlobalAccess.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
+        GlobalAccess.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
     }
 
     @Override
     public void onCreate(Stage primaryStage) {
         FXMLLoader loader = new FXMLLoader();
         try {
-            Scene scene = new Scene(loader.load(getClass().getResourceAsStream(
-                    "root.fxml")));
+            Scene scene = new Scene(loader.load(getClass().getResourceAsStream("root.fxml")));
             MainWindowPresenter presenter = loader.getController();
             mainWindowPresenter = presenter;
             primaryStage.setScene(scene);

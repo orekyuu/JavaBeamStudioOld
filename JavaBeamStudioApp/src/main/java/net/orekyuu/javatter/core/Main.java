@@ -7,6 +7,7 @@ import net.orekyuu.javatter.api.notification.Notification;
 import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.notification.NotificationManager;
+import net.orekyuu.javatter.core.notification.NotificationTypeManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -24,6 +25,7 @@ public class Main extends Application {
         setField("application", new ApplicationImpl(this));
         setField("columnRegister", new ColumnManager());
         setField("notificationSender", new NotificationManager());
+        setField("notificationTypeRegister", new NotificationTypeManager());
     }
 
     private void setField(String fieldName, Object value) throws ReflectiveOperationException {

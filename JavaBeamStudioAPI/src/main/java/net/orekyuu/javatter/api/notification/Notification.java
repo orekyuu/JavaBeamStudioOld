@@ -10,23 +10,25 @@ import java.util.Optional;
  */
 public final class Notification {
 
-    private final Optional<String> title;
     private final Optional<Image> subTitleImage;
     private final Optional<String> message;
     private final Optional<String> subTitle;
+    private final NotificationType type;
 
     /**
      * Notificationを作成します。
-     * @param title ポップアップのタイトルです。この項目は必須です。
+     * @param type ポップアップのタイプです
      * @param subTitle ポップアップのサブタイトル
      * @param subImage サブタイトルの画像
      * @param message ポップアップの詳細メッセージ
      */
-    protected Notification(String title, String subTitle, Image subImage, String message) {
-        if (title == null) {
-            throw new NullPointerException("title is null.");
-        }
-        this.title = Optional.of(title);
+    protected Notification(NotificationType type, String subTitle, Image subImage, String message) {
+        if (type == null)
+            throw new NullPointerException("type is null.");
+        if (type.getPopupTitle() == null)
+            throw new NullPointerException("popup title is null.");
+
+        this.type = type;
         this.subTitle = Optional.ofNullable(subTitle);
         this.subTitleImage = Optional.ofNullable(subImage);
         this.message = Optional.ofNullable(message);
@@ -38,7 +40,7 @@ public final class Notification {
      * @return ポップアップのタイトル
      */
     public Optional<String> getTitle() {
-        return title;
+        return Optional.of(type.getPopupTitle());
     }
 
     /**
@@ -65,13 +67,22 @@ public final class Notification {
         return subTitle;
     }
 
+    /**
+     * 通知タイプを返します。
+     * @return 通知タイプ
+     */
+    public NotificationType getType() {
+        return type;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Notification{");
-        sb.append("title=").append(title);
+        sb.append("title=").append(type.getPopupTitle());
         sb.append(", subTitleImage=").append(subTitleImage);
         sb.append(", message=").append(message);
         sb.append(", subTitle=").append(subTitle);
+        sb.append(", type=").append(type.getTypeName());
         sb.append('}');
         return sb.toString();
     }
