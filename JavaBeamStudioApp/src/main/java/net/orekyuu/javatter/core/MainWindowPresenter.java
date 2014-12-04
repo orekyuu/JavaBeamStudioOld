@@ -199,6 +199,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
         clientUserName.setText(getCurrentUser().get().getName());
+        currentUser = getCurrentUser().get();
     }
 
     // ドロップ前
