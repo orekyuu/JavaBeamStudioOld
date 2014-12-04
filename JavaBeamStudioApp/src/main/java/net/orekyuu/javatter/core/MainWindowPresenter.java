@@ -67,9 +67,9 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
-    private ClientUser currentUser;
     private List<PreviewImage> appendedImagesViews = new ArrayList<>();
-    private Property<ClientUser> currentUseruserProperty = new SimpleObjectProperty<>();;
+    private Property<ClientUser> currentUseruserProperty = new SimpleObjectProperty<>();
+    private Property<ClientUser> currentUser = new SimpleObjectProperty<>();
     private boolean isReply = false;
     private long destinationId;
 
@@ -77,8 +77,9 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     public void initialize(URL location, ResourceBundle resources) {
 
         users = ClientUserRegister.getInstance().getUsers(s -> true);
-        currentUser = getCurrentUser().get();
-        currentUseruserProperty.setValue(currentUser);
+        currentUser.setValue(getCurrentUser().get());
+        currentUseruserProperty.bind(currentUser);
+        
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
@@ -199,7 +200,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
         clientUserName.setText(getCurrentUser().get().getName());
-        currentUser = getCurrentUser().get();
+        currentUser.setValue(getCurrentUser().get());
     }
 
     // ドロップ前
