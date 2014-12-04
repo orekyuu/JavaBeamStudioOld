@@ -110,20 +110,19 @@ public class TweetCellController implements Initializable {
 
         // リプライ先
         if (s.getReplyStatusId() != -1) {
-            CompletableFuture
-                    .runAsync(() -> {
-                        StatusModel replyModel = StatusModel.Builder.build(
-                                s.getReplyStatusId(), clientUser);
-                        Platform.runLater(() -> {
-                            updateTweetTextFlow(replyModel, replyText);
-                            replyName.setText(getConfigFormatName(replyModel
-                                    .getOwner()));
-                            replyRoot.setVisible(true);
-                            box.getChildren().remove(replyRoot);
-                            box.getChildren().add(replyRoot);
-                        });
-                        setReplyImage(replyModel);
-                    });
+            CompletableFuture.runAsync(() -> {
+                StatusModel replyModel = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
+                Platform.runLater(() -> {
+                    updateTweetTextFlow(replyModel, replyText);
+                    replyName.setText(getConfigFormatName(replyModel.getOwner()));
+                    replyRoot.setVisible(true);
+                    box.getChildren().remove(replyRoot);
+                    box.getChildren().add(replyRoot);
+                });
+                setReplyImage(replyModel);
+            });
+
+
         } else {
             box.getChildren().remove(replyRoot);
             replyRoot.setVisible(false);
@@ -135,8 +134,7 @@ public class TweetCellController implements Initializable {
 
     private void setReplyImage(StatusModel status) {
         CompletableFuture.runAsync(() -> {
-            Image img = IconCache.getImage(status.getOwner()
-                    .getProfileImageURL());
+            Image img = IconCache.getImage(status.getOwner().getProfileImageURL());
             Platform.runLater(() -> replyImage.setImage(img));
         });
     }
@@ -176,23 +174,18 @@ public class TweetCellController implements Initializable {
         int start = 0;
         for (TweetEntity entity : entities) {
             if (entity.getStart() - start > 0)
-                textFlow.getChildren().add(
-                        new Text(status.getText().substring(start,
-                                entity.getStart())));
+                textFlow.getChildren().add(new Text(status.getText().substring(start,entity.getStart())));
             addTweetEntity(entity, textFlow);
             start = entity.getEnd();
         }
         TweetEntity last = entities.get(entities.size() - 1);
         if (status.getText().length() - last.getEnd() > 0)
-            textFlow.getChildren().add(
-                    new Text(status.getText().substring(last.getEnd(),
-                            status.getText().length())));
+            textFlow.getChildren().add(new Text(status.getText().substring(last.getEnd(),status.getText().length())));
     }
 
     private void addTweetEntity(TweetEntity entity, TextFlow textFlow) {
         if (entity instanceof URLEntity) {
-            Hyperlink hyperlink = new Hyperlink(
-                    ((URLEntity) entity).getExpandedURL());
+            Hyperlink hyperlink = new Hyperlink(((URLEntity) entity).getExpandedURL());
             hyperlink.setOnAction(this::openBrowser);
             textFlow.getChildren().add(hyperlink);
         }
@@ -303,8 +296,7 @@ public class TweetCellController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (nameDisplayType == null) {
-            String type = GeneralConfigHelper.loadConfigFromDB()
-                    .getNameDisplayType();
+            String type = GeneralConfigHelper.loadConfigFromDB().getNameDisplayType();
             nameDisplayType = NameDisplayType.valueOf(type);
         }
         root.layoutXProperty().addListener(e -> root.setLayoutX(0));
