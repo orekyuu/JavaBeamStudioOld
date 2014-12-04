@@ -68,7 +68,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
     private List<PreviewImage> appendedImagesViews = new ArrayList<>();
-    private Property<ClientUser> currentUseruserProperty = new SimpleObjectProperty<>();
+    private Property<ClientUser> currentUserProperty = new SimpleObjectProperty<>();
     private Property<ClientUser> currentUser = new SimpleObjectProperty<>();
     private boolean isReply = false;
     private long destinationId;
@@ -78,7 +78,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         currentUser.setValue(getCurrentUser().get());
-        currentUseruserProperty.bind(currentUser);
+        currentUserProperty.bind(currentUser);
         
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
@@ -307,7 +307,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @Override
     public Property<ClientUser> getCurrentUserProperty() {
-        return currentUseruserProperty;
+        return currentUserProperty;
     }
 
     @Override
