@@ -2,8 +2,9 @@ package net.orekyuu.javatter.api;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.StringProperty;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
 public interface CurrentWindow {
@@ -23,13 +24,13 @@ public interface CurrentWindow {
     * 現在のツイートを行うユーザーを取得する
     * @return ClientUser
     */
-   Optional<ClientUser> getCurrentUser();
+   Property<ClientUser> getCurrentUserProperty();
    /**
     * ツイートを行うユーザーを変更する。<br>
     * 指定したユーザーが見つからなかった場合はその旨のlogを表示する。
     * @param screenName 投稿したいユーザーのスクリーンネーム
     */
-   void changeUser(String screenName);
+   void assignUser(ClientUser user);
    /**
     * TextArea内の文字を取得する.
     * @return String
@@ -40,5 +41,7 @@ public interface CurrentWindow {
     * @param text セットしたい文字列。
     */
    void setText(String text);
+   
+   StringProperty getTweetTextProperty();
    
 }

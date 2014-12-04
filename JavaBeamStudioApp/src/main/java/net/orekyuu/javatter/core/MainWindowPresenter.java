@@ -3,6 +3,9 @@ package net.orekyuu.javatter.core;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,8 +67,9 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
+    private ClientUser currentUser;
     private List<PreviewImage> appendedImagesViews = new ArrayList<>();
-
+    private Property<ClientUser> currentUseruserProperty = new SimpleObjectProperty<>();;
     private boolean isReply = false;
     private long destinationId;
 
@@ -73,6 +77,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     public void initialize(URL location, ResourceBundle resources) {
 
         users = ClientUserRegister.getInstance().getUsers(s -> true);
+        currentUser = getCurrentUser().get();
+        currentUseruserProperty.setValue(currentUser);
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
@@ -91,10 +97,15 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         initPreviewImageViews();
         tweetTextArea.setOnDragOver(this::onDrop);
         tweetTextArea.setOnDragDropped(this::onDroped);
-        NumberBinding length = Bindings.subtract(140,
-                Bindings.length(tweetTextArea.textProperty()));
+        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
 
+    }
+    
+    private Optional<ClientUser> getCurrentUser() {
+        if (users.isEmpty())
+            return Optional.empty();
+        return Optional.of(users.get(nowUserIndex));
     }
 
     private void initPreviewImageViews() {
@@ -109,8 +120,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         appendedImagesViews.add(tweetImageView4);
 
         for (int i = 0; i < appendedImagesViews.size(); i++) {
-            appendedImagesViews.get(i)
-                    .setHoverImageView(hoverImageViews.get(i));
+            appendedImagesViews.get(i).setHoverImageView(hoverImageViews.get(i));
         }
     }
 
@@ -154,37 +164,31 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     // ツイートの実行
     public void tweet() {
-        getCurrentUser()
-                .ifPresent(
-                        user -> {
-                            Tweet builder = new TweetBuilder()
-                                    .setText(tweetTextArea.getText())
-                                    .setClientUser(user)
-                                    .setOnTweetSuccess(
-                                            s -> System.out.println(s.getText()))
-                                    .setAsync();
-                            appendedImagesViews.stream()
-                                    .filter(p -> p.getPreviewFile() != null)
-                                    .map(PreviewImage::getPreviewFile)
-                                    .forEach(builder::addMedia);
-                            if (isReply){
-                                builder.setReplyTo(destinationId);
-                                isReply = false;
-                            }
-                            builder.tweet();
-                            Platform.runLater(() -> {
-                                appendedImagesViews.forEach(e -> e
-                                        .setPreviewFile(null));
-                                tweetTextArea.setText("");
-                            });
-                            
-                        });
+        getCurrentUser().ifPresent(user -> {
+            Tweet builder = new TweetBuilder()
+                    .setText(tweetTextArea.getText())
+                    .setClientUser(user)
+                    .setOnTweetSuccess(s -> System.out.println(s.getText()))
+                    .setAsync();
+            appendedImagesViews.stream()
+                    .filter(p -> p.getPreviewFile() != null)
+                    .map(PreviewImage::getPreviewFile)
+                    .forEach(builder::addMedia);
+            if(isReply){
+                builder.setReplyTo(destinationId);
+                isReply = false;
+            }
+            builder.tweet();
+            Platform.runLater(() -> {
+                appendedImagesViews.forEach(e -> e.setPreviewFile(null));
+                tweetTextArea.setText("");
+            });
+        });
     }
 
     // Javaビームです。
     public void javaBeam() {
-        getCurrentUser().ifPresent(
-                user -> new TweetBuilder().setClientUser(user)
+        getCurrentUser().ifPresent(user -> new TweetBuilder().setClientUser(user)
                         .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
@@ -201,7 +205,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private void onDrop(DragEvent e) {
         Dragboard dragboard = e.getDragboard();
         long usedPreview = appendedImagesViews.stream()
-                .filter(i -> i.getPreviewFile() != null).count();
+                .filter(i -> i.getPreviewFile() != null)
+                .count();
         if (dragboard.hasFiles() && usedPreview < 4) {
             e.acceptTransferModes(TransferMode.COPY);
         }
@@ -211,7 +216,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private void onDroped(DragEvent e) {
         List<File> images = appendedImagesViews.stream()
                 .filter(i -> i.getPreviewFile() != null)
-                .map(PreviewImage::getPreviewFile).collect(Collectors.toList());
+                .map(PreviewImage::getPreviewFile)
+                .collect(Collectors.toList());
 
         Dragboard dragboard = e.getDragboard();
         int dragboardSize = dragboard.getFiles().size();
@@ -232,10 +238,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private void updateTweetImagePreviews(List<File> images) {
         // サイズチェック
         if (images.size() > appendedImagesViews.size()) {
-            throw new IllegalArgumentException(
-                    "images size > apendedImageViews size. images size: "
-                            + images.size() + "appendedImageViews size: "
-                            + appendedImagesViews.size());
+            throw new IllegalArgumentException("images size > apendedImageViews size. images size: "
+                            + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
         }
         Platform.runLater(() -> {
             appendedImagesViews.forEach(p -> p.setPreviewFile(null));
@@ -264,19 +268,13 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         }
     }
 
-    @Override
-    public Optional<ClientUser> getCurrentUser() {
-        if (users.isEmpty())
-            return Optional.empty();
-        return Optional.of(users.get(nowUserIndex));
-    }
 
     @Override
-    public void changeUser(String screenName) {
+    public void assignUser(ClientUser user) {
         boolean unFindedUser = false;
         int currentUser = nowUserIndex;
         if (users.isEmpty()) {
-            while (!users.get(nowUserIndex).getName().equals(screenName)) {
+            while (users.get(nowUserIndex) != user) {
                 nowUserIndex = (nowUserIndex + 1) % users.size();
                 if (nowUserIndex == currentUser) {
                     unFindedUser = true;
@@ -303,6 +301,16 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @Override
     public void setText(String text) {
         tweetTextArea.setText(text);
+    }
+
+    @Override
+    public Property<ClientUser> getCurrentUserProperty() {
+        return currentUseruserProperty;
+    }
+
+    @Override
+    public StringProperty getTweetTextProperty() {
+        return tweetTextArea.textProperty();
     }
 
 }
