@@ -3,6 +3,9 @@ package net.orekyuu.javatter.core;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.twitter.Tweet;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
@@ -32,7 +36,7 @@ import java.util.stream.Collectors;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
 
-public class MainWindowPresenter implements Initializable {
+public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private Text clientUserName;
     @FXML
@@ -64,11 +68,19 @@ public class MainWindowPresenter implements Initializable {
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
     private List<PreviewImage> appendedImagesViews = new ArrayList<>();
+    private Property<ClientUser> currentUserProperty = new SimpleObjectProperty<>();
+    private Property<ClientUser> currentUser = new SimpleObjectProperty<>();
+    private boolean isReply = false;
+    private long destinationId;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         users = ClientUserRegister.getInstance().getUsers(s -> true);
-        if(!users.isEmpty()) {
+        currentUser.setValue(getCurrentUser().get());
+        currentUserProperty.bind(currentUser);
+        
+        if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
                     for (ClientUser user : users) {
@@ -81,6 +93,7 @@ public class MainWindowPresenter implements Initializable {
                     e.printStackTrace();
                 }
             });
+
         }
         initPreviewImageViews();
         tweetTextArea.setOnDragOver(this::onDrop);
@@ -89,7 +102,7 @@ public class MainWindowPresenter implements Initializable {
         remaining.textProperty().bind(Bindings.convert(length));
 
     }
-
+    
     private Optional<ClientUser> getCurrentUser() {
         if (users.isEmpty())
             return Optional.empty();
@@ -162,6 +175,10 @@ public class MainWindowPresenter implements Initializable {
                     .filter(p -> p.getPreviewFile() != null)
                     .map(PreviewImage::getPreviewFile)
                     .forEach(builder::addMedia);
+            if(isReply){
+                builder.setReplyTo(destinationId);
+                isReply = false;
+            }
             builder.tweet();
             Platform.runLater(() -> {
                 appendedImagesViews.forEach(e -> e.setPreviewFile(null));
@@ -173,7 +190,7 @@ public class MainWindowPresenter implements Initializable {
     // Javaビームです。
     public void javaBeam() {
         getCurrentUser().ifPresent(user -> new TweetBuilder().setClientUser(user)
-                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
+                        .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
@@ -183,6 +200,7 @@ public class MainWindowPresenter implements Initializable {
         nowUserIndex = (nowUserIndex + 1) % users.size();
         clientUserImage.setImage(myProfileImage.get(nowUserIndex));
         clientUserName.setText(getCurrentUser().get().getName());
+        currentUser.setValue(getCurrentUser().get());
     }
 
     // ドロップ前
@@ -220,10 +238,10 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void updateTweetImagePreviews(List<File> images) {
-        //サイズチェック
+        // サイズチェック
         if (images.size() > appendedImagesViews.size()) {
             throw new IllegalArgumentException("images size > apendedImageViews size. images size: "
-                    + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
+                            + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
         }
         Platform.runLater(() -> {
             appendedImagesViews.forEach(p -> p.setPreviewFile(null));
@@ -232,4 +250,69 @@ public class MainWindowPresenter implements Initializable {
             }
         });
     }
+
+    @Override
+    public void setReply(long id, String destinationName) {
+        isReply = true;
+        destinationId = id;
+        setText(destinationName);
+    }
+
+    @Override
+    public List<File> getappendedImages() {
+        List<File> imageFiles = appendedImagesViews.stream()
+                .filter(p -> p.getPreviewFile() != null)
+                .map(PreviewImage::getPreviewFile).collect(Collectors.toList());
+        if (!imageFiles.isEmpty()) {
+            return null;
+        } else {
+            return imageFiles;
+        }
+    }
+
+
+    @Override
+    public void assignUser(ClientUser user) {
+        boolean unFindedUser = false;
+        int currentUser = nowUserIndex;
+        if (users.isEmpty()) {
+            while (users.get(nowUserIndex) != user) {
+                nowUserIndex = (nowUserIndex + 1) % users.size();
+                if (nowUserIndex == currentUser) {
+                    unFindedUser = true;
+                    break;
+                }
+            }
+            if (unFindedUser) {
+                // なんらかの理由でユーザーが見つからなかった旨のlogを表示
+                nowUserIndex = currentUser;
+                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                clientUserName.setText(getCurrentUser().get().getName());
+            } else {
+                clientUserImage.setImage(myProfileImage.get(nowUserIndex));
+                clientUserName.setText(getCurrentUser().get().getName());
+            }
+        }
+    }
+
+    @Override
+    public String getText() {
+        return tweetTextArea.getText();
+    }
+
+    @Override
+    public void setText(String text) {
+        tweetTextArea.setText(text);
+    }
+
+    @Override
+    public Property<ClientUser> getCurrentUserProperty() {
+        return currentUserProperty;
+    }
+
+    @Override
+    public StringProperty getTweetTextProperty() {
+        return tweetTextArea.textProperty();
+    }
+
 }
