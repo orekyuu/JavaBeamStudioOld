@@ -1,9 +1,9 @@
 package net.orekyuu.javatter.core.config;
 
 import javafx.beans.binding.Bindings;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,32 +16,31 @@ import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class AccountController implements Initializable {
+public class AccountController extends ConfigPageBase {
     @FXML
     private ListView<ClientUser> accountList;
     @FXML
     private Button deleteAccountButton;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        deleteAccountButton.disableProperty().bind(Bindings.isNull(accountList.getSelectionModel().selectedItemProperty()));
-        accountList.setCellFactory(c ->
-            new ListCell<ClientUser>() {
-                @Override
-                protected void updateItem(ClientUser item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if(!empty)
-                        setText(item.getName());
-                    else
-                        setText(null);
-                }
-            }
-        );
-
+    protected void initializeBackground() {
         ClientUserRegister.getInstance().registeredUserList().stream().forEach(accountList.getItems()::add);
+    }
+
+    @Override
+    protected void initializeUI() {
+        deleteAccountButton.disableProperty().bind(Bindings.isNull(accountList.getSelectionModel().selectedItemProperty()));
+        accountList.setCellFactory(c -> new ListCell<ClientUser>() {
+                            @Override
+                            protected void updateItem(ClientUser item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (!empty)
+                                    setText(item.getName());
+                                else
+                                    setText(null);
+                            }
+        });
     }
 
     public void addAccount() {
@@ -61,8 +60,22 @@ public class AccountController implements Initializable {
     }
 
     public void deleteAccount() {
-        LocalClientUser user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();
-        user.delete();
-        accountList.getItems().remove(user);
+        Task<Void> task = new Task<Void>() {
+            private LocalClientUser user;
+            @Override
+            protected Void call() throws Exception {
+                user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();
+                user.delete();
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                accountList.getItems().remove(user);
+            }
+        };
+        bindTask(task);
+        task.run();
     }
 }

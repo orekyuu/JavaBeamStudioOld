@@ -1,15 +1,14 @@
 package net.orekyuu.javatter.core.config;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 
-import java.net.URL;
 import java.util.Arrays;
-import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
-public class GeneralConfigPresenter implements Initializable {
+public class GeneralConfigPresenter extends ConfigPageBase {
 
     @FXML
     private CheckBox checkTweet;
@@ -24,31 +23,41 @@ public class GeneralConfigPresenter implements Initializable {
     @FXML
     private CheckBox isExpandURL;
     private GeneralConfigModel lasted;
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    protected void initializeBackground() {
         nameDisplayType.getItems().addAll(NameDisplayType.ID.configName(), NameDisplayType.NAME.configName(), NameDisplayType.ID_NAME.configName(), NameDisplayType.NAME_ID.configName());
-
         lasted = GeneralConfigHelper.loadConfigFromDB();
         if (lasted == null) lasted = new GeneralConfigModel();
-        setSelect(lasted);
+    }
 
+    @Override
+    protected void initializeUI() {
+        setSelect(lasted);
     }
 
     public void save() {
-        GeneralConfigModel config = new GeneralConfigModel();
-        config.setCheckFav(checkFav.isSelected());
-        config.setCheckReply(checkReply.isSelected());
-        config.setCheckTweet(checkTweet.isSelected());
-        config.setCheckRT(checkRT.isSelected());
-        config.setExpandURL(isExpandURL.isSelected());
-        NameDisplayType name = Arrays.stream(NameDisplayType.values())
-                .filter(type -> type.configName().equals(nameDisplayType.getValue()))
-                .findFirst()
-                .get();
-        config.setNameDisplayType(name.name());
-        GeneralConfigHelper.saveToDB(config);
-        lasted = config;
+        Task<Void> task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                GeneralConfigModel config = new GeneralConfigModel();
+                config.setCheckFav(checkFav.isSelected());
+                config.setCheckReply(checkReply.isSelected());
+                config.setCheckTweet(checkTweet.isSelected());
+                config.setCheckRT(checkRT.isSelected());
+                config.setExpandURL(isExpandURL.isSelected());
+                NameDisplayType name = Arrays.stream(NameDisplayType.values())
+                        .filter(type -> type.configName().equals(nameDisplayType.getValue()))
+                        .findFirst()
+                        .get();
+                config.setNameDisplayType(name.name());
+                GeneralConfigHelper.saveToDB(config);
+                lasted = config;
+                return null;
+            }
+        };
+        bindTask(task);
+        task.run();
     }
 
     public void cancel() {
