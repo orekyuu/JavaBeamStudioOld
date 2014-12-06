@@ -18,8 +18,8 @@ import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.cache.IconCache;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
-import net.orekyuu.javatter.core.models.StatusModel;
-import net.orekyuu.javatter.core.models.UserModel;
+import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.api.models.UserModel;
 import twitter4j.*;
 
 import java.awt.Desktop;

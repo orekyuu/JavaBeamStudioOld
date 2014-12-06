@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core.models;
+package net.orekyuu.javatter.api.models;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -41,46 +41,79 @@ public class UserModel {
         profileImageURL = user.getProfileImageURL();
     }
 
+    /**
+     * @return ユーザーが作成された日付
+     */
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * @return ユーザーの説明文
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @return ユーザーのお気に入り数
+     */
     public int getFavCount() {
         return favCount;
     }
 
+    /**
+     * @return ユーザーのフォロワー数
+     */
     public int getFollowersCount() {
         return followersCount;
     }
 
+    /**
+     * @return ユーザーのフォロー数
+     */
     public int getFriendsCount() {
         return friendsCount;
     }
 
+    /**
+     * @return ユーザーID
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * @return 追加されているリストの数
+     */
     public int getListedCount() {
         return listedCount;
     }
 
+    /**
+     * @return ユーザーのプロフィールに設定されている場所
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * @return ユーザーの名前
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return ユーザーのスクリーンネーム
+     */
     public String getScreenName() {
         return screenName;
     }
 
+    /**
+     * @return ユーザーアイコンのURL
+     */
     public String getProfileImageURL() {
         return profileImageURL;
     }
@@ -120,8 +153,8 @@ public class UserModel {
 
         /**
          * UserModelを作成します
-         * @param user User
-         * @return UserModel
+         * @param user 情報元
+         * @return 引数のユーザーを元に作られたUserModel
          */
         public static UserModel build(User user) {
             try {

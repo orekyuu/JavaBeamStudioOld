@@ -7,7 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.models.StatusModel;
+import net.orekyuu.javatter.api.models.StatusModel;
 
 import java.io.IOException;
 
