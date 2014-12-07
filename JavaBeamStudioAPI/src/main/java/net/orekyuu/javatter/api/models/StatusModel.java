@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core.models;
+package net.orekyuu.javatter.api.models;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -68,58 +68,100 @@ public class StatusModel {
         isFavorited = status.isFavorited();
     }
 
+    /**
+     * @return ツイートID
+     */
     public long getStatusId() {
         return statusId;
     }
 
+    /**
+     * @return ツイートのテキスト
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * @return ツイートされた日時
+     */
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * @return リプライ先
+     */
     public long getReplyStatusId() {
         return replyStatusId;
     }
 
+    /**
+     * @return ツイートされたクライアント名
+     */
     public String getViaName() {
         return viaName;
     }
 
+    /**
+     * @return クライアントのリンク
+     */
     public String getViaLink() {
         return viaLink;
     }
 
+    /**
+     * @return リツイート元のツイート
+     */
     public StatusModel getRetweetFrom() {
         return retweetFrom;
     }
 
+    /**
+     * @return ツイートしたユーザー
+     */
     public UserModel getOwner() {
         return owner;
     }
 
+    /**
+     * @return このツイートをリツイートしたか
+     */
     public boolean isRetweeted() {
         return isRetweeted;
     }
 
+    /**
+     * @return このツイートをお気に入りしたか
+     */
     public boolean isFavorited() {
         return isFavorited;
     }
 
+    /**
+     * @return ツイートに含まれるメンション
+     */
     public List<UserMentionEntity> getMentions() {
         return Arrays.asList(mentions);
     }
 
+    /**
+     * @return ツイートに含まれるURL
+     */
     public List<URLEntity> getUrls() {
         return Arrays.asList(urls);
     }
 
+    /**
+     * @return ツイートに含まれるハッシュタグ
+     */
     public List<HashtagEntity> getHashtags() {
         return Arrays.asList(hashtags);
     }
 
+    /**
+     * @return ツイートに含まれるメディア
+     */
     public List<MediaEntity> getMedias() {
         return Arrays.asList(medias);
     }
@@ -162,8 +204,8 @@ public class StatusModel {
 
         /**
          * StatusModelを作成します。
-         * @param status status
-         * @return StatusModel
+         * @param status status 情報元
+         * @return 引数のStatusを元に作られたStatusModel
          */
         public static StatusModel build(Status status) {
             try {
@@ -176,9 +218,9 @@ public class StatusModel {
         /**
          * StatusModelをIDから取得します。<br>
          * キャッシュになければTwitterから取得し、キャッシュします。
-         * @param statusId id
-         * @param user user
-         * @return StatusModel
+         * @param statusId id ツイートID
+         * @param user user 取得するユーザー
+         * @return 取得したStatusModel
          */
         public static StatusModel build(long statusId, ClientUser user) {
             try {

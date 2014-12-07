@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.core.models.StatusModel;
+import net.orekyuu.javatter.api.models.StatusModel;
 
 public class MentionsController implements JavatterColumn {
     @FXML

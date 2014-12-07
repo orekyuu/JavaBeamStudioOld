@@ -2,6 +2,7 @@ package net.orekyuu.javatter.core.models;
 
 import mockit.Mock;
 import mockit.MockUp;
+import net.orekyuu.javatter.api.models.StatusModel;
 import org.junit.Before;
 import org.junit.Test;
 import twitter4j.Status;
