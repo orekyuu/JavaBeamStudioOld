@@ -77,7 +77,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     public void initialize(URL location, ResourceBundle resources) {
 
         users = ClientUserRegister.getInstance().getUsers(s -> true);
-        currentUser.setValue(getCurrentUser().get());
+        currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
         
         if (!users.isEmpty()) {
@@ -106,7 +106,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private Optional<ClientUser> getCurrentUser() {
         if (users.isEmpty())
             return Optional.empty();
-        return Optional.of(users.get(nowUserIndex));
+        return Optional.ofNullable(users.get(nowUserIndex));
     }
 
     private void initPreviewImageViews() {
