@@ -131,9 +131,6 @@ public class TweetCellController implements Initializable {
                 }
             };
             TaskUtil.startTask(modelTask);
-            Thread th = new Thread(modelTask);
-            th.setDaemon(true);
-            th.start();
         } else {
             box.getChildren().remove(replyRoot);
             replyRoot.setVisible(false);

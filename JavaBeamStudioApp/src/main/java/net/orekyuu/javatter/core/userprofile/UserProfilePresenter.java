@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.cache.IconCache;
+import net.orekyuu.javatter.api.cache.IconCache;
 
 import java.io.IOException;
 import java.io.InputStream;
