@@ -23,7 +23,7 @@ public class TweetCell extends ListCell<StatusModel> {
      * @param clientuser
      *            UserStreamの持つClientUser
      */
-    TweetCell(ClientUser clientuser) {
+    public TweetCell(ClientUser clientuser) {
         super();
         clientUser = clientuser;
     }

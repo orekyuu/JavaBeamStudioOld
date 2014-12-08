@@ -8,7 +8,6 @@ import net.orekyuu.javatter.api.models.UserModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 
 /**
  * ユーザープロファイルに表示するタブのベースクラス
@@ -38,7 +37,9 @@ public abstract class UserProfileTabBase implements Initializable {
      */
     protected final void runTask(Task task) {
         bindTask(task);
-        Executors.newSingleThreadExecutor().submit(task);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
