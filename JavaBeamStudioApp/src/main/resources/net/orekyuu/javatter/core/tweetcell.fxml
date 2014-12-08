@@ -35,10 +35,9 @@
                   <Button mnemonicParsing="false" onAction="#reply" text="Reply" />
                   <Button mnemonicParsing="false" onAction="#retweet" text="RT" />
                   <Button mnemonicParsing="false" onAction="#favoriten" text="★" />
-                  <MenuButton mnemonicParsing="false" text="MenuButton">
+                  <MenuButton mnemonicParsing="false" text="Actions">
                       <items>
-                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                          <MenuItem mnemonicParsing="false" text="Action 2" />
+                          <MenuItem mnemonicParsing="false" text="ユーザープロファイルを開く" onAction="#openUserProfile"/>
                       </items>
                   </MenuButton>
                   <Region HBox.hgrow="ALWAYS" />

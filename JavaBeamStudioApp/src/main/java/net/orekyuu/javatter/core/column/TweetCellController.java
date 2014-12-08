@@ -1,9 +1,12 @@
 package net.orekyuu.javatter.core.column;
 
-import javafx.concurrent.Task;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,15 +16,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
-import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.cache.IconCache;
-import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.cache.IconCache;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
 import twitter4j.*;
 
 import java.awt.Desktop;
@@ -30,6 +34,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class TweetCellController implements Initializable {
 
@@ -86,48 +91,44 @@ public class TweetCellController implements Initializable {
         updateImagePreview(s);
         via.setText(s.getViaName());
         // イメージ設定(非同期処理)
-        if (retweetFrom == null) {
-            Task<Image> imageTask = new Task<Image>() {
-                @Override
-                protected Image call() throws Exception {
-                    return IconCache.getImage(status.getOwner().getProfileImageURL());
-                }
+        CompletableFuture.runAsync(() -> {
 
-                @Override
-                protected void succeeded() {
-                    profileimage.setImage(getValue());
+            if (retweetFrom == null) {
+                Image img = IconCache.getImage(status.getOwner()
+                        .getProfileImageURL());
+                Platform.runLater(() -> {
+                    profileimage.setImage(img);
                     rtSourceUser.setImage(null);
                     rtSourceUser.setVisible(false);
-                }
-            };
-            TaskUtil.startTask(imageTask);
-        } else {
-            startRtweetIconTask(status, retweetFrom);
-        }
+                });
+            } else {
+                Image source = IconCache.getImage(status.getOwner()
+                        .getProfileImageURL());
+                Image img = IconCache.getImage(retweetFrom.getOwner()
+                        .getProfileImageURL());
+                Platform.runLater(() -> {
+                    profileimage.setImage(img);
+                    rtSourceUser.setImage(source);
+                    rtSourceUser.setVisible(true);
+                });
+            }
+        });
 
         // リプライ先
         if (s.getReplyStatusId() != -1) {
-            Task<StatusModel> modelTask = new Task<StatusModel>() {
-                @Override
-                protected StatusModel call() throws Exception {
-                    StatusModel model = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
-                    setReplyImage(model);
-                    return model;
-                }
-
-                @Override
-                protected void succeeded() {
-                    updateTweetTextFlow(getValue(), replyText);
-                    replyName.setText(getConfigFormatName(getValue().getOwner()));
+            CompletableFuture.runAsync(() -> {
+                StatusModel replyModel = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
+                Platform.runLater(() -> {
+                    updateTweetTextFlow(replyModel, replyText);
+                    replyName.setText(getConfigFormatName(replyModel.getOwner()));
                     replyRoot.setVisible(true);
                     box.getChildren().remove(replyRoot);
                     box.getChildren().add(replyRoot);
-                }
-            };
-            TaskUtil.startTask(modelTask);
-            Thread th = new Thread(modelTask);
-            th.setDaemon(true);
-            th.start();
+                });
+                setReplyImage(replyModel);
+            });
+
+
         } else {
             box.getChildren().remove(replyRoot);
             replyRoot.setVisible(false);
@@ -137,31 +138,11 @@ public class TweetCellController implements Initializable {
         }
     }
 
-    private void startRtweetIconTask(StatusModel status, StatusModel rt) {
-        GetIconTask sourceIconTask = new GetIconTask(status.getOwner());
-        sourceIconTask.setOnSucceeded(e -> {
-            rtSourceUser.setImage(sourceIconTask.getValue());
-            rtSourceUser.setVisible(true);
-        });
-        GetIconTask iconTask = new GetIconTask(rt.getOwner());
-        iconTask.setOnSucceeded(e -> profileimage.setImage(iconTask.getValue()));
-        TaskUtil.startTask(sourceIconTask);
-        TaskUtil.startTask(iconTask);
-    }
-
     private void setReplyImage(StatusModel status) {
-        Task task = new Task<Image>() {
-            @Override
-            protected Image call() throws Exception {
-                return IconCache.getImage(status.getOwner().getProfileImageURL());
-            }
-
-            @Override
-            protected void succeeded() {
-                replyImage.setImage(getValue());
-            }
-        };
-        TaskUtil.startTask(task);
+        CompletableFuture.runAsync(() -> {
+            Image img = IconCache.getImage(status.getOwner().getProfileImageURL());
+            Platform.runLater(() -> replyImage.setImage(img));
+        });
     }
 
     private void updateImagePreview(StatusModel status) {
@@ -172,18 +153,11 @@ public class TweetCellController implements Initializable {
             imageView.setFitWidth(64);
             imageView.setFitHeight(64);
             imgPreview.getChildren().add(imageView);
-            Task<Image> task = new Task<Image>() {
-                @Override
-                protected Image call() throws Exception {
-                    return new Image(e.getMediaURL());
-                }
 
-                @Override
-                protected void succeeded() {
-                    imageView.setImage(getValue());
-                }
-            };
-            TaskUtil.startTask(task);
+            CompletableFuture.runAsync(() -> {
+                Image image = new Image(e.getMediaURL());
+                Platform.runLater(() -> imageView.setImage(image));
+            });
 
             imageView.setOnMouseClicked(clickEvent -> {
                 new ImageViewerBuilder().setMedia(imageView.getImage()).show();
@@ -347,6 +321,25 @@ public class TweetCellController implements Initializable {
             return user.getName() + " / " + "@" + user.getScreenName();
         default:
             throw new IllegalArgumentException(nameDisplayType.name());
+        }
+    }
+
+    public void openUserProfile() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
+            UserProfilePresenter presenter = loader.getController();
+            presenter.setUser(status.getOwner());
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.getScene().getStylesheets().add(
+                    Main.class.getResource("javabeamstudio.css")
+                            .toExternalForm());
+            stage.setTitle(status.getOwner().getName() + "さんのプロファイル");
+            stage.centerOnScreen();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
