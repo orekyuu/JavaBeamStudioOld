@@ -4,9 +4,9 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 public class GeneralConfigPresenter extends ConfigPageBase {
 
@@ -57,7 +57,7 @@ public class GeneralConfigPresenter extends ConfigPageBase {
             }
         };
         bindTask(task);
-        task.run();
+        TaskUtil.startTask(task);
     }
 
     public void cancel() {

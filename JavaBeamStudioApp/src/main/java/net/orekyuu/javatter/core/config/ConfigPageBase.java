@@ -5,6 +5,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Region;
 import net.orekyuu.javatter.api.control.ControllablePane;
 import net.orekyuu.javatter.api.control.ControllablePaneController;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 
 /**
  * コンフィグ画面のベース
@@ -45,7 +46,7 @@ public abstract class ConfigPageBase implements ControllablePaneController {
             }
         };
         bindTask(task);
-        task.run();
+        TaskUtil.startTask(task);
     }
 
     /**
