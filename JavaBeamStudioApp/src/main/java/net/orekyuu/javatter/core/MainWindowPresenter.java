@@ -79,8 +79,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     public void initialize(URL location, ResourceBundle resources) {
         
         Thread.setDefaultUncaughtExceptionHandler((thread,exception)->{
-            Exception e = new Exception(exception);
-            ExceptionDialogBuilder.create(e);
+            ExceptionDialogBuilder.create(new Exception(exception));
         });
         
         users = ClientUserRegister.getInstance().getUsers(s -> true);
