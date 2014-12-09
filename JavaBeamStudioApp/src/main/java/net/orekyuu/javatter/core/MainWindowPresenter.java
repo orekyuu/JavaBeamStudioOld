@@ -28,10 +28,12 @@ import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
+
 import java.util.*;
 import java.io.File;
 import java.net.URL;
 import java.util.stream.Collectors;
+
 
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
@@ -75,7 +77,12 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        
+        Thread.setDefaultUncaughtExceptionHandler((thread,exception)->{
+            Exception e = new Exception(exception);
+            ExceptionDialogBuilder.create(e);
+        });
+        
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
