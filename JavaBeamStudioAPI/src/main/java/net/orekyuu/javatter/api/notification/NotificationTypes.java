@@ -6,7 +6,8 @@ package net.orekyuu.javatter.api.notification;
 public enum NotificationTypes implements NotificationType {
     MENTION("メンション", "メンション通知"),
     FOLLOW("フォローされました", "フォロー通知"),
-    FAVORITE("お気に入りされました", "お気に入り通知");
+    FAVORITE("お気に入りされました", "お気に入り通知"),
+    RETWEET("リツイートされました" , "リツイート通知");
 
     private final String typeName;
     private final String title;
