@@ -103,7 +103,7 @@ public class NotificationManager implements NotificationSender {
                 if(users.stream().anyMatch(user -> user.getAccessToken().getUserId() == status.getInReplyToStatusId())){
                     StatusModel statusModel = StatusModel.Builder.build(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
-                    Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
+                    Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
                         .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
                         .setMessage(statusModel.getOwner().getName()+"さんからのリプライ"+statusModel.getText()).build();
                     sender.sendNotification(notification);
