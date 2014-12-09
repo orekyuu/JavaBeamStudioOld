@@ -18,9 +18,9 @@ import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.cache.IconCache;
-import net.orekyuu.javatter.core.models.StatusModel;
-import net.orekyuu.javatter.core.models.UserModel;
+import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.api.models.UserModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -89,6 +89,25 @@ public class NotificationManager implements NotificationSender {
                         .setSubTitleImage(image).setSubTitle(model.getName())
                         .setMessage(model.getDescription()).build();
                 sender.sendNotification(notification);
+            }).addOnStatus(status->{
+                if(status.isRetweet()){
+                    if(users.stream().anyMatch(user->user.getAccessToken().getUserId() == status.getRetweetedStatus().getUser().getId())){
+                        StatusModel statusModel = StatusModel.Builder.build(status);
+                        Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
+                        Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
+                            .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
+                            .setMessage(statusModel.getOwner().getName()+"さんにリツイートされました"+statusModel.getText()).build();
+                        sender.sendNotification(notification);
+                    }
+                }
+                if(users.stream().anyMatch(user -> user.getAccessToken().getUserId() == status.getInReplyToStatusId())){
+                    StatusModel statusModel = StatusModel.Builder.build(status);
+                    Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
+                    Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
+                        .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
+                        .setMessage(statusModel.getOwner().getName()+"さんからのリプライ"+statusModel.getText()).build();
+                    sender.sendNotification(notification);
+                }
             });
         });
     }
