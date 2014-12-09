@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
 import net.orekyuu.javatter.core.column.ColumnManager;
+import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -38,6 +39,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws IOException {
+        Thread.setDefaultUncaughtExceptionHandler((thread,throwable)->{
+            ExceptionDialogBuilder.create(new Exception(throwable));
+        });
         launch(args);
     }
 }
