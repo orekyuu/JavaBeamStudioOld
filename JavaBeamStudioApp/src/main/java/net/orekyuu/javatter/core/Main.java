@@ -1,13 +1,14 @@
 package net.orekyuu.javatter.core;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.column.ColumnManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class Main extends Application {
@@ -32,9 +33,20 @@ public class Main extends Application {
     private void setupApplication(Stage stage) throws ExecutionException, InterruptedException {
         net.orekyuu.javatter.api.Application application = GlobalAccess.getInstance().getApplication();
         application.onStart(new String[]{""});
-        CompletableFuture<Void> async = CompletableFuture.runAsync(application::onLoad);
-        async.get();
-        application.onCreate(stage);
+        Task task = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                application.onLoad();
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                application.onCreate(stage);
+            }
+        };
+        TaskUtil.startTask(task);
     }
 
     public static void main(String[] args) throws IOException {

@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core.cache;
+package net.orekyuu.javatter.api.cache;
 
 import com.google.common.base.Function;
 import com.google.common.cache.CacheBuilder;
