@@ -100,7 +100,7 @@ public class NotificationManager implements NotificationSender {
                         sender.sendNotification(notification);
                     }
                 }
-                if(users.stream().anyMatch(user -> user.getAccessToken().getUserId() == status.getInReplyToStatusId())){
+                if(users.stream().anyMatch(user -> user.getAccessToken().getUserId() == status.getInReplyToUserId())){
                     StatusModel statusModel = StatusModel.Builder.build(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
