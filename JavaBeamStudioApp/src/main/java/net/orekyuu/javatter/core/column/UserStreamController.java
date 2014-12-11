@@ -2,7 +2,6 @@ package net.orekyuu.javatter.core.column;
 
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -18,7 +17,7 @@ import twitter4j.Status;
 public class UserStreamController implements JavatterColumn {
     @FXML
     private ListView<StatusModel> userStreamList;
-    private final int LIMIT_VALUE = 30;
+    private final int INITIALIZING_LIMIT = 30;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
@@ -34,7 +33,7 @@ public class UserStreamController implements JavatterColumn {
                 }
                 homeTimeline
                         .stream()
-                        .limit(LIMIT_VALUE)
+                        .limit(INITIALIZING_LIMIT)
                         .forEachOrdered(
                                 status -> {
                                     userStreamList.getItems().add(
@@ -42,20 +41,27 @@ public class UserStreamController implements JavatterColumn {
                                 });
                 return null;
             }
+            @Override
+            protected void succeeded() {
+            	super.succeeded();
+                userStreamList
+                        .setCellFactory(cell -> new TweetCell(clientUser));
+                clientUser.getStream().addOnStatus(status -> {
+                    Task statusAdding = new Task() {
+                        @Override
+                        protected Object call() {
+                            userStreamList.getItems().add(0,
+                                    StatusModel.Builder.build(status));
+                            if (userStreamList.getItems().size() > 100)
+                                userStreamList.getItems().remove(100);
+                            return null;
+                        }
+                    };
+                    TaskUtil.startTask(statusAdding);
+                });
+            }
         };
         TaskUtil.startTask(initializing);
-        // 初期設定が終了するまで待機
-        while (!initializing.isDone());
 
-        userStreamList.setCellFactory(cell -> new TweetCell(clientUser));
-        clientUser.getStream().addOnStatus(
-                status -> {
-                    Platform.runLater(() -> {
-                        userStreamList.getItems().add(0,
-                                StatusModel.Builder.build(status));
-                        if (userStreamList.getItems().size() > 100)
-                            userStreamList.getItems().remove(100);
-                    });
-                });
     }
 }

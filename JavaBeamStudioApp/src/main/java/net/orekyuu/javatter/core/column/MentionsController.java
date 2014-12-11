@@ -2,20 +2,20 @@ package net.orekyuu.javatter.core.column;
 
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
 public class MentionsController implements JavatterColumn {
     @FXML
     ListView<StatusModel> mentionsList;
-    private final int LIMIT_VALUE = 30;
+    private final int INITIALIZING_LIMIT = 30;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
@@ -23,15 +23,15 @@ public class MentionsController implements JavatterColumn {
         Task initializing = new Task() {
             @Override
             protected Object call() {
-                List<Status> homeTimeline = null;
+                List<Status> mentionsTimeline = null;
                 try {
-                    homeTimeline = clientUser.getTwitter().getHomeTimeline();
+                    mentionsTimeline = clientUser.getTwitter().getMentionsTimeline();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                homeTimeline
+                mentionsTimeline
                         .stream()
-                        .limit(LIMIT_VALUE)
+                        .limit(INITIALIZING_LIMIT)
                         .forEachOrdered(
                                 status -> {
                                     mentionsList.getItems().add(
@@ -39,25 +39,29 @@ public class MentionsController implements JavatterColumn {
                                 });
                 return null;
             }
-        };
-        // 初期設定が終了するまで待機
-        while (!initializing.isDone());
-
-        mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
-        clientUser.getStream().addOnStatus(
-                status -> {
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
+                clientUser.getStream().addOnStatus(status ->{
                     if (status.getInReplyToUserId() == userId) {
-                        Platform.runLater(() -> {
-                            mentionsList.getItems().add(0,
-                                    StatusModel.Builder.build(status));
-                            if (mentionsList.getItems().size() > 100)
+                        Task statusAdding = new Task(){
+                            @Override
+                            protected Object call(){
+                                mentionsList.getItems().add(0,
+                                        StatusModel.Builder.build(status));
+                                if (mentionsList.getItems().size() > 100)
                                 mentionsList.getItems().remove(100);
-                        });
+                                return null;
+                            }
+                        };
+                        TaskUtil.startTask(statusAdding);
                     }
                 });
-
+            }
+        };
+        TaskUtil.startTask(initializing);
     }
-
     private long getUserId(ClientUser clientUser) {
         long userId = 0;
         try {
