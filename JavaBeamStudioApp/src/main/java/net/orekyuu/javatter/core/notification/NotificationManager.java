@@ -91,7 +91,8 @@ public class NotificationManager implements NotificationSender {
                 sender.sendNotification(notification);
             }).addOnStatus(status->{
                 if(status.isRetweet()){
-                    if(users.stream().anyMatch(user->user.getAccessToken().getUserId() == status.getRetweetedStatus().getUser().getId())){
+                    UserModel userModel = UserModel.Builder.build(status.getRetweetedStatus().getUser());
+                    if(users.stream().anyMatch(user->user.getAccessToken().getUserId() == userModel.getId())){
                         StatusModel statusModel = StatusModel.Builder.build(status);
                         Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                         Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
