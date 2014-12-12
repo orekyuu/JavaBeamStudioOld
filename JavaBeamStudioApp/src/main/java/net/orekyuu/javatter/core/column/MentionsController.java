@@ -9,59 +9,53 @@ import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
 public class MentionsController implements JavatterColumn {
     @FXML
     ListView<StatusModel> mentionsList;
-    private final int INITIALIZING_LIMIT = 30;
+    private static final int INITIALIZING_LIMIT = 30;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
         long userId = getUserId(clientUser);
-        Task initializing = new Task() {
+        Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
-            protected Object call() {
-                List<Status> mentionsTimeline = null;
+            protected List<Status> call() {
+                List<Status> mtl = null;
                 try {
-                    mentionsTimeline = clientUser.getTwitter().getMentionsTimeline();
+                    mtl = clientUser.getTwitter().getMentionsTimeline(
+                            new Paging(1, INITIALIZING_LIMIT));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mentionsTimeline
-                        .stream()
-                        .limit(INITIALIZING_LIMIT)
-                        .forEachOrdered(
-                                status -> {
-                                    mentionsList.getItems().add(
-                                            StatusModel.Builder.build(status));
-                                });
-                return null;
+                return mtl;
             }
+
             @Override
             protected void succeeded() {
                 super.succeeded();
+                List<Status> mentionsTimeline = getValue();
                 mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
-                clientUser.getStream().addOnStatus(status ->{
-                    if (status.getInReplyToUserId() == userId) {
-                        Task statusAdding = new Task(){
-                            @Override
-                            protected Object call(){
-                                mentionsList.getItems().add(0,
-                                        StatusModel.Builder.build(status));
-                                if (mentionsList.getItems().size() > 100)
+                mentionsTimeline.stream().forEachOrdered(
+                        status -> {
+                            mentionsList.getItems().add(
+                                    StatusModel.Builder.build(status));
+                        });
+                clientUser.getStream().addOnStatus(
+                        status -> {
+                            mentionsList.getItems().add(0,
+                                    StatusModel.Builder.build(status));
+                            if (mentionsList.getItems().size() > 100)
                                 mentionsList.getItems().remove(100);
-                                return null;
-                            }
-                        };
-                        TaskUtil.startTask(statusAdding);
-                    }
-                });
+                        });
             }
         };
         TaskUtil.startTask(initializing);
     }
+
     private long getUserId(ClientUser clientUser) {
         long userId = 0;
         try {

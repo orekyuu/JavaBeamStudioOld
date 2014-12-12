@@ -9,6 +9,7 @@ import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import twitter4j.Paging;
 import twitter4j.Status;
 
 /**
@@ -17,48 +18,44 @@ import twitter4j.Status;
 public class UserStreamController implements JavatterColumn {
     @FXML
     private ListView<StatusModel> userStreamList;
-    private final int INITIALIZING_LIMIT = 30;
+    private static final int INITIALIZING_LIMIT = 30;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
         // 初期設定タスク
-        Task initializing = new Task() {
+        Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
-            protected Object call() {
-                List<Status> homeTimeline = null;
+            protected List<Status> call() {
+                List<Status> htl = null;
                 try {
-                    homeTimeline = clientUser.getTwitter().getHomeTimeline();
+                    htl = clientUser.getTwitter().getHomeTimeline(
+                            new Paging(1,INITIALIZING_LIMIT));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                homeTimeline
-                        .stream()
-                        .limit(INITIALIZING_LIMIT)
-                        .forEachOrdered(
-                                status -> {
-                                    userStreamList.getItems().add(
-                                            StatusModel.Builder.build(status));
-                                });
-                return null;
-            }
+                return htl;
+            };
+
             @Override
             protected void succeeded() {
-            	super.succeeded();
+                super.succeeded();
+                List<Status> homeTimeline = getValue();
                 userStreamList
                         .setCellFactory(cell -> new TweetCell(clientUser));
-                clientUser.getStream().addOnStatus(status -> {
-                    Task statusAdding = new Task() {
-                        @Override
-                        protected Object call() {
-                            userStreamList.getItems().add(0,
+                homeTimeline.stream().forEachOrdered(
+                        status -> {
+                            userStreamList.getItems().add(
                                     StatusModel.Builder.build(status));
-                            if (userStreamList.getItems().size() > 100)
-                                userStreamList.getItems().remove(100);
-                            return null;
-                        }
-                    };
-                    TaskUtil.startTask(statusAdding);
-                });
+                        });
+                clientUser
+                        .getStream()
+                        .addOnStatus(
+                                status -> {
+                                    userStreamList.getItems().add(0,
+                                            StatusModel.Builder.build(status));
+                                    if (userStreamList.getItems().size() > 100)
+                                        userStreamList.getItems().remove(100);
+                                });
             }
         };
         TaskUtil.startTask(initializing);
