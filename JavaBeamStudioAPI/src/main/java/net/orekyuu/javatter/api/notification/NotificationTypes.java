@@ -7,8 +7,8 @@ public enum NotificationTypes implements NotificationType {
     MENTION("メンション", "メンション通知"),
     FOLLOW("フォローされました", "フォロー通知"),
     FAVORITE("お気に入りされました", "お気に入り通知"),
-    RETWEET("リツイートされました" , "リツイート通知");
-
+    RETWEET("リツイートされました" , "リツイート通知"),
+    ADDED_LIST("リストに追加されました","リスト通知");
     private final String typeName;
     private final String title;
 

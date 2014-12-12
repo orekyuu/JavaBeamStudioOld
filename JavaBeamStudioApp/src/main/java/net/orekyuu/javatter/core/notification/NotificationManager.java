@@ -97,7 +97,7 @@ public class NotificationManager implements NotificationSender {
                         Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                         Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
                             .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
-                            .setMessage(statusModel.getOwner().getName()+"さんにリツイートされました"+statusModel.getText()).build();
+                            .setMessage(statusModel.getOwner().getName()+"さんにリツイートされました\n"+statusModel.getRetweetFrom().getText()).build();
                         sender.sendNotification(notification);
                     }
                 }
@@ -106,9 +106,16 @@ public class NotificationManager implements NotificationSender {
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
                         .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
-                        .setMessage(statusModel.getOwner().getName()+"さんからのリプライ"+statusModel.getText()).build();
+                        .setMessage(statusModel.getOwner().getName()+"さんからのリプライ\n"+statusModel.getText()).build();
                     sender.sendNotification(notification);
                 }
+            }).addOnUserMemberAdditon((user,user2,userList) ->{
+                UserModel userModel = UserModel.Builder.build(user2);
+                Image image = IconCache.getImage(userModel.getProfileImageURL());
+                Notification notification = new NotificationBuilder(NotificationTypes.ADDED_LIST)
+                    .setSubTitleImage(image).setSubTitle(userModel.getName()+":"+userList.getName())
+                    .setMessage(user.getName()+"さんは"+userModel.getName()+"さんのリスト:"+"「"+userList.getName()+"」"+"に追加されました").build();
+                sender.sendNotification(notification);
             });
         });
     }
