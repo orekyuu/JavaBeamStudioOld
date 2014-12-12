@@ -75,7 +75,6 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
