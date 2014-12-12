@@ -1,7 +1,9 @@
 package net.orekyuu.javatter.core.column;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -26,10 +28,10 @@ public class UserStreamController implements JavatterColumn {
         Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
             protected List<Status> call() {
-                List<Status> htl = null;
+                List<Status> htl = new ArrayList<Status>();
                 try {
                     htl = clientUser.getTwitter().getHomeTimeline(
-                            new Paging(1,INITIALIZING_LIMIT));
+                            new Paging(1, INITIALIZING_LIMIT));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -42,23 +44,20 @@ public class UserStreamController implements JavatterColumn {
                 List<Status> homeTimeline = getValue();
                 userStreamList
                         .setCellFactory(cell -> new TweetCell(clientUser));
-                homeTimeline.stream().forEachOrdered(
+                homeTimeline.stream()
+                        .map(status -> StatusModel.Builder.build(status))
+                        .forEachOrdered(userStreamList.getItems()::add);
+                clientUser.getStream().addOnStatus(
                         status -> {
-                            userStreamList.getItems().add(
-                                    StatusModel.Builder.build(status));
+                            Platform.runLater(() -> {
+                                userStreamList.getItems().add(0,
+                                        StatusModel.Builder.build(status));
+                                if (userStreamList.getItems().size() > 100)
+                                    userStreamList.getItems().remove(100);
+                            });
                         });
-                clientUser
-                        .getStream()
-                        .addOnStatus(
-                                status -> {
-                                    userStreamList.getItems().add(0,
-                                            StatusModel.Builder.build(status));
-                                    if (userStreamList.getItems().size() > 100)
-                                        userStreamList.getItems().remove(100);
-                                });
             }
         };
         TaskUtil.startTask(initializing);
-
     }
 }

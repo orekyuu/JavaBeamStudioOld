@@ -1,7 +1,9 @@
 package net.orekyuu.javatter.core.column;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -20,11 +22,10 @@ public class MentionsController implements JavatterColumn {
 
     @Override
     public void setClientUser(ClientUser clientUser) {
-        long userId = getUserId(clientUser);
         Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
             protected List<Status> call() {
-                List<Status> mtl = null;
+                List<Status> mtl = new ArrayList<Status>();
                 try {
                     mtl = clientUser.getTwitter().getMentionsTimeline(
                             new Paging(1, INITIALIZING_LIMIT));
@@ -39,17 +40,17 @@ public class MentionsController implements JavatterColumn {
                 super.succeeded();
                 List<Status> mentionsTimeline = getValue();
                 mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
-                mentionsTimeline.stream().forEachOrdered(
-                        status -> {
-                            mentionsList.getItems().add(
-                                    StatusModel.Builder.build(status));
-                        });
+                mentionsTimeline.stream()
+                        .map(status -> StatusModel.Builder.build(status))
+                        .forEachOrdered(mentionsList.getItems()::add);
                 clientUser.getStream().addOnStatus(
                         status -> {
-                            mentionsList.getItems().add(0,
-                                    StatusModel.Builder.build(status));
-                            if (mentionsList.getItems().size() > 100)
-                                mentionsList.getItems().remove(100);
+                            Platform.runLater(() -> {
+                                mentionsList.getItems().add(0,
+                                        StatusModel.Builder.build(status));
+                                if (mentionsList.getItems().size() > 100)
+                                    mentionsList.getItems().remove(100);
+                            });
                         });
             }
         };
