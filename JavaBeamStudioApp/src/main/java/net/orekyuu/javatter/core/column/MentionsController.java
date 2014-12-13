@@ -17,22 +17,22 @@ import twitter4j.TwitterException;
 
 public class MentionsController implements JavatterColumn {
     @FXML
-    ListView<StatusModel> mentionsList;
+    private ListView<StatusModel> mentionsList;
     private static final int INITIALIZING_LIMIT = 30;
+    private static final int STATUSES_LIMIT = 100;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
         Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
             protected List<Status> call() {
-                List<Status> mtl = new ArrayList<Status>();
                 try {
-                    mtl = clientUser.getTwitter().getMentionsTimeline(
+                    return clientUser.getTwitter().getMentionsTimeline(
                             new Paging(1, INITIALIZING_LIMIT));
-                } catch (Exception e) {
+                } catch (TwitterException e) {
                     e.printStackTrace();
                 }
-                return mtl;
+                return new ArrayList<>();
             }
 
             @Override
@@ -41,31 +41,19 @@ public class MentionsController implements JavatterColumn {
                 List<Status> mentionsTimeline = getValue();
                 mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
                 mentionsTimeline.stream()
-                        .map(status -> StatusModel.Builder.build(status))
+                        .map(StatusModel.Builder::build)
                         .forEachOrdered(mentionsList.getItems()::add);
                 clientUser.getStream().addOnStatus(
                         status -> {
                             Platform.runLater(() -> {
                                 mentionsList.getItems().add(0,
                                         StatusModel.Builder.build(status));
-                                if (mentionsList.getItems().size() > 100)
-                                    mentionsList.getItems().remove(100);
+                                if (mentionsList.getItems().size() > STATUSES_LIMIT)
+                                    mentionsList.getItems().remove(STATUSES_LIMIT);
                             });
                         });
             }
         };
         TaskUtil.startTask(initializing);
     }
-
-    private long getUserId(ClientUser clientUser) {
-        long userId = 0;
-        try {
-            userId = clientUser.getTwitter().getId();
-            return userId;
-        } catch (TwitterException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
 }

@@ -13,6 +13,7 @@ import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import twitter4j.Paging;
 import twitter4j.Status;
+import twitter4j.TwitterException;
 
 /**
  * userstreamのコントローラです。
@@ -21,6 +22,7 @@ public class UserStreamController implements JavatterColumn {
     @FXML
     private ListView<StatusModel> userStreamList;
     private static final int INITIALIZING_LIMIT = 30;
+    private static final int STATUSES_LIMIT = 100;
 
     @Override
     public void setClientUser(ClientUser clientUser) {
@@ -28,14 +30,13 @@ public class UserStreamController implements JavatterColumn {
         Task<List<Status>> initializing = new Task<List<Status>>() {
             @Override
             protected List<Status> call() {
-                List<Status> htl = new ArrayList<Status>();
                 try {
-                    htl = clientUser.getTwitter().getHomeTimeline(
+                    return clientUser.getTwitter().getHomeTimeline(
                             new Paging(1, INITIALIZING_LIMIT));
-                } catch (Exception e) {
+                } catch (TwitterException e) {
                     e.printStackTrace();
                 }
-                return htl;
+                return new ArrayList<>();
             };
 
             @Override
@@ -45,15 +46,15 @@ public class UserStreamController implements JavatterColumn {
                 userStreamList
                         .setCellFactory(cell -> new TweetCell(clientUser));
                 homeTimeline.stream()
-                        .map(status -> StatusModel.Builder.build(status))
+                        .map(StatusModel.Builder::build)
                         .forEachOrdered(userStreamList.getItems()::add);
                 clientUser.getStream().addOnStatus(
                         status -> {
                             Platform.runLater(() -> {
                                 userStreamList.getItems().add(0,
                                         StatusModel.Builder.build(status));
-                                if (userStreamList.getItems().size() > 100)
-                                    userStreamList.getItems().remove(100);
+                                if (userStreamList.getItems().size() > STATUSES_LIMIT)
+                                    userStreamList.getItems().remove(STATUSES_LIMIT);
                             });
                         });
             }
