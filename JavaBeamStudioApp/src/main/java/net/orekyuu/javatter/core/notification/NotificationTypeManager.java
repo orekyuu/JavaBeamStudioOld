@@ -79,12 +79,13 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             }
         }
     }
-    public void saveNotificationSoundPath(NotificationSoundData data){
+    public void saveNotificationSound(NotificationSoundData data){
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
         try{
-            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite" + soundData);
-            Dao<NotificationSoundData,?> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
+            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + soundData);
+            Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
+            TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             dao.createOrUpdate(data);
         }catch(SQLException e){
             e.printStackTrace();
@@ -99,14 +100,14 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         }
     }
     
-    public static NotificationSoundData loadNotificationSoundData(){
+    private NotificationSoundData loadNotificationSoundData(){
         JdbcPooledConnectionSource connectionSource = null;
         NotificationSoundData data = null;
         try{
-            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite" + soundData);
-            Dao<NotificationSoundData,?> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
+            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + soundData);
+            Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
-            data = dao.queryForAll().get(0);
+            data = dao.queryForId(0);
             }catch(SQLException e){
             e.printStackTrace();
         }finally{
@@ -120,12 +121,36 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         }
     if(data == null){
         data = new NotificationSoundData();
-        data.setNotificationSoundName("ファイルが見つかりません。ファイルを選択してください。");
+        data.setNotificationSoundName("");
         data.setNotificationSoundPath("");
     }
     return data;
     }
-
+    
+    /**
+     * 保存されている通知音の名前を取得する。
+     * @return 保存されていなければ空の文字列を返す
+     */
+    public String getNotificationSoundName(){
+        return loadNotificationSoundData().getNotificationSoundName();
+    }
+    
+    /**
+     * 保存されている通知音のパスえを取得する
+     * @return 保存されていなければ空の文字列を返す
+     */
+    public String getNotificationSoundPath(){
+        return loadNotificationSoundData().getNotificationSoundPath();
+    }
+    /**
+     * 保存されている通知音のパスに実際にファイルが存在するかどうかを取得する。
+     * @return 存在しなければければtrue、存在すればFalse
+     */
+    public boolean soundDataIsEmpty(){
+        Path path = Paths.get(getNotificationSoundPath());
+        return Files.notExists(path);
+    }
+    
     /**
      * 通知するかを返す
      * @param type 通知タイプ
@@ -208,7 +233,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         private String notificationSoundName;
         
         @DatabaseField(canBeNull = false,id = true)
-        private static final int id = 0;
+        private int id = 0;
         
         public void setNotificationSoundPath(String path){
             notificationSoundPath = path;
