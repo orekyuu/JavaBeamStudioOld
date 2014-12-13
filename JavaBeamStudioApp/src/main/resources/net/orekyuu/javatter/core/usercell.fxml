@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.UserCellController">
+   <children>
+       <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+       <Region />
+       <VBox fx:id="box" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+           <children>
+            <Label fx:id="name" text="name">
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+            </Label>
+             <Label fx:id="screenname" text="\@screen_name">
+                 <padding>
+                     <Insets right="20.0" />
+                 </padding>
+             </Label>
+           <TextFlow fx:id="tweet" />
+           <Region VBox.vgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#openUserProfile" text="ユーザプロファイルを開く" />
+           </children>
+       </VBox>
+   </children>
+</AnchorPane>
