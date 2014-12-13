@@ -3,7 +3,6 @@ package net.orekyuu.javatter.core.notification;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,9 +14,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.GlobalAccess;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +38,10 @@ public class NotificationConfigPresenter implements Initializable {
     private ListProperty<NotificationTypeManager.NotificationConfig> currentConfigProperty = new SimpleListProperty<>();
     private List<BooleanProperty> toggleButtonSelectedproperties = new ArrayList<>();
     private List<Boolean> previousConfig = new ArrayList<>();
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-  
+        notificationSoundFileName.setText(NotificationTypeManager.loadNotificationSoundData().getNotificationSoundName());
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
         notificationList.setCellFactory(param -> new ListCell<NotificationTypeManager.NotificationConfig>() {
@@ -71,7 +74,17 @@ public class NotificationConfigPresenter implements Initializable {
     }
 
     public void selectNotificationSound() {
-
+        FileChooser chooser = new FileChooser();
+        Stage stage = GlobalAccess.getInstance().getApplication().getPrimaryStage();
+        chooser.setTitle("ファイル選択");
+        File file = chooser.showOpenDialog(stage);
+        System.out.println(file.getPath().toString()+":"+file.getName());
+        NotificationTypeManager manager = new NotificationTypeManager();
+        NotificationTypeManager.NotificationSoundData soundData = new NotificationTypeManager.NotificationSoundData();
+        soundData.setNotificationSoundPath(file.getPath());
+        soundData.setNotificationSoundName(file.getName());
+        manager.saveNotificationSoundPath(soundData);
+        notificationSoundFileName.setText(file.getName());
     }
 
     public void save() {
