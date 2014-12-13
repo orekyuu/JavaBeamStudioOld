@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -226,10 +227,10 @@ public class StatusModel {
         public static StatusModel build(long statusId, ClientUser user) {
             try {
                 ConcurrentMap<Status, StatusModel> map = cache.asMap();
-                for (StatusModel model : map.values()) {
-                    if (model.getStatusId() == statusId) {
-                        return model;
-                    }
+                Optional<StatusModel> first = map.values().parallelStream()
+                        .filter(model -> model.getStatusId() == statusId).findFirst();
+                if (first.isPresent()) {
+                    return first.get();
                 }
 
                 return build(user.getTwitter().showStatus(statusId));
