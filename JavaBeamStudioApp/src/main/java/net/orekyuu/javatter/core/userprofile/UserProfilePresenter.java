@@ -1,5 +1,12 @@
 package net.orekyuu.javatter.core.userprofile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,17 +20,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.api.cache.IconCache;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 
 public class UserProfilePresenter implements Initializable {
     @FXML
@@ -59,7 +59,7 @@ public class UserProfilePresenter implements Initializable {
         };
         Executors.newSingleThreadExecutor().submit(task);
 
-        Arrays.asList("profiletab.fxml", "tweet_tab.fxml", "favorites_tab.fxml").stream().map(this::createTab).forEach(tabpane.getTabs()::add);
+        Arrays.asList("profiletab.fxml", "tweet_tab.fxml", "favorites_tab.fxml","follow_tab.fxml","follower_tab.fxml").stream().map(this::createTab).forEach(tabpane.getTabs()::add);
 
     }
 
