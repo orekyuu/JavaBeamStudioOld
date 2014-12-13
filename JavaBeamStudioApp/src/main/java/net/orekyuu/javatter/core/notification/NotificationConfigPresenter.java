@@ -20,6 +20,7 @@ import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.GlobalAccess;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +42,13 @@ public class NotificationConfigPresenter implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        notificationSoundFileName.setText(NotificationTypeManager.loadNotificationSoundData().getNotificationSoundName());
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
+        if(typeManager.soundDataIsEmpty()){
+            notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
+        }else{
+        notificationSoundFileName.textProperty().setValue(typeManager.getNotificationSoundName());
+        }
         notificationList.setCellFactory(param -> new ListCell<NotificationTypeManager.NotificationConfig>() {
             @Override
             protected void updateItem(NotificationTypeManager.NotificationConfig item, boolean empty) {
@@ -71,6 +76,7 @@ public class NotificationConfigPresenter implements Initializable {
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
         currentConfigProperty.bind(notificationList.itemsProperty());
         typeManager.getConfigs().forEach(conf -> System.out.println(conf.getNotificationType()));
+        System.out.println("ファイルの存在"+typeManager.soundDataIsEmpty());
     }
 
     public void selectNotificationSound() {
@@ -78,13 +84,15 @@ public class NotificationConfigPresenter implements Initializable {
         Stage stage = GlobalAccess.getInstance().getApplication().getPrimaryStage();
         chooser.setTitle("ファイル選択");
         File file = chooser.showOpenDialog(stage);
+        if(file != null){
         System.out.println(file.getPath().toString()+":"+file.getName());
         NotificationTypeManager manager = new NotificationTypeManager();
         NotificationTypeManager.NotificationSoundData soundData = new NotificationTypeManager.NotificationSoundData();
         soundData.setNotificationSoundPath(file.getPath());
         soundData.setNotificationSoundName(file.getName());
-        manager.saveNotificationSoundPath(soundData);
-        notificationSoundFileName.setText(file.getName());
+        manager.saveNotificationSound(soundData);
+        notificationSoundFileName.textProperty().setValue(file.getName());
+        }
     }
 
     public void save() {
