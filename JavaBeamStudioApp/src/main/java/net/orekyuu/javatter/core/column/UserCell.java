@@ -29,7 +29,7 @@ public class UserCell extends ListCell<UserModel> {
     }
 
     /**
-     * アイテムの内容をStatusに従って切り替える
+     * アイテムの内容をUserに従って切り替える
      *
      * @param user
      *            受け取ったステータス
