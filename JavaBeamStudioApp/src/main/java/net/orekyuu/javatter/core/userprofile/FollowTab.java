@@ -17,13 +17,13 @@ public class FollowTab extends UserProfileTabBase {
     private ListView<UserModel> listView;
     private ClientUser clientUser;
     private static final int FRIENDS_LIMIT = 30;
+    private ResponseList<User> users;
 
     @Override
     protected void initializeBackground(UserModel user) {
         this.clientUser = GlobalAccess.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
-            ResponseList<User> users = clientUser.getTwitter().getFriendsList(user.getId(),-1L,FRIENDS_LIMIT);
-            users.stream().map(UserModel.Builder::build).forEach(listView.getItems()::add);
+            users = clientUser.getTwitter().getFriendsList(user.getId(),-1L,FRIENDS_LIMIT);
         } catch (TwitterException e) {
             e.printStackTrace();
         }
@@ -32,6 +32,7 @@ public class FollowTab extends UserProfileTabBase {
     @Override
     protected void initializeUI(UserModel user) {
         listView.setCellFactory(e -> new UserCell(clientUser));
+        users.stream().map(UserModel.Builder::build).forEach(listView.getItems()::add);
         StackPane stack = (StackPane) listView.getParent();
         listView.prefWidthProperty().bind(stack.widthProperty());
         listView.prefHeightProperty().bind(stack.heightProperty());
