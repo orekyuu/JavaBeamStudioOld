@@ -41,6 +41,7 @@ public class UserCellController implements Initializable {
     private UserModel user;
 
     private static NameDisplayType nameDisplayType;
+    private static final double DESCRIPTION_LEFT_PADDING = 60.0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -114,6 +115,7 @@ public class UserCellController implements Initializable {
         this.user = user;
         name.setText(getConfigFormatName(this.user));
         description.setText(user.getDescription());
+        description.wrappingWidthProperty().bind(root.widthProperty().subtract(DESCRIPTION_LEFT_PADDING));
 
         Task<Image> imageTask = new Task<Image>() {
             @Override
