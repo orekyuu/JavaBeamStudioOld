@@ -59,7 +59,9 @@ public class UserProfilePresenter implements Initializable {
         };
         Executors.newSingleThreadExecutor().submit(task);
 
-        Arrays.asList("profiletab.fxml", "tweet_tab.fxml", "favorites_tab.fxml","follow_tab.fxml","follower_tab.fxml").stream().map(this::createTab).forEach(tabpane.getTabs()::add);
+        Arrays.asList("profiletab.fxml", "tweet_tab.fxml",
+                "favorites_tab.fxml", "follow_tab.fxml", "follower_tab.fxml")
+                .stream().map(this::createTab).forEach(tabpane.getTabs()::add);
 
     }
 
