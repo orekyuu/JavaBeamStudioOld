@@ -7,20 +7,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.UserCellController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.UserCellController">
    <children>
        <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
        <Region />
-      <Button mnemonicParsing="false" onAction="#openUserProfile" text="ユーザプロファイルを開く" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="2.0" />
+      <Button mnemonicParsing="false" onAction="#openUserProfile" text="ユーザプロファイルを開く" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
       <Label fx:id="name" text="name" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="2.0">
          <padding>
             <Insets right="20.0" />
          </padding>
       </Label>
-      <Label fx:id="description" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="20.0">
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-      </Label>
+   <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-pr" text="自己紹介文" wrappingWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="30.0" />
    </children>
 </AnchorPane>

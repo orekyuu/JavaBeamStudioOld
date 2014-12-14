@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
@@ -29,7 +30,7 @@ public class UserCellController implements Initializable {
     @FXML
     private Label name;
     @FXML
-    private Label description;
+    private Text description;
     @FXML
     private ImageView profileimage;
     @FXML
@@ -40,8 +41,6 @@ public class UserCellController implements Initializable {
     private UserModel user;
 
     private static NameDisplayType nameDisplayType;
-
-    private static final int DESCRIPTION_LENGTH = 20;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -114,11 +113,7 @@ public class UserCellController implements Initializable {
     public void updateUserCell(UserModel user) {
         this.user = user;
         name.setText(getConfigFormatName(this.user));
-        String descriptionText = user.getDescription();
-        if (descriptionText.length() >= DESCRIPTION_LENGTH) {
-            descriptionText = descriptionText.substring(0, DESCRIPTION_LENGTH) + "…";
-        }
-        description.setText(descriptionText);
+        description.setText(user.getDescription());
 
         Task<Image> imageTask = new Task<Image>() {
             @Override
