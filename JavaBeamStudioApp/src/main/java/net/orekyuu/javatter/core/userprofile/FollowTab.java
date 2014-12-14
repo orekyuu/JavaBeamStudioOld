@@ -16,12 +16,13 @@ public class FollowTab extends UserProfileTabBase {
     @FXML
     private ListView<UserModel> listView;
     private ClientUser clientUser;
+    private static final int FRIENDS_LIMIT = 30;
 
     @Override
     protected void initializeBackground(UserModel user) {
         this.clientUser = GlobalAccess.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
-            ResponseList<User> users = clientUser.getTwitter().getFriendsList(user.getId(),-1L,30);
+            ResponseList<User> users = clientUser.getTwitter().getFriendsList(user.getId(),-1L,FRIENDS_LIMIT);
             users.stream().map(UserModel.Builder::build).forEach(listView.getItems()::add);
         } catch (TwitterException e) {
             e.printStackTrace();

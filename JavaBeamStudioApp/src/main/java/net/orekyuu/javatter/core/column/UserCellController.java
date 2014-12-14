@@ -41,6 +41,8 @@ public class UserCellController implements Initializable {
 
     private static NameDisplayType nameDisplayType;
 
+    private static final int DESCRIPTION_LENGTH = 20;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (nameDisplayType == null) {
@@ -113,8 +115,8 @@ public class UserCellController implements Initializable {
         this.user = user;
         name.setText(getConfigFormatName(this.user));
         String descriptionText = user.getDescription();
-        if (descriptionText.length() >= 20) {
-            descriptionText = descriptionText.substring(0, 20) + "…";
+        if (descriptionText.length() >= DESCRIPTION_LENGTH) {
+            descriptionText = descriptionText.substring(0, DESCRIPTION_LENGTH) + "…";
         }
         description.setText(descriptionText);
 
