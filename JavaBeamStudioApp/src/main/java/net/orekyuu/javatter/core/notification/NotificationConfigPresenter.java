@@ -43,17 +43,16 @@ public class NotificationConfigPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
-        
+        previousSoundData = typeManager.loadNotificationSoundData();
         if(typeManager.soundDataIsEmpty()){
-            previousSoundData.setNotificationSoundName("ファイルを選択してください");
+            notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
         }else{
-            previousSoundData = typeManager.loadNotificationSoundData();
-            volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
-            currentSoundData.setNotificationSoundName(previousSoundData.getNotificationSoundName());
-            currentSoundData.setNotificationSoundPath(previousSoundData.getNotificationSoundPath());
-            currentSoundData.setNotificationSoundVolume(previousSoundData.getNotificationSoundVolume());
+            notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         }
-        notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
+        volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
+        currentSoundData.setNotificationSoundName(previousSoundData.getNotificationSoundName());
+        currentSoundData.setNotificationSoundPath(previousSoundData.getNotificationSoundPath());
+        currentSoundData.setNotificationSoundVolume(previousSoundData.getNotificationSoundVolume());
         
         notificationList.setCellFactory(param -> new ListCell<NotificationTypeManager.NotificationConfig>() {
             @Override
@@ -115,7 +114,6 @@ public class NotificationConfigPresenter implements Initializable {
         
         currentConfigProperty.forEach(p -> System.out.println(p.getNotificationType()+":"+p.isNotice()));
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
-        
         typeManager.saveNotificationSound(currentSoundData);
     }
 
@@ -125,7 +123,6 @@ public class NotificationConfigPresenter implements Initializable {
             toggleButtonSelectedproperties.get(i).setValue(previousConfig.get(i));
             System.out.println("toggleButton"+i+":"+previousConfig.get(i));
         }
-       
         notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
         save();
