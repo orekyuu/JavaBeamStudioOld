@@ -3,8 +3,6 @@ package net.orekyuu.javatter.core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
-import net.orekyuu.javatter.api.notification.Notification;
-import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
