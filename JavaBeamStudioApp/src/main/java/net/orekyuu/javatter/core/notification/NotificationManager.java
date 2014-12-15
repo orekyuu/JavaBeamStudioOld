@@ -2,7 +2,6 @@ package net.orekyuu.javatter.core.notification;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
 import javafx.scene.layout.VBox;
