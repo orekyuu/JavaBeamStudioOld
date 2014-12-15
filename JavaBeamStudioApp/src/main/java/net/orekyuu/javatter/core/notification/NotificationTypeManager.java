@@ -79,6 +79,10 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             }
         }
     }
+    /**
+     * 通知音についての情報を保存する
+     * @param data 保存する通知音のデータ
+     */
     public void saveNotificationSound(NotificationSoundData data){
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
@@ -99,8 +103,11 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             }
         }
     }
-    
-    private NotificationSoundData loadNotificationSoundData(){
+    /**
+     * @return 取得に失敗すると空のデータを返す。
+     */
+    public NotificationSoundData loadNotificationSoundData(){
+        makeFile();
         JdbcPooledConnectionSource connectionSource = null;
         NotificationSoundData data = null;
         try{
@@ -123,31 +130,20 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         data = new NotificationSoundData();
         data.setNotificationSoundName("");
         data.setNotificationSoundPath("");
+        data.setNotificationSoundVolume(0.5);
     }
     return data;
     }
     
     /**
-     * 保存されている通知音の名前を取得する。
-     * @return 保存されていなければ空の文字列を返す
-     */
-    public String getNotificationSoundName(){
-        return loadNotificationSoundData().getNotificationSoundName();
-    }
-    
-    /**
-     * 保存されている通知音のパスえを取得する
-     * @return 保存されていなければ空の文字列を返す
-     */
-    public String getNotificationSoundPath(){
-        return loadNotificationSoundData().getNotificationSoundPath();
-    }
-    /**
      * 保存されている通知音のパスに実際にファイルが存在するかどうかを取得する。
      * @return 存在しなければければtrue、存在すればFalse
      */
     public boolean soundDataIsEmpty(){
-        Path path = Paths.get(getNotificationSoundPath());
+        Path path = Paths.get(loadNotificationSoundData().getNotificationSoundPath());
+        if(loadNotificationSoundData().getNotificationSoundPath().isEmpty()){
+            return true;
+        }
         return Files.notExists(path);
     }
     
@@ -232,6 +228,9 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         @DatabaseField(canBeNull = false)
         private String notificationSoundName;
         
+        @DatabaseField(canBeNull = false)
+        private double notificationSoundvolume;
+        
         @DatabaseField(canBeNull = false,id = true)
         private int id = 0;
         
@@ -243,11 +242,19 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             notificationSoundName = name;
         }
         
+        public void setNotificationSoundVolume(double volume){
+            notificationSoundvolume = volume;
+        }
+        
         public String getNotificationSoundPath(){
             return notificationSoundPath;
         }
+        
         public String getNotificationSoundName(){
             return notificationSoundName;
+        }
+        public double getNotificationSoundVolume(){
+            return notificationSoundvolume;
         }
     }
 }
