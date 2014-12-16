@@ -23,8 +23,11 @@ import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+
+import twitter4j.UserMentionEntity;
 
 public class NotificationManager implements NotificationSender {
     private BlockingQueue<Notification> notificationQueue = new LinkedBlockingQueue<>();
@@ -90,6 +93,7 @@ public class NotificationManager implements NotificationSender {
                         .setMessage(model.getDescription()).build();
                 sender.sendNotification(notification);
             }).addOnStatus(status->{
+                
                 if(status.isRetweet()){
                     UserModel userModel = UserModel.Builder.build(status.getRetweetedStatus().getUser());
                     if(users.stream().anyMatch(user->user.getAccessToken().getUserId() == userModel.getId())){
@@ -101,7 +105,7 @@ public class NotificationManager implements NotificationSender {
                         sender.sendNotification(notification);
                     }
                 }
-                if(users.stream().anyMatch(user -> user.getAccessToken().getUserId() == status.getInReplyToUserId())){
+                if(users.stream().anyMatch(user -> Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId()))){
                     StatusModel statusModel = StatusModel.Builder.build(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
