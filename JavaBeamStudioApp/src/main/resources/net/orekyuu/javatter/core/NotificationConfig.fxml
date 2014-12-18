@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="net.orekyuu.javatter.core.notification.NotificationConfigPresenter">
+    <children>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="通知音設定">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Text>
+        <HBox>
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="音量："/>
+                <Text fx:id="volumeText" strokeType="OUTSIDE" strokeWidth="0.0" text="volume"/>
+            </children>
+        </HBox>
+        <Slider fx:id="volumeSlider" blockIncrement="0.1" max="1.0" value="0.5"/>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="通知音"/>
+        <HBox>
+            <children>
+                <Text fx:id="notificationSoundFileName" strokeType="OUTSIDE" strokeWidth="0.0" text="file_name"/>
+                <Button mnemonicParsing="false" onAction="#selectNotificationSound" text="ファイルを選択"/>
+            </children>
+        </HBox>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="通知切り替え">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Text>
+        <ListView fx:id="notificationList"/>
+        <Pane VBox.vgrow="ALWAYS"/>
+        <HBox>
+            <children>
+                <Button mnemonicParsing="false" onAction="#save" text="保存"/>
+                <Button mnemonicParsing="false" onAction="#cancel" text="キャンセル"/>
+            </children>
+            <VBox.margin>
+                <Insets left="20.0" top="50.0"/>
+            </VBox.margin>
+        </HBox>
+    </children>
+</VBox>
