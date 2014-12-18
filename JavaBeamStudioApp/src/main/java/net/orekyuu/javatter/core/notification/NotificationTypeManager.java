@@ -21,7 +21,6 @@ public class NotificationTypeManager implements NotificationTypeRegister {
     private Set<NotificationType> notificationTypes = new LinkedHashSet<>();
     private static final String dbName = "notification.db";
     private List<NotificationConfig> notificationConfigs;
-    private static final String soundData = "sound.db";
 
     @Override
     public void register(NotificationType type) {
@@ -87,7 +86,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
         try{
-            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + soundData);
+            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + dbName);
             Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             dao.createOrUpdate(data);
@@ -104,18 +103,19 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         }
     }
     /**
+     * 通知音に関するデータを返す
      * @return 取得に失敗すると空のデータを返す。
      */
-    public NotificationSoundData loadNotificationSoundData(){
+    public Optional<NotificationSoundData> loadNotificationSoundData(){
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
         NotificationSoundData data = null;
         try{
-            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + soundData);
+            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + dbName);
             Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             data = dao.queryForId(0);
-            }catch(SQLException e){
+        } catch(SQLException e){
             e.printStackTrace();
         }finally{
             if(connectionSource != null){
@@ -126,27 +126,22 @@ public class NotificationTypeManager implements NotificationTypeRegister {
                 }
             }
         }
-    if(data == null){
-        data = new NotificationSoundData();
-        data.setNotificationSoundName("");
-        data.setNotificationSoundPath("");
-        data.setNotificationSoundVolume(0.5);
-    }
-    return data;
+        return Optional.ofNullable(data);
     }
     
     /**
      * 保存されている通知音のパスに実際にファイルが存在するかどうかを取得する。
      * @return 存在しなければければtrue、存在すればFalse
      */
-    public boolean soundDataIsEmpty(){
-        Path path = Paths.get(loadNotificationSoundData().getNotificationSoundPath());
-        if(loadNotificationSoundData().getNotificationSoundPath().isEmpty()){
+    public boolean soundDataIsEmpty() {
+        Optional<NotificationSoundData> notificationSoundData = loadNotificationSoundData();
+        if (!notificationSoundData.isPresent()) {
             return true;
         }
-        return Files.notExists(path);
+        Optional<String> path = notificationSoundData.map(NotificationSoundData::getNotificationSoundPath);
+        return Files.notExists(Paths.get(path.get()));
     }
-    
+
     /**
      * 通知するかを返す
      * @param type 通知タイプ
@@ -185,13 +180,9 @@ public class NotificationTypeManager implements NotificationTypeRegister {
 
     private void makeFile() {
         try {
-            Path path = Paths.get("notification.db");
-            Path path2 = Paths.get(soundData);
+            Path path = Paths.get(dbName);
             if (Files.notExists(path)) {
                 Files.createFile(path);
-            }
-            if(Files.notExists(path2)){
-                Files.createFile(path2);
             }
         } catch (IOException e) {
             e.printStackTrace();

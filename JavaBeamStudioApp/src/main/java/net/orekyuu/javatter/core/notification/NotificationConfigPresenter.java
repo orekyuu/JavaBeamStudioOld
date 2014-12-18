@@ -35,7 +35,7 @@ public class NotificationConfigPresenter implements Initializable {
     private ListView<NotificationTypeManager.NotificationConfig> notificationList;
     
     private ListProperty<NotificationTypeManager.NotificationConfig> currentConfigProperty = new SimpleListProperty<>();
-    private List<BooleanProperty> toggleButtonSelectedproperties = new ArrayList<>();
+    private List<BooleanProperty> toggleButtonSelectedProperties = new ArrayList<>();
     private List<Boolean> previousConfig = new ArrayList<>();
     private NotificationTypeManager.NotificationSoundData previousSoundData = new NotificationTypeManager.NotificationSoundData();
     private NotificationTypeManager.NotificationSoundData currentSoundData = new NotificationTypeManager.NotificationSoundData();
@@ -43,13 +43,13 @@ public class NotificationConfigPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
-        previousSoundData = typeManager.loadNotificationSoundData();
+        previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
         if(typeManager.soundDataIsEmpty()){
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
         }else{
             notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         }
-        volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
+        volumeText.textProperty().set(String.valueOf(previousSoundData.getNotificationSoundVolume()));
         currentSoundData.setNotificationSoundName(previousSoundData.getNotificationSoundName());
         currentSoundData.setNotificationSoundPath(previousSoundData.getNotificationSoundPath());
         currentSoundData.setNotificationSoundVolume(previousSoundData.getNotificationSoundVolume());
@@ -65,9 +65,8 @@ public class NotificationConfigPresenter implements Initializable {
                     ToggleButton toggleButton = new ToggleButton(item.isNotice() ? "通知する" : "通知しない");
                     toggleButton.setSelected(item.isNotice());
                     previousConfig.add(item.isNotice());
-                    System.out.println(item.getNotificationType()+":"+item.isNotice());
                     BooleanProperty toggleButtonSelectedProperty = toggleButton.selectedProperty();
-                    toggleButtonSelectedproperties.add(toggleButtonSelectedProperty);
+                    toggleButtonSelectedProperties.add(toggleButtonSelectedProperty);
                     toggleButton.textProperty().bind(Bindings.when(toggleButton.selectedProperty()).then("通知する").otherwise("通知しない"));
                     toggleButton.selectedProperty().addListener(e ->{ 
                         item.setNotice(toggleButton.isSelected());
@@ -80,8 +79,6 @@ public class NotificationConfigPresenter implements Initializable {
         });       
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
         currentConfigProperty.bind(notificationList.itemsProperty());
-        typeManager.getConfigs().forEach(conf -> System.out.println(conf.getNotificationType()));
-        System.out.println("ファイルの存在"+typeManager.soundDataIsEmpty());
     }
 
     public void selectNotificationSound() {
@@ -94,16 +91,20 @@ public class NotificationConfigPresenter implements Initializable {
         List<String> mp3Extensions = new ArrayList<>();
         mp3Extensions.add("*.mp3");
         mp3Extensions.add("*.MP3");
+        List<String> wavExtensions = new ArrayList<>();
+        wavExtensions.add("*.wav");
+        wavExtensions.add("*.WAV");
         
         FileChooser.ExtensionFilter mp3Filter = new FileChooser.ExtensionFilter("MP3 形式サウンド",mp3Extensions);
+        FileChooser.ExtensionFilter wavFilter = new FileChooser.ExtensionFilter("WAV 形式サウンド",wavExtensions);
         chooser.getExtensionFilters().add(mp3Filter);
+        chooser.getExtensionFilters().add(wavFilter);
         File file = chooser.showOpenDialog(stage);
         
         if(file != null){
-        System.out.println(file.getPath().toString()+":"+file.getName());
-        currentSoundData.setNotificationSoundPath(file.getPath());
-        currentSoundData.setNotificationSoundName(file.getName());
-        notificationSoundFileName.textProperty().set(file.getName());
+            currentSoundData.setNotificationSoundPath(file.getPath());
+            currentSoundData.setNotificationSoundName(file.getName());
+            notificationSoundFileName.textProperty().set(file.getName());
         }
         
     }
@@ -112,19 +113,15 @@ public class NotificationConfigPresenter implements Initializable {
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(currentConfigProperty);
         
-        currentConfigProperty.forEach(p -> System.out.println(p.getNotificationType()+":"+p.isNotice()));
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
         typeManager.saveNotificationSound(currentSoundData);
     }
 
     public void cancel() {
-        System.out.println(""+previousConfig.size());
         for(int i = 1;i < previousConfig.size();i++){
-            toggleButtonSelectedproperties.get(i).setValue(previousConfig.get(i));
-            System.out.println("toggleButton"+i+":"+previousConfig.get(i));
+            toggleButtonSelectedProperties.get(i).setValue(previousConfig.get(i));
         }
         notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
-        save();
     }
 }
