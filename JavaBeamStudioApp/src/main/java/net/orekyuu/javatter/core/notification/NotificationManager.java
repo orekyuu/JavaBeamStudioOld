@@ -2,10 +2,10 @@ package net.orekyuu.javatter.core.notification;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -23,6 +23,9 @@ import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
@@ -39,6 +42,13 @@ public class NotificationManager implements NotificationSender {
         if (!manager.isNotice(notification.getType()))
             return;
         try {
+            NotificationTypeManager.NotificationSoundData notificationSoundData = manager.getNotificationSoundData();
+            Path path = Paths.get(notificationSoundData.getNotificationSoundPath());
+            if (Files.exists(path)) {
+                AudioClip clip = new AudioClip(path.toUri().toString());
+                clip.setVolume(notificationSoundData.getNotificationSoundVolume());
+                clip.play();
+            }
             notificationQueue.put(notification);
             presenter.update();
         } catch (InterruptedException e) {

@@ -21,6 +21,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
     private Set<NotificationType> notificationTypes = new LinkedHashSet<>();
     private static final String dbName = "notification.db";
     private List<NotificationConfig> notificationConfigs;
+    private NotificationSoundData soundData;
 
     @Override
     public void register(NotificationType type) {
@@ -90,6 +91,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             dao.createOrUpdate(data);
+            soundData = data;
         }catch(SQLException e){
             e.printStackTrace();
         }finally{
@@ -152,6 +154,18 @@ public class NotificationTypeManager implements NotificationTypeRegister {
                 .filter(t -> t.getNotificationType().equals(type.getTypeName()))
                 .findFirst();
         return notificationConfig.map(NotificationConfig::isNotice).orElse(true);
+    }
+
+    /**
+     * 通知音に関する設定を返す
+     * @return 通知音の設定
+     */
+    public NotificationSoundData getNotificationSoundData() {
+        NotificationSoundData notificationSoundData = new NotificationSoundData();
+        notificationSoundData.setNotificationSoundName(soundData.getNotificationSoundName());
+        notificationSoundData.setNotificationSoundPath(soundData.getNotificationSoundPath());
+        notificationSoundData.setNotificationSoundVolume(soundData.getNotificationSoundVolume());
+        return notificationSoundData;
     }
 
     private List<NotificationConfig> loadNotificationConfig() {
