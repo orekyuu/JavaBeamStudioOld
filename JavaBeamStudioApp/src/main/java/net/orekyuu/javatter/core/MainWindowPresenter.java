@@ -1,11 +1,21 @@
 package net.orekyuu.javatter.core;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +27,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -27,12 +39,6 @@ import net.orekyuu.javatter.api.twitter.Tweet;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-
-import java.util.*;
-import java.io.File;
-import java.net.URL;
-import java.util.stream.Collectors;
-
 import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
 import twitter4j.TwitterException;
 
@@ -99,7 +105,26 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         tweetTextArea.setOnDragDropped(this::onDroped);
         NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
+        tweetTextAreaShortcut();
+    }
 
+    private void tweetTextAreaShortcut() {
+        tweetTextArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent t) {
+                tweetShortCut(t);
+            }
+        });
+    }
+
+    private void tweetShortCut(KeyEvent keyEvent) {
+        if (!tweetTextArea.getText().isEmpty()) {
+            if (keyEvent.isShortcutDown()
+                    && keyEvent.getCode().equals(KeyCode.ENTER)) {
+                tweet();
+                tweetTextArea.setText("");
+            }
+        }
     }
     
     private Optional<ClientUser> getCurrentUser() {
