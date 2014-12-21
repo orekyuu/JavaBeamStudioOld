@@ -8,7 +8,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import net.orekyuu.javatter.api.JavatterColumn;
+import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -17,7 +17,7 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.UserMentionEntity;
 
-public class MentionsController implements JavatterColumn {
+public class MentionsController implements ColumnController {
     @FXML
     private ListView<StatusModel> mentionsList;
     private static final int INITIALIZING_LIMIT = 30;

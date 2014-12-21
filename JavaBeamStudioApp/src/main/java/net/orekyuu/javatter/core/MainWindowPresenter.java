@@ -33,9 +33,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
+import net.orekyuu.javatter.core.column.Column;
+import net.orekyuu.javatter.core.column.ColumnManager;
+import net.orekyuu.javatter.core.column.ColumnPresenter;
+import net.orekyuu.javatter.core.column.ColumnState;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
@@ -77,6 +82,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private Property<ClientUser> currentUser = new SimpleObjectProperty<>();
     private boolean isReply = false;
     private long destinationId;
+    private List<ColumnPresenter> columnPresenterList = new LinkedList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -105,6 +111,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
         tweetTextArea.setOnKeyPressed(this::tweetShortCut);
+        initColumns();
     }
 
     private void tweetShortCut(KeyEvent keyEvent) {
@@ -113,6 +120,15 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
                     && keyEvent.getCode().equals(KeyCode.ENTER)) {
                 tweet();
             }
+        }
+    }
+
+    private void initColumns() {
+        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        List<ColumnState> columnStates = manager.loadColumnState();
+        for (ColumnState state : columnStates) {
+            Optional<ClientUser> user = ClientUserRegister.getInstance().getUsers(u -> u.getName().equals(state.getUserName())).stream().findFirst();
+            addColumn(state.getColumnName(), user, false);
         }
     }
     
@@ -139,21 +155,51 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     public void addColumn() {
+        addColumn(null, Optional.empty(), true);
+    }
+
+    private void addColumn(String columnName, Optional<ClientUser> user, boolean useSave) {
         FXMLLoader loader = new FXMLLoader();
+        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        Optional<Column> column = manager.findColumn(columnName);
         try {
             Node node = loader.load(getClass().getResourceAsStream(
                     "column.fxml"));
             HBox.setHgrow(node, Priority.ALWAYS);
             hbox.getChildren().add(node);
+            ColumnPresenter presenter = loader.getController();
+            presenter.setColumn(column, user);
+            presenter.setOnChangeEvent(this::onColumnChange);
+            columnPresenterList.add(presenter);
+            if (useSave) {
+                saveColumn();
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            ExceptionDialogBuilder.create(e);
         }
     }
 
     public void removeColumn() {
-        if (hbox.getChildren().size() != 0)
+        if (hbox.getChildren().size() != 0) {
             hbox.getChildren().remove(hbox.getChildren().size() - 1);
+            columnPresenterList.remove(columnPresenterList.size() - 1);
+            saveColumn();
+        }
+    }
+
+    private void onColumnChange(String columnName) {
+        saveColumn();
+    }
+
+    private void saveColumn() {
+        List<ColumnState> states = columnPresenterList.stream()
+                .filter(p -> p.getColumnState().isPresent())
+                .map(p -> p.getColumnState().get())
+                .collect(Collectors.toList());
+        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        manager.saveColumnState(states);
+        System.out.println("saveColumn");
+        states.forEach(System.out::println);
     }
 
     public void openConfig() {

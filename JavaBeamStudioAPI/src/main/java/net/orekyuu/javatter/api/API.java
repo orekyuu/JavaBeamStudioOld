@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.api;
 
+import net.orekyuu.javatter.api.column.ColumnRegister;
 import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 

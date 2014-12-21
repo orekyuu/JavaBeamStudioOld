@@ -37,6 +37,7 @@ public class ApplicationImpl implements Application {
     @Override
     public void onLoad() {
         loadClientUsers();
+        registerColumns();
         StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
 
         NotificationTypeRegister notificationTypeRegister = API.getInstance().getNotificationTypeRegister();
@@ -63,6 +64,10 @@ public class ApplicationImpl implements Application {
 
     private void loadClientUsers() {
         LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
+
+    }
+
+    private void registerColumns() {
         API.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
         API.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
     }
