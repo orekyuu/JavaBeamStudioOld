@@ -15,7 +15,6 @@ import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -105,16 +104,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         tweetTextArea.setOnDragDropped(this::onDroped);
         NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
         remaining.textProperty().bind(Bindings.convert(length));
-        tweetTextAreaShortcut();
-    }
-
-    private void tweetTextAreaShortcut() {
-        tweetTextArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent t) {
-                tweetShortCut(t);
-            }
-        });
+        tweetTextArea.setOnKeyPressed(this::tweetShortCut);
     }
 
     private void tweetShortCut(KeyEvent keyEvent) {
@@ -122,7 +112,6 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             if (keyEvent.isShortcutDown()
                     && keyEvent.getCode().equals(KeyCode.ENTER)) {
                 tweet();
-                tweetTextArea.setText("");
             }
         }
     }
