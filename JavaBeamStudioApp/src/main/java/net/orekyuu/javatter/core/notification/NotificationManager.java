@@ -43,11 +43,13 @@ public class NotificationManager implements NotificationSender {
             return;
         try {
             NotificationTypeManager.NotificationSoundData notificationSoundData = manager.getNotificationSoundData();
-            Path path = Paths.get(notificationSoundData.getNotificationSoundPath());
-            if (Files.exists(path)) {
-                AudioClip clip = new AudioClip(path.toUri().toString());
-                clip.setVolume(notificationSoundData.getNotificationSoundVolume());
-                clip.play();
+            if (!notificationSoundData.getNotificationSoundPath().isEmpty()) {
+                Path path = Paths.get(notificationSoundData.getNotificationSoundPath());
+                if (Files.exists(path)) {
+                    AudioClip clip = new AudioClip(path.toUri().toString());
+                    clip.setVolume(notificationSoundData.getNotificationSoundVolume());
+                    clip.play();
+                }
             }
             notificationQueue.put(notification);
             presenter.update();
