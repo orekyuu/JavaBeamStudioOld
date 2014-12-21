@@ -4,10 +4,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import twitter4j.TwitterException;
 import twitter4j.User;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -20,9 +23,11 @@ public class UserModel {
     private final int favCount;
     private final int followersCount;
     private final int friendsCount;
+    private final int tweetCount;
     private final long id;
     private final int listedCount;
     private final String location;
+    private final String webSite;
     private final String name;
     private final String screenName;
     private final String profileImageURL;
@@ -33,9 +38,11 @@ public class UserModel {
         favCount = user.getFavouritesCount();
         followersCount = user.getFollowersCount();
         friendsCount = user.getFriendsCount();
+        tweetCount = user.getStatusesCount();
         id = user.getId();
         listedCount = user.getListedCount();
         location = user.getLocation();
+        webSite = user.getURL();
         name = user.getName();
         screenName = user.getScreenName();
         profileImageURL = user.getProfileImageURL();
@@ -118,6 +125,20 @@ public class UserModel {
         return profileImageURL;
     }
 
+    /**
+     * @return ユーザーのツイート数
+     */
+    public int getTweetCount() {
+        return tweetCount;
+    }
+
+    /**
+     * @return ユーザーのWebサイト
+     */
+    public String getWebSite() {
+        return webSite;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserModel{");
@@ -126,9 +147,11 @@ public class UserModel {
         sb.append(", favCount=").append(favCount);
         sb.append(", followersCount=").append(followersCount);
         sb.append(", friendsCount=").append(friendsCount);
+        sb.append(", tweetCount=").append(tweetCount);
         sb.append(", id=").append(id);
         sb.append(", listedCount=").append(listedCount);
         sb.append(", location='").append(location).append('\'');
+        sb.append(", webSite='").append(webSite).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", screenName='").append(screenName).append('\'');
         sb.append(", profileImageURL='").append(profileImageURL).append('\'');
@@ -162,6 +185,22 @@ public class UserModel {
             } catch (ExecutionException e) {
                 throw new UncheckedExecutionException(e);
             }
+        }
+
+        public static UserModel build(long id, ClientUser clientUser) {
+            Optional<UserModel> first = cache.asMap().values().stream()
+                    .filter(user -> user.getId() == id).findFirst();
+            if (first.isPresent()) {
+                return first.get();
+            }
+
+            try {
+                User user = clientUser.getTwitter().showUser(id);
+                return build(user);
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

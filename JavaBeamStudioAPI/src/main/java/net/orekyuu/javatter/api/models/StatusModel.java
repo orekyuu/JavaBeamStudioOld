@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -225,15 +224,15 @@ public class StatusModel {
          * @return 取得したStatusModel
          */
         public static StatusModel build(long statusId, ClientUser user) {
-            try {
-                ConcurrentMap<Status, StatusModel> map = cache.asMap();
-                Optional<StatusModel> first = map.values().parallelStream()
-                        .filter(model -> model.getStatusId() == statusId).findFirst();
-                if (first.isPresent()) {
-                    return first.get();
-                }
+            Optional<StatusModel> first = cache.asMap().values().stream()
+                    .filter(status -> status.getStatusId() == statusId).findFirst();
+            if (first.isPresent()) {
+                return first.get();
+            }
 
-                return build(user.getTwitter().showStatus(statusId));
+            try {
+                Status status = user.getTwitter().showStatus(statusId);
+                return build(status);
             } catch (TwitterException e) {
                 e.printStackTrace();
             }

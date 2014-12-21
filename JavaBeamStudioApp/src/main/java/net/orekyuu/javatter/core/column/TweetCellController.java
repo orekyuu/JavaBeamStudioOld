@@ -3,7 +3,10 @@ package net.orekyuu.javatter.core.column;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,15 +16,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import net.orekyuu.javatter.api.GlobalAccess;
 import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
 import twitter4j.*;
 
 import java.awt.Desktop;
@@ -125,9 +131,6 @@ public class TweetCellController implements Initializable {
                 }
             };
             TaskUtil.startTask(modelTask);
-            Thread th = new Thread(modelTask);
-            th.setDaemon(true);
-            th.start();
         } else {
             box.getChildren().remove(replyRoot);
             replyRoot.setVisible(false);
@@ -347,6 +350,25 @@ public class TweetCellController implements Initializable {
             return user.getName() + " / " + "@" + user.getScreenName();
         default:
             throw new IllegalArgumentException(nameDisplayType.name());
+        }
+    }
+
+    public void openUserProfile() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
+            UserProfilePresenter presenter = loader.getController();
+            presenter.setUser(status.getOwner());
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.getScene().getStylesheets().add(
+                    Main.class.getResource("javabeamstudio.css")
+                            .toExternalForm());
+            stage.setTitle(status.getOwner().getName() + "さんのプロファイル");
+            stage.centerOnScreen();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

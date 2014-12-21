@@ -38,3 +38,16 @@ Button.delete{
 ImageView.hoverImage {
     -fx-image: url("./pict/delete.png");
 }
+
+ImageView.no-image {
+	-fx-image: url("./pict/noimage.bmp");
+}
+
+.profile-icon {
+}
+
+.profile-screenname {
+}
+
+.profile-name {
+}

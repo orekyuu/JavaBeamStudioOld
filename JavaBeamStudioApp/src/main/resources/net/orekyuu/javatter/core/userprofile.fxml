@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.userprofile.UserProfilePresenter">
+    <children>
+        <SplitPane dividerPositions="0.25" layoutX="14.0" layoutY="10.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="116.0" prefWidth="578.0">
+                    <children>
+                        <ImageView fx:id="icon" fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="5.0">
+                     <styleClass>
+                        <String fx:value="profile-icon" />
+                        <String fx:value="no-image" />
+                     </styleClass></ImageView>
+                        <Text fx:id="screenName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-screenname" text="\@screenname" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="40.0" />
+                        <Text fx:id="name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-name" text="USERNAME" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="5.0" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="132.0" prefWidth="578.0">
+                    <children>
+                        <TabPane fx:id="tabpane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
