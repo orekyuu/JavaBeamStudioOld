@@ -34,8 +34,8 @@ public class GeneralConfigPresenter extends ConfigPageBase {
     protected void initializeUI() {
         setSelect(lasted);
     }
-
-    public void save() {
+    @FXML
+    private void save() {
         Task<Void> task = new Task<Void>() {
 
             @Override
@@ -59,11 +59,11 @@ public class GeneralConfigPresenter extends ConfigPageBase {
         bindTask(task);
         TaskUtil.startTask(task);
     }
-
-    public void cancel() {
+    @FXML
+    private void cancel() {
         setSelect(lasted);
     }
-
+    
     private void setSelect(GeneralConfigModel model) {
         checkTweet.setSelected(model.isCheckTweet());
         checkReply.setSelected(model.isCheckReply());
