@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * クライアントに認証されているユーザーのレジスタ
+ * @since 1.0.0
  */
 public class ClientUserRegister {
 
@@ -21,6 +22,7 @@ public class ClientUserRegister {
      * レジスタのインスタンスを返します。
      *
      * @return 唯一のインスタンス
+     * @since 1.0.0
      */
     public static ClientUserRegister getInstance() {
         return instance;
@@ -30,6 +32,7 @@ public class ClientUserRegister {
      * Javatterにユーザーを登録します。
      *
      * @param user 登録を行うユーザー
+     * @since 1.0.0
      */
     public void registerUser(ClientUser user) {
         users.add(user);
@@ -39,6 +42,7 @@ public class ClientUserRegister {
      * Javatterに登録されたユーザーを返します。
      *
      * @return 登録されているユーザーのリスト
+     * @since 1.0.0
      */
     public List<ClientUser> registeredUserList() {
         return new LinkedList<>(users);
@@ -47,7 +51,8 @@ public class ClientUserRegister {
     /**
      * 登録さているユーザー数を返します。
      *
-     * @return ユーザー数
+     * @return 登録されているユーザーの数
+     * @since 1.0.0
      */
     public int registeredUserCount() {
         return users.size();
@@ -57,6 +62,7 @@ public class ClientUserRegister {
      * 条件に当てはまるユーザーの削除を行う。
      *
      * @param condition ユーザーの削除条件
+     * @since 1.0.0
      */
     public void removeUsers(Predicate<ClientUser> condition) {
         users.removeIf(condition);
@@ -67,6 +73,7 @@ public class ClientUserRegister {
      *
      * @param condition ユーザーの抽出条件
      * @return 条件にヒットしたユーザーのリスト
+     * @since 1.0.0
      */
     public List<ClientUser> getUsers(Predicate<ClientUser> condition) {
         return users.stream().filter(condition).collect(Collectors.toList());

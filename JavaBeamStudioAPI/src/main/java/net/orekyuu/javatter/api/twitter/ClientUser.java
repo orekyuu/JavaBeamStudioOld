@@ -7,6 +7,7 @@ import twitter4j.auth.AccessToken;
 
 /**
  * クライアントを利用するユーザー
+ * @since 1.0.0
  */
 public interface ClientUser {
 
@@ -14,19 +15,22 @@ public interface ClientUser {
      * アクセストークンを返します。<br>
      *
      * @return このユーザーのAccessToken
+     * @since 1.0.0
      */
     AccessToken getAccessToken();
 
     /**
      * ClientUserが所有するTwitterインスタンスを返します。
      * @return Twitter
+     * @since 1.0.0
      */
     Twitter getTwitter();
 
     /**
-     * ClientUserが所有するJavatterUserStreamを返します。
+     * {@link ClientUser}が所有する{@link JavatterStream}を返します。
      *
-     * @return JavatterUserStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream getStream();
 
@@ -34,6 +38,7 @@ public interface ClientUser {
      * ユーザーの名前を返します。<br>
      *
      * @return クライアントで表示用の名前
+     * @since 1.0.0
      */
     default String getName() {
         try {

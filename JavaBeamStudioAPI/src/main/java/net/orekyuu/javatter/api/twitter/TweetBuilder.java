@@ -25,8 +25,7 @@ public interface TweetBuilder {
     /**
      * ツイートを行うクライアントユーザーをセットする
      * 
-     * @param user
-     *            クライアントユーザー
+     * @param user 発言を行うユーザー
      * @return 自身のインスタンス
      */
     TweetBuilder setClientUser(ClientUser user);

@@ -318,19 +318,14 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     public void setReply(long id, String destinationName) {
         isReply = true;
         destinationId = id;
-        setText(destinationName);
+        setTweetText(destinationName);
     }
 
     @Override
-    public List<File> getappendedImages() {
-        List<File> imageFiles = appendedImagesViews.stream()
+    public List<File> getAppendedImages() {
+        return appendedImagesViews.stream()
                 .filter(p -> p.getPreviewFile() != null)
                 .map(PreviewImage::getPreviewFile).collect(Collectors.toList());
-        if (!imageFiles.isEmpty()) {
-            return null;
-        } else {
-            return imageFiles;
-        }
     }
 
 
@@ -359,12 +354,12 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     @Override
-    public String getText() {
+    public String getTweetText() {
         return tweetTextArea.getText();
     }
 
     @Override
-    public void setText(String text) {
+    public void setTweetText(String text) {
         tweetTextArea.setText(text);
     }
 

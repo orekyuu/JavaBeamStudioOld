@@ -7,6 +7,7 @@ import net.orekyuu.javatter.api.models.UserModel;
 
 /**
  * ユーザーのアイコンを取得する非同期タスク
+ * @since 1.0.0
  */
 public class GetIconTask extends Task<Image> {
 
@@ -15,6 +16,7 @@ public class GetIconTask extends Task<Image> {
     /**
      * 指定のユーザーのアイコンを取得する非同期タスクを作成します。
      * @param user アイコンを取得するユーザー
+     * @since 1.0.0
      */
     public GetIconTask(UserModel user) {
         this.user = user;

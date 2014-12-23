@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 /**
  * Javatterのユーザーストリームを表します
+ * @since 1.0.0
  */
 public interface JavatterStream {
 
@@ -15,7 +16,8 @@ public interface JavatterStream {
      * Consumerには発生した例外が入力されます。
      *
      * @param exceptionConsumer ユーザーストリームに例外が発生した時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnException(Consumer<Exception> exceptionConsumer);
 
@@ -25,7 +27,8 @@ public interface JavatterStream {
      * BiConsumerの第2引数にはStatusIDが入力されます。
      *
      * @param scrubGeoConsumer 位置情報が削除された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnScrubGeo(BiConsumer<Long, Long> scrubGeoConsumer);
 
@@ -34,7 +37,8 @@ public interface JavatterStream {
      * Consumerにはプロフィール更新をしたユーザーが入力されます。
      *
      * @param profileUpdateConsumer プロフィール情報を更新した時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnProfileUpdate(Consumer<User> profileUpdateConsumer);
 
@@ -43,7 +47,8 @@ public interface JavatterStream {
      * ConsumerにはStatusDeletionNoticeが入力されます。
      *
      * @param deletionNotice 削除通知時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnDeletionNotice(Consumer<StatusDeletionNotice> deletionNotice);
 
@@ -52,7 +57,8 @@ public interface JavatterStream {
      * Consumerには新着Statusが入力されます。
      *
      * @param statusConsumer 新着ツイートがきた時のイベント(新着Status)
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnStatus(Consumer<Status> statusConsumer);
 
@@ -62,7 +68,8 @@ public interface JavatterStream {
      * BiConsumerの第1引数には削除されたUserが入力されます。
      *
      * @param blockConsumer ブロックした時のイベント(削除したUser, 削除されたUser)
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnBlockUser(BiConsumer<User, User> blockConsumer);
 
@@ -73,7 +80,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数にはお気に入りされたStatusが入力されます。
      *
      * @param favoriteConsumer お気に入りのイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnFavorite(ThConsumer<User, User, Status> favoriteConsumer);
 
@@ -83,7 +91,8 @@ public interface JavatterStream {
      * BiConsumerの第1引数にはフォローされたユーザーが入力されます。
      *
      * @param followConsumer フォロー時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnFollow(BiConsumer<User, User> followConsumer);
 
@@ -93,7 +102,8 @@ public interface JavatterStream {
      * BiConsumerの第1引数には解除されたUserが入力されます。
      *
      * @param unBlockConsumer ブロック解除した時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUnBlockUser(BiConsumer<User, User> unBlockConsumer);
 
@@ -104,7 +114,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数にはお気に入り解除されたStatusが入力されます。
      *
      * @param unFavoriteConsumer お気に入り解除のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUnFavorite(ThConsumer<User, User, Status> unFavoriteConsumer);
 
@@ -114,7 +125,8 @@ public interface JavatterStream {
      * BiConsumerの第2引数にはアンフォローされたユーザーが入力されます。
      *
      * @param unFollowConsumer アンフォロー時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUnFollow(BiConsumer<User, User> unFollowConsumer);
 
@@ -123,7 +135,8 @@ public interface JavatterStream {
      * ConsumerにはDirectMessageの情報が入力されます。
      *
      * @param directMessageConsumer ダイレクトメッセージ受信時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnDirectMessage(Consumer<DirectMessage> directMessageConsumer);
 
@@ -133,7 +146,8 @@ public interface JavatterStream {
      * BiConsumerの第2引数にはユーザーリストが入力されます。
      *
      * @param userListUpdateConsumer ユーザーリストに追加された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserListUpdate(BiConsumer<User, UserList> userListUpdateConsumer);
 
@@ -144,7 +158,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数にはフォローされたユーザーリストが入力されます。
      *
      * @param userListConsumer ユーザーリストがフォローされた時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserListSubscripton(ThConsumer<User, User, UserList> userListConsumer);
 
@@ -155,7 +170,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数にはフォロー解除されたユーザーリストが入力されます。
      *
      * @param userListConsumer ユーザーリストがフォロー解除された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserListUnsubscripton(ThConsumer<User, User, UserList> userListConsumer);
 
@@ -166,7 +182,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数には追加されたユーザーリストが入力されます。
      *
      * @param addMemberConsumer ユーザーリストにメンバーが追加された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserMemberAdditon(ThConsumer<User, User, UserList> addMemberConsumer);
 
@@ -177,7 +194,8 @@ public interface JavatterStream {
      * ThConsumerの第3引数には削除されたユーザーリストが入力されます。
      *
      * @param deletionMemberConsumer ユーザーリストからメンバーが削除された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserMemberDeletion(ThConsumer<User, User, UserList> deletionMemberConsumer);
 
@@ -187,7 +205,8 @@ public interface JavatterStream {
      * BiConsumerの第2引数には削除されたユーザーリストが入力されます。
      *
      * @param userListDeletionConsumer ユーザーリストが削除された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserListDeletion(BiConsumer<User, UserList> userListDeletionConsumer);
 
@@ -197,7 +216,8 @@ public interface JavatterStream {
      * BiConsumerの第2引数には作成されたユーザーリストが入力されます。
      *
      * @param userListCreationConsumer ユーザーリストが作成された時のイベント
-     * @return JavatterStream
+     * @return {@link JavatterStream}
+     * @since 1.0.0
      */
     JavatterStream addOnUserListCreation(BiConsumer<User, UserList> userListCreationConsumer);
 }

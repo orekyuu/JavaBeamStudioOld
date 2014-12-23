@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 /**
  * ツイートの情報を保持したクラス
+ * @since 1.0.0
  */
 public class StatusModel {
     private final long statusId;
@@ -71,6 +72,7 @@ public class StatusModel {
 
     /**
      * @return ツイートID
+     * @since 1.0.0
      */
     public long getStatusId() {
         return statusId;
@@ -78,6 +80,7 @@ public class StatusModel {
 
     /**
      * @return ツイートのテキスト
+     * @since 1.0.0
      */
     public String getText() {
         return text;
@@ -85,6 +88,7 @@ public class StatusModel {
 
     /**
      * @return ツイートされた日時
+     * @since 1.0.0
      */
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -92,6 +96,7 @@ public class StatusModel {
 
     /**
      * @return リプライ先
+     * @since 1.0.0
      */
     public long getReplyStatusId() {
         return replyStatusId;
@@ -99,6 +104,7 @@ public class StatusModel {
 
     /**
      * @return ツイートされたクライアント名
+     * @since 1.0.0
      */
     public String getViaName() {
         return viaName;
@@ -106,6 +112,7 @@ public class StatusModel {
 
     /**
      * @return クライアントのリンク
+     * @since 1.0.0
      */
     public String getViaLink() {
         return viaLink;
@@ -113,6 +120,7 @@ public class StatusModel {
 
     /**
      * @return リツイート元のツイート
+     * @since 1.0.0
      */
     public StatusModel getRetweetFrom() {
         return retweetFrom;
@@ -120,6 +128,7 @@ public class StatusModel {
 
     /**
      * @return ツイートしたユーザー
+     * @since 1.0.0
      */
     public UserModel getOwner() {
         return owner;
@@ -127,6 +136,7 @@ public class StatusModel {
 
     /**
      * @return このツイートをリツイートしたか
+     * @since 1.0.0
      */
     public boolean isRetweeted() {
         return isRetweeted;
@@ -134,6 +144,7 @@ public class StatusModel {
 
     /**
      * @return このツイートをお気に入りしたか
+     * @since 1.0.0
      */
     public boolean isFavorited() {
         return isFavorited;
@@ -141,6 +152,7 @@ public class StatusModel {
 
     /**
      * @return ツイートに含まれるメンション
+     * @since 1.0.0
      */
     public List<UserMentionEntity> getMentions() {
         return Arrays.asList(mentions);
@@ -148,6 +160,7 @@ public class StatusModel {
 
     /**
      * @return ツイートに含まれるURL
+     * @since 1.0.0
      */
     public List<URLEntity> getUrls() {
         return Arrays.asList(urls);
@@ -155,6 +168,7 @@ public class StatusModel {
 
     /**
      * @return ツイートに含まれるハッシュタグ
+     * @since 1.0.0
      */
     public List<HashtagEntity> getHashtags() {
         return Arrays.asList(hashtags);
@@ -162,6 +176,7 @@ public class StatusModel {
 
     /**
      * @return ツイートに含まれるメディア
+     * @since 1.0.0
      */
     public List<MediaEntity> getMedias() {
         return Arrays.asList(medias);
@@ -189,7 +204,8 @@ public class StatusModel {
     }
 
     /**
-     * StatusModelを作成するビルダーです。
+     * {@link StatusModel}を作成するビルダーです。
+     * @since 1.0.0
      */
     public static class Builder {
         private static LoadingCache<Status, StatusModel> cache = CacheBuilder.newBuilder()
@@ -206,7 +222,9 @@ public class StatusModel {
         /**
          * StatusModelを作成します。
          * @param status status 情報元
-         * @return 引数のStatusを元に作られたStatusModel
+         * @return 引数のStatusを元に作られた{@link StatusModel}
+         * @since 1.0.0
+         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          */
         public static StatusModel build(Status status) {
             try {
@@ -221,7 +239,8 @@ public class StatusModel {
          * キャッシュになければTwitterから取得し、キャッシュします。
          * @param statusId id ツイートID
          * @param user user 取得するユーザー
-         * @return 取得したStatusModel
+         * @return 取得した{@link StatusModel}
+         * @since 1.0.0
          */
         public static StatusModel build(long statusId, ClientUser user) {
             Optional<StatusModel> first = cache.asMap().values().stream()
