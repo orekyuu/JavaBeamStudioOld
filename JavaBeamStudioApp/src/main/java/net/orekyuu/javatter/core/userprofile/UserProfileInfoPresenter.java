@@ -75,7 +75,7 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
     }
 
     @FXML
-    public void openBrowser() {
+    private void openBrowser() {
         try {
             Desktop.getDesktop().browse(new URL("https://twitter.com/" + user.getScreenName()).toURI());
         } catch (IOException | URISyntaxException e) {
