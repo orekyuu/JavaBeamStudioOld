@@ -64,8 +64,8 @@ public class SigninController implements Initializable {
     public void setThisStage(Stage stage) {
         this.stage = stage;
     }
-
-    public void submit() {
+    @FXML
+    private void submit() {
         indicatorPane.setVisible(true);
         Task<Boolean> task = new Task<Boolean>() {
             @Override
