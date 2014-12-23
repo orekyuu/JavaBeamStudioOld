@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.notification.Notification;
 import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.api.notification.NotificationSender;
@@ -38,7 +38,7 @@ public class NotificationManager implements NotificationSender {
 
     @Override
     public void sendNotification(Notification notification) {
-        NotificationTypeManager manager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
+        NotificationTypeManager manager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         if (!manager.isNotice(notification.getType()))
             return;
         try {
@@ -70,7 +70,7 @@ public class NotificationManager implements NotificationSender {
 
         stage.setX(screen.getWidth() - root.getPrefWidth());
         stage.setY(screen.getHeight() - root.getPrefHeight());
-        stage.initOwner(GlobalAccess.getInstance().getApplication().getPrimaryStage());
+        stage.initOwner(API.getInstance().getApplication().getPrimaryStage());
         stage.show();
 
         setupNotification();
@@ -84,7 +84,7 @@ public class NotificationManager implements NotificationSender {
     }
 
     private void setupNotification() {
-        NotificationSender sender = GlobalAccess.getInstance().getNotificationSender();
+        NotificationSender sender = API.getInstance().getNotificationSender();
         List<ClientUser> users = ClientUserRegister.getInstance().getUsers(s -> true);
         users.stream().map(ClientUser::getStream).forEach(stream -> {
             stream.addOnFavorite((user1, user2, status) -> {

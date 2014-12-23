@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core.userprofile;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
@@ -21,7 +21,7 @@ public class FollowerTab extends UserProfileTabBase {
 
     @Override
     protected void initializeBackground(UserModel user) {
-        this.clientUser = GlobalAccess.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             users = clientUser.getTwitter().getFollowersList(user.getId(),-1L,FOLLOWERS_LIMIT);
         } catch (TwitterException e) {

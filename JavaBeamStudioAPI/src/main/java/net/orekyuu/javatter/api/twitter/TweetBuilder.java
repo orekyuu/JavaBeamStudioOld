@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * ツイートに関するインターフェース
  */
-public interface Tweet {
+public interface TweetBuilder {
     /**
      * ツイートにイメージを添付する<br>
      * 最大4つまで
@@ -14,7 +14,7 @@ public interface Tweet {
      *            ファイル
      * @return 自身のインスタンス
      */
-    Tweet addMedia(File mediaFile);
+    TweetBuilder addMedia(File mediaFile);
 
     /**
      * ツイートの実行
@@ -29,7 +29,7 @@ public interface Tweet {
      *            クライアントユーザー
      * @return 自身のインスタンス
      */
-    Tweet setClientUser(ClientUser user);
+    TweetBuilder setClientUser(ClientUser user);
 
     /**
      * リプライ先を設定する
@@ -38,7 +38,7 @@ public interface Tweet {
      *            ステータスID
      * @return 自身のインスタンス
      */
-    Tweet setReplyTo(long id);
+    TweetBuilder setReplyTo(long id);
 
     /**
      * ツイートするテキストをセット
@@ -47,26 +47,26 @@ public interface Tweet {
      *            テキスト
      * @return 自身のインスタンス
      */
-    Tweet setText(String s);
+    TweetBuilder setText(String s);
 
     /**
      * ツイート失敗時のイベントを設定する
      * @param callback ツイート失敗時の処理
      * @return 自身のインスタンス
      */
-    Tweet setOnTweetFailed(TweetFailed callback);
+    TweetBuilder setOnTweetFailed(TweetFailed callback);
 
     /**
      * ツイート成功時のイベントを設定する
      * @param callback ツイート成功時の処理
      * @return 自身のインスタンス
      */
-    Tweet setOnTweetSuccess(TweetSuccess callback);
+    TweetBuilder setOnTweetSuccess(TweetSuccess callback);
 
     /**
      * 非同期ツイートを有効化する
      * @return 自身のインスタンス
      */
-    Tweet setAsync();
+    TweetBuilder setAsync();
 
 }

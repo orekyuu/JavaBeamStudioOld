@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.cache.IconCache;
@@ -258,7 +258,7 @@ public class TweetCellController implements Initializable {
      */
     @FXML
     protected void reply() {
-        GlobalAccess
+        API
                 .getInstance()
                 .getApplication()
                 .getCurrentWindow()

@@ -3,14 +3,14 @@ package net.orekyuu.javatter.api;
 import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 
-public class GlobalAccess {
-    private static final GlobalAccess instance = new GlobalAccess();
+public class API {
+    private static final API instance = new API();
     private Application application;
     private ColumnRegister columnRegister;
     private NotificationSender notificationSender;
     private NotificationTypeRegister notificationTypeRegister;
 
-    private GlobalAccess() {
+    private API() {
 
     }
 
@@ -23,7 +23,7 @@ public class GlobalAccess {
         return application;
     }
 
-    public static GlobalAccess getInstance() {
+    public static API getInstance() {
         return instance;
     }
 

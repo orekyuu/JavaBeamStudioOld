@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
@@ -39,7 +39,7 @@ public class ApplicationImpl implements Application {
         loadClientUsers();
         StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
 
-        NotificationTypeRegister notificationTypeRegister = GlobalAccess.getInstance().getNotificationTypeRegister();
+        NotificationTypeRegister notificationTypeRegister = API.getInstance().getNotificationTypeRegister();
         Arrays.stream(NotificationTypes.values()).forEach(notificationTypeRegister::register);
 
         ((NotificationTypeManager) notificationTypeRegister).initialize();
@@ -63,8 +63,8 @@ public class ApplicationImpl implements Application {
 
     private void loadClientUsers() {
         LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
-        GlobalAccess.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
-        GlobalAccess.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
+        API.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
+        API.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ApplicationImpl implements Application {
         primaryStage.show();
 
         try {
-            ((NotificationManager) GlobalAccess.getInstance().getNotificationSender())
+            ((NotificationManager) API.getInstance().getNotificationSender())
                     .initializeNotificationManager();
         } catch (IOException e) {
             e.printStackTrace();

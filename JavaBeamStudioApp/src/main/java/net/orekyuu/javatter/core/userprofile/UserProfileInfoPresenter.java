@@ -5,7 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
@@ -35,7 +35,7 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
     @Override
     protected void initializeBackground(UserModel user) {
         this.user = user;
-        ClientUser currentUser = GlobalAccess.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        ClientUser currentUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             friendship = currentUser.getTwitter().showFriendship(currentUser.getTwitter().getId(), user.getId());
         } catch (TwitterException e) {
