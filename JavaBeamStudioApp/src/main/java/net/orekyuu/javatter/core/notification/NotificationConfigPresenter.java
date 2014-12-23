@@ -80,8 +80,8 @@ public class NotificationConfigPresenter implements Initializable {
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
         currentConfigProperty.bind(notificationList.itemsProperty());
     }
-
-    public void selectNotificationSound() {
+    @FXML
+    private void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
         
         Stage stage = GlobalAccess.getInstance().getApplication().getPrimaryStage();
@@ -108,16 +108,16 @@ public class NotificationConfigPresenter implements Initializable {
         }
         
     }
-
-    public void save() {
+    @FXML
+    private void save() {
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(currentConfigProperty);
         
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
         typeManager.saveNotificationSound(currentSoundData);
     }
-
-    public void cancel() {
+    @FXML
+    private void cancel() {
         for(int i = 1;i < previousConfig.size();i++){
             toggleButtonSelectedProperties.get(i).setValue(previousConfig.get(i));
         }
