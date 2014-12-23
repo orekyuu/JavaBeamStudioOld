@@ -14,8 +14,12 @@ public class NotificationBuilder {
 
     /**
      * @param type 通知ポップアップのタイプ
+     * @exception java.lang.NullPointerException NotificationTypeがnullの時
      */
     public NotificationBuilder(NotificationType type) {
+        if (type == null) {
+            throw new NullPointerException("NotificationType is null");
+        }
         this.type = type;
     }
 
