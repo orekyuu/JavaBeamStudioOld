@@ -43,7 +43,11 @@ public class NotificationConfigPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
-        previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
+        previousSoundData.setNotificationSoundName("");
+        previousSoundData.setNotificationSoundPath("");
+        previousSoundData.setNotificationSoundVolume(0.5);
+        previousSoundData = typeManager.loadNotificationSoundData().orElse(previousSoundData);
+        print(typeManager.soundDataIsEmpty()+"");
         if(typeManager.soundDataIsEmpty()){
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
         }else{
@@ -81,6 +85,9 @@ public class NotificationConfigPresenter implements Initializable {
         currentConfigProperty.bind(notificationList.itemsProperty());
     }
 
+    private void print(String s){
+        System.out.println(s);
+    }
     public void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
         
