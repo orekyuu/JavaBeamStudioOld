@@ -4,6 +4,9 @@ import net.orekyuu.javatter.api.column.ColumnRegister;
 import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 
+/**
+ * Javaビーム工房が提供するAPIです
+ */
 public class API {
     private static final API instance = new API();
     private Application application;
