@@ -13,10 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -32,6 +34,8 @@ public class UserProfilePresenter implements Initializable {
     private Text screenName;
     @FXML
     private Text name;
+    @FXML
+    private AnchorPane headline;
     @FXML
     private TabPane tabpane;
 
@@ -88,6 +92,7 @@ public class UserProfilePresenter implements Initializable {
             e.printStackTrace();
         }
 
+        SplitPane.setResizableWithParent(headline, Boolean.FALSE);
         stackPane.getChildren().add(region);
         stackPane.getChildren().add(indicator);
         return tab;
