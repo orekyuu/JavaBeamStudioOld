@@ -9,14 +9,13 @@ import java.util.concurrent.CompletableFuture;
 import net.orekyuu.javatter.api.twitter.TweetFailed;
 import net.orekyuu.javatter.api.twitter.TweetSuccess;
 import twitter4j.*;
-import net.orekyuu.javatter.api.twitter.Tweet;
+import net.orekyuu.javatter.api.twitter.TweetBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 /**
  * ツイートに関するクラス
- * @author seroriKETC
  *
  */
-public class TweetBuilder implements Tweet {
+public class TweetBuilderImpl implements TweetBuilder {
     private List<File> files = new ArrayList<>();
     private ClientUser user;
     private String text;
@@ -68,44 +67,44 @@ public class TweetBuilder implements Tweet {
     }
 
     @Override
-    public Tweet addMedia(File mediaFile) {
+    public TweetBuilder addMedia(File mediaFile) {
         System.out.println("add media: " + mediaFile.getName());
         files.add(mediaFile);
         return this;
     }
 
     @Override
-    public Tweet setClientUser(ClientUser user) {
+    public TweetBuilder setClientUser(ClientUser user) {
         this.user = user;
         return this;
     }
 
     @Override
-    public Tweet setReplyTo(long id) {
+    public TweetBuilder setReplyTo(long id) {
         this.replyStatusID = id;
         return this;
     }
 
     @Override
-    public Tweet setText(String s) {
+    public TweetBuilder setText(String s) {
         text = s;
         return this;
     }
 
     @Override
-    public Tweet setOnTweetFailed(TweetFailed callback) {
+    public TweetBuilder setOnTweetFailed(TweetFailed callback) {
         failed = Optional.of(callback);
         return this;
     }
 
     @Override
-    public Tweet setOnTweetSuccess(TweetSuccess callback) {
+    public TweetBuilder setOnTweetSuccess(TweetSuccess callback) {
         success = Optional.of(callback);
         return this;
     }
 
     @Override
-    public Tweet setAsync() {
+    public TweetBuilder setAsync() {
         isAsync = true;
         return this;
     }

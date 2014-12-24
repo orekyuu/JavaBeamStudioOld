@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class NotificationConfigPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
-        NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
+        NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
         if(typeManager.soundDataIsEmpty()){
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
@@ -84,7 +84,7 @@ public class NotificationConfigPresenter implements Initializable {
     public void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
         
-        Stage stage = GlobalAccess.getInstance().getApplication().getPrimaryStage();
+        Stage stage = API.getInstance().getApplication().getPrimaryStage();
         
         chooser.setTitle("ファイル選択");
         
@@ -110,7 +110,7 @@ public class NotificationConfigPresenter implements Initializable {
     }
 
     public void save() {
-        NotificationTypeManager typeManager = (NotificationTypeManager) GlobalAccess.getInstance().getNotificationTypeRegister();
+        NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(currentConfigProperty);
         
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));

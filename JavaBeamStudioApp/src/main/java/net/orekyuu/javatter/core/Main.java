@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
@@ -29,14 +29,14 @@ public class Main extends Application {
     }
 
     private void setField(String fieldName, Object value) throws ReflectiveOperationException {
-        Class<GlobalAccess> clazz = GlobalAccess.class;
+        Class<API> clazz = API.class;
         Field f = clazz.getDeclaredField(fieldName);
         f.setAccessible(true);
-        f.set(GlobalAccess.getInstance(), value);
+        f.set(API.getInstance(), value);
     }
 
     private void setupApplication(Stage stage) throws ExecutionException, InterruptedException {
-        net.orekyuu.javatter.api.Application application = GlobalAccess.getInstance().getApplication();
+        net.orekyuu.javatter.api.Application application = API.getInstance().getApplication();
         application.onStart(new String[]{""});
         Task task = new Task() {
             @Override

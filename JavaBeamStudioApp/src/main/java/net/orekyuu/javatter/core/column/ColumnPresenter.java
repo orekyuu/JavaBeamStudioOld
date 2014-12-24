@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
@@ -32,7 +32,7 @@ public class ColumnPresenter implements Initializable {
                 .forEach(account.getItems()::add);
         root.setCollapsible(false);
 
-        ColumnManager manager = (ColumnManager) GlobalAccess.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
         manager.getRegisteredColumns().stream().map(Column::getName).forEach(columnType.getItems()::add);
 
         columnType.getSelectionModel().selectedItemProperty().addListener(listener -> changeColumn());
@@ -40,7 +40,7 @@ public class ColumnPresenter implements Initializable {
     }
 
     private void changeColumn() {
-        ColumnManager manager = (ColumnManager) GlobalAccess.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
 
         List<ClientUser> users = ClientUserRegister.getInstance().getUsers(c -> c.getName().equals(account.getSelectionModel().getSelectedItem()));
 

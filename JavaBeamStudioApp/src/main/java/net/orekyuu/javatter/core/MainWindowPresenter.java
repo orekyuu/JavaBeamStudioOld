@@ -34,11 +34,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.CurrentWindow;
-import net.orekyuu.javatter.api.twitter.Tweet;
+import net.orekyuu.javatter.api.twitter.TweetBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.core.util.twitter.TweetBuilder;
+import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable, CurrentWindow {
@@ -179,7 +179,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     // ツイートの実行
     public void tweet() {
         getCurrentUser().ifPresent(user -> {
-            Tweet builder = new TweetBuilder()
+            TweetBuilder builder = new TweetBuilderImpl()
                     .setText(tweetTextArea.getText())
                     .setClientUser(user)
                     .setOnTweetSuccess(s -> System.out.println(s.getText()))
@@ -202,7 +202,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     // Javaビームです。
     public void javaBeam() {
-        getCurrentUser().ifPresent(user -> new TweetBuilder().setClientUser(user)
+        getCurrentUser().ifPresent(user -> new TweetBuilderImpl().setClientUser(user)
                         .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 

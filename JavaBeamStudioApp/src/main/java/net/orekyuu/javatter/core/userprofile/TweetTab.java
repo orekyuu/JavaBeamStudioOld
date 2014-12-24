@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core.userprofile;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
-import net.orekyuu.javatter.api.GlobalAccess;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -24,7 +24,7 @@ public class TweetTab extends UserProfileTabBase {
 
     @Override
     protected void initializeBackground(UserModel user) {
-        this.clientUser = GlobalAccess.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             ResponseList<Status> statuses = clientUser.getTwitter().getUserTimeline(user.getId(), new Paging(page, REQUEST_COUNT));
             statuses.stream().map(StatusModel.Builder::build).forEach(listView.getItems()::add);
