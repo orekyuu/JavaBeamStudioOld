@@ -43,7 +43,7 @@ public class NotificationConfigPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
-        previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
+        previousSoundData = typeManager.loadNotificationSoundData().orElse(previousSoundData);
         if(typeManager.soundDataIsEmpty()){
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
         }else{
