@@ -113,7 +113,7 @@ public class NotificationConfigPresenter extends ConfigPageBase {
     private void save() {
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(notificationList.getItems());
-        
+
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
         typeManager.saveNotificationSound(currentSoundData);
         previousSoundData = currentSoundData;
