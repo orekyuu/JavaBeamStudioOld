@@ -45,7 +45,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             if (!anyMatch) {
                 NotificationConfig config = new NotificationConfig();
                 config.setNotice(true);
-                config.setNotificationType(type);
+                config.setNotificationType(type.getTypeName());
                 res.add(config);
             }
         }
@@ -213,8 +213,8 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             return notificationType;
         }
 
-        public void setNotificationType(NotificationType notificationType) {
-            this.notificationType = notificationType.getTypeName();
+        public void setNotificationType(String typeName) {
+            this.notificationType = typeName;
         }
 
         public boolean isNotice() {
@@ -228,13 +228,13 @@ public class NotificationTypeManager implements NotificationTypeRegister {
     @DatabaseTable(tableName = "sound")
     public static class NotificationSoundData {
         @DatabaseField(canBeNull = false)
-        private String notificationSoundPath;
+        private String notificationSoundPath = "";
         
         @DatabaseField(canBeNull = false)
-        private String notificationSoundName;
+        private String notificationSoundName = "";
         
         @DatabaseField(canBeNull = false)
-        private double notificationSoundvolume;
+        private double notificationSoundvolume = 0.5;
         
         @DatabaseField(canBeNull = false,id = true)
         private int id = 0;
@@ -260,6 +260,17 @@ public class NotificationTypeManager implements NotificationTypeRegister {
         }
         public double getNotificationSoundVolume(){
             return notificationSoundvolume;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("NotificationSoundData{");
+            sb.append("notificationSoundPath='").append(notificationSoundPath).append('\'');
+            sb.append(", notificationSoundName='").append(notificationSoundName).append('\'');
+            sb.append(", notificationSoundvolume=").append(notificationSoundvolume);
+            sb.append(", id=").append(id);
+            sb.append('}');
+            return sb.toString();
         }
     }
 }

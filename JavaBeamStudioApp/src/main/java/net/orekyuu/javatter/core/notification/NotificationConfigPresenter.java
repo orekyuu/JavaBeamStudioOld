@@ -1,11 +1,7 @@
 package net.orekyuu.javatter.core.notification;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
@@ -18,13 +14,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.API;
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import net.orekyuu.javatter.core.config.ConfigPageBase;
 
-public class NotificationConfigPresenter implements Initializable {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class NotificationConfigPresenter extends ConfigPageBase {
     @FXML
     private Text volumeText;
     @FXML
@@ -34,13 +32,19 @@ public class NotificationConfigPresenter implements Initializable {
     @FXML
     private ListView<NotificationTypeManager.NotificationConfig> notificationList;
     
-    private ListProperty<NotificationTypeManager.NotificationConfig> currentConfigProperty = new SimpleListProperty<>();
-    private List<BooleanProperty> toggleButtonSelectedProperties = new ArrayList<>();
-    private List<Boolean> previousConfig = new ArrayList<>();
+    private List<NotificationTypeManager.NotificationConfig> previousConfigList = new LinkedList<>();
     private NotificationTypeManager.NotificationSoundData previousSoundData = new NotificationTypeManager.NotificationSoundData();
     private NotificationTypeManager.NotificationSoundData currentSoundData = new NotificationTypeManager.NotificationSoundData();
+    private NotificationTypeManager typeManager;
+
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    protected void initializeBackground() {
+        typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
+        previousSoundData = typeManager.loadNotificationSoundData().orElse(new NotificationTypeManager.NotificationSoundData());
+    }
+
+    @Override
+    protected void initializeUI() {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
@@ -53,22 +57,19 @@ public class NotificationConfigPresenter implements Initializable {
         currentSoundData.setNotificationSoundName(previousSoundData.getNotificationSoundName());
         currentSoundData.setNotificationSoundPath(previousSoundData.getNotificationSoundPath());
         currentSoundData.setNotificationSoundVolume(previousSoundData.getNotificationSoundVolume());
-        
+
         notificationList.setCellFactory(param -> new ListCell<NotificationTypeManager.NotificationConfig>() {
             @Override
             protected void updateItem(NotificationTypeManager.NotificationConfig item, boolean empty) {
                 super.updateItem(item, empty);
-                if(empty || item == null) {
+                if (empty || item == null) {
                     setGraphic(null);
                 } else {
                     Text text = new Text(item.getNotificationType());
                     ToggleButton toggleButton = new ToggleButton(item.isNotice() ? "通知する" : "通知しない");
                     toggleButton.setSelected(item.isNotice());
-                    previousConfig.add(item.isNotice());
-                    BooleanProperty toggleButtonSelectedProperty = toggleButton.selectedProperty();
-                    toggleButtonSelectedProperties.add(toggleButtonSelectedProperty);
                     toggleButton.textProperty().bind(Bindings.when(toggleButton.selectedProperty()).then("通知する").otherwise("通知しない"));
-                    toggleButton.selectedProperty().addListener(e ->{ 
+                    toggleButton.selectedProperty().addListener(e -> {
                         item.setNotice(toggleButton.isSelected());
                     });
                     Pane grow = new Pane();
@@ -76,9 +77,9 @@ public class NotificationConfigPresenter implements Initializable {
                     setGraphic(new HBox(text, grow, toggleButton));
                 }
             }
-        });       
+        });
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
-        currentConfigProperty.bind(notificationList.itemsProperty());
+        previousConfigList = createCopyList(notificationList.getItems());
     }
 
     public void selectNotificationSound() {
@@ -111,17 +112,26 @@ public class NotificationConfigPresenter implements Initializable {
 
     public void save() {
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
-        typeManager.saveNotificationConfigs(currentConfigProperty);
+        typeManager.saveNotificationConfigs(notificationList.getItems());
         
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
         typeManager.saveNotificationSound(currentSoundData);
+        previousSoundData = currentSoundData;
+        previousConfigList = createCopyList(notificationList.getItems());
+    }
+
+    private List<NotificationTypeManager.NotificationConfig> createCopyList(List<NotificationTypeManager.NotificationConfig> list) {
+        return list.stream().map(conf -> {
+            NotificationTypeManager.NotificationConfig copy = new NotificationTypeManager.NotificationConfig();
+            copy.setNotice(conf.isNotice());
+            copy.setNotificationType(conf.getNotificationType());
+            return copy;
+        }).collect(Collectors.toList());
     }
 
     public void cancel() {
-        for(int i = 1;i < previousConfig.size();i++){
-            toggleButtonSelectedProperties.get(i).setValue(previousConfig.get(i));
-        }
+        notificationList.getItems().setAll(createCopyList(previousConfigList));
         notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
-        volumeText.textProperty().set(""+previousSoundData.getNotificationSoundVolume());
+        volumeText.textProperty().set(String.valueOf(previousSoundData.getNotificationSoundVolume()));
     }
 }
