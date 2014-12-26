@@ -29,6 +29,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -47,6 +48,8 @@ import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.TwitterException;
 
 public class MainWindowPresenter implements Initializable, CurrentWindow {
+	@FXML
+	private AnchorPane root;
     @FXML
     private Text clientUserName;
     @FXML
@@ -214,6 +217,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("設定");
+            stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {

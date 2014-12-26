@@ -9,7 +9,7 @@
 <?import net.orekyuu.javatter.core.PreviewImage?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="711.0"
             prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="net.orekyuu.javatter.core.MainWindowPresenter">
+            fx:controller="net.orekyuu.javatter.core.MainWindowPresenter" fx:id="root">
     <children>
         <TextArea fx:id="tweetTextArea" layoutX="14.0" layoutY="14.0" prefHeight="114.0" prefWidth="345.0" AnchorPane.leftAnchor="14.0"
                   AnchorPane.rightAnchor="241.0" AnchorPane.topAnchor="14.0">
