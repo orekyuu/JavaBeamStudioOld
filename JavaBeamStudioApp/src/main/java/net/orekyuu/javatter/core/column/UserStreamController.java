@@ -7,7 +7,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import net.orekyuu.javatter.api.JavatterColumn;
+import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -18,7 +18,7 @@ import twitter4j.TwitterException;
 /**
  * userstreamのコントローラです。
  */
-public class UserStreamController implements JavatterColumn {
+public class UserStreamController implements ColumnController {
     @FXML
     private ListView<StatusModel> userStreamList;
     private static final int INITIALIZING_LIMIT = 30;

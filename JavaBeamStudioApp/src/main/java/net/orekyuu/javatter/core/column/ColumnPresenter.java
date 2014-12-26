@@ -6,15 +6,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
+import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.JavatterColumn;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class ColumnPresenter implements Initializable {
     @FXML
@@ -23,6 +24,9 @@ public class ColumnPresenter implements Initializable {
     private ChoiceBox<String> columnType;
     @FXML
     private ChoiceBox<String> account;
+
+    private Optional<ColumnState> columnState = Optional.empty();
+    private Consumer<String> onColumnChange;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,20 +45,50 @@ public class ColumnPresenter implements Initializable {
 
     private void changeColumn() {
         ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
-
-        List<ClientUser> users = ClientUserRegister.getInstance().getUsers(c -> c.getName().equals(account.getSelectionModel().getSelectedItem()));
-
         String name = columnType.getSelectionModel().selectedItemProperty().get();
-        Column column = manager.findColumn(name);
+        Optional<Column> column = manager.findColumn(name);
+        String userName = account.getSelectionModel().getSelectedItem();
+        Optional<ClientUser> user = ClientUserRegister.getInstance()
+                .getUsers(c -> c.getName().equals(userName)).stream().findFirst();
+        setColumn(column, user);
+        if (onColumnChange == null)
+            return;
+        if (column.isPresent()) {
+            onColumnChange.accept(column.get().getName());
+        } else {
+            onColumnChange.accept(null);
+        }
+    }
+
+    public Optional<ColumnState> getColumnState() {
+        return columnState;
+    }
+
+    public void setColumn(Optional<Column> column, Optional<ClientUser> user) {
+        columnState = Optional.empty();
+        if (!column.isPresent()) {
+            root.setContent(null);
+            return;
+        }
+        if (!user.isPresent()) {
+            return;
+        }
+
+        user.ifPresent(u -> columnState = Optional.of(new ColumnState(column.get().getName(), user.get())));
         FXMLLoader loader = new FXMLLoader();
         try {
-            Parent p = loader.load(column.createInputStream());
+            Parent p = loader.load(column.get().createInputStream());
             Object controller = loader.getController();
-            if(controller instanceof JavatterColumn && !users.isEmpty())
-                ((JavatterColumn) controller).setClientUser(users.get(0));
+            user.ifPresent(((ColumnController) controller)::setClientUser);
             root.setContent(p);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        columnType.setValue(columnState.get().getColumnName());
+        account.setValue(user.get().getName());
+    }
+
+    public void setOnChangeEvent(Consumer<String> onColumnChange) {
+        this.onColumnChange = onColumnChange;
     }
 }

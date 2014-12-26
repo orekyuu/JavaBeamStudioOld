@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.api;
+package net.orekyuu.javatter.api.column;
 
 import java.net.URL;
 import java.nio.file.Path;
