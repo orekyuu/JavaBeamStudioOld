@@ -153,8 +153,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             appendedImagesViews.get(i).setHoverImageView(hoverImageViews.get(i));
         }
     }
-
-    public void addColumn() {
+    @FXML
+    private void addColumn() {
         addColumn(null, Optional.empty(), true);
     }
 
@@ -178,8 +178,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             e.printStackTrace();
         }
     }
-
-    public void removeColumn() {
+    @FXML
+    private void removeColumn() {
         if (hbox.getChildren().size() != 0) {
             hbox.getChildren().remove(hbox.getChildren().size() - 1);
             columnPresenterList.remove(columnPresenterList.size() - 1);
@@ -202,7 +202,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         states.forEach(System.out::println);
     }
 
-    public void openConfig() {
+	 @FXML
+	 private void openConfig() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent parent = loader.load(getClass().getResourceAsStream(
@@ -223,7 +224,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     // ツイートの実行
-    public void tweet() {
+    @FXML
+    private void tweet() {
         getCurrentUser().ifPresent(user -> {
             TweetBuilder builder = new TweetBuilderImpl()
                     .setText(tweetTextArea.getText())
@@ -247,13 +249,15 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     // Javaビームです。
-    public void javaBeam() {
+    @FXML
+    private void javaBeam() {
         getCurrentUser().ifPresent(user -> new TweetBuilderImpl().setClientUser(user)
                         .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
-    public void changeUser() {
+    @FXML
+    private void changeUser() {
         if (users.isEmpty())
             return;
         nowUserIndex = (nowUserIndex + 1) % users.size();
