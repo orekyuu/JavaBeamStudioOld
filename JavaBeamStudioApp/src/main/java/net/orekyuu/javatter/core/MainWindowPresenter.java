@@ -36,10 +36,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
-import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
+import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.TwitterException;
 
@@ -87,7 +87,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
-
+        
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
@@ -119,7 +119,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             }
         }
     }
-
+    
     private Optional<ClientUser> getCurrentUser() {
         if (users.isEmpty())
             return Optional.empty();
