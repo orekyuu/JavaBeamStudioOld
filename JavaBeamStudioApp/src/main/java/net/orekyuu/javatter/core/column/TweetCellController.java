@@ -257,7 +257,7 @@ public class TweetCellController implements Initializable {
      * リプライボタンから呼び出される。 リプライを行う。
      */
     @FXML
-    private void reply() {
+    private void reply(){
         API
                 .getInstance()
                 .getApplication()
