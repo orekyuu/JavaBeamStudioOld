@@ -47,7 +47,7 @@ public class NotificationConfigPresenter extends ConfigPageBase {
     protected void initializeUI() {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
-        previousSoundData = typeManager.loadNotificationSoundData().orElse(null);
+        previousSoundData = typeManager.loadNotificationSoundData().orElse(previousSoundData);
         if(typeManager.soundDataIsEmpty()){
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
         }else{
