@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -68,6 +69,7 @@ public class UserCellController implements Initializable {
                     .add(Main.class.getResource("javabeamstudio.css")
                             .toExternalForm());
             stage.setTitle(user.getName() + "さんのプロファイル");
+            stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
