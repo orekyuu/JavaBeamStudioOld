@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * ツイートの情報を保持したクラス
  * @since 1.0.0
  */
-public class StatusModel {
+public final class StatusModel {
     private final long statusId;
     private final String text;
     private final LocalDateTime createdAt;
@@ -207,10 +207,9 @@ public class StatusModel {
      * {@link StatusModel}を作成するビルダーです。
      * @since 1.0.0
      */
-    public static class Builder {
+    public final static class Builder {
         private static LoadingCache<Status, StatusModel> cache = CacheBuilder.newBuilder()
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .softValues()
                 .maximumSize(100)
                 .build(new CacheLoader<Status, StatusModel>() {
                     @Override

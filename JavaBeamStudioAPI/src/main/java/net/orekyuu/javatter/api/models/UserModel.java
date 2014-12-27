@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * ユーザーの情報を格納したクラス
  */
-public class UserModel {
+public final class UserModel {
     private final LocalDateTime createdAt;
     private final String description;
     private final int favCount;
@@ -176,10 +176,9 @@ public class UserModel {
      * {@link net.orekyuu.javatter.api.models.UserModel}を作成するビルダーです
      * @since 1.0.0
      */
-    public static class Builder {
+    public final static class Builder {
         private static LoadingCache<User, UserModel> cache = CacheBuilder.newBuilder()
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .softValues()
                 .maximumSize(100)
                 .build(new CacheLoader<User, UserModel>() {
                     @Override
