@@ -33,21 +33,22 @@ public class AccountController extends ConfigPageBase {
     protected void initializeUI() {
         deleteAccountButton.disableProperty().bind(Bindings.isNull(accountList.getSelectionModel().selectedItemProperty()));
         accountList.setCellFactory(c -> new ListCell<ClientUser>() {
-                            @Override
-                            protected void updateItem(ClientUser item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (!empty)
-                                    setText(item.getName());
-                                else
-                                    setText(null);
-                            }
+            @Override
+            protected void updateItem(ClientUser item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!empty)
+                    setText(item.getName());
+                else
+                    setText(null);
+            }
         });
     }
+
     @FXML
     private void addAccount() {
         FXMLLoader loader = new FXMLLoader();
         try {
-            Parent parent= loader.load(Main.class.getResourceAsStream("Signin.fxml"));
+            Parent parent = loader.load(Main.class.getResourceAsStream("Signin.fxml"));
             SigninController controller = loader.getController();
             Stage stage = new Stage();
             controller.setThisStage(stage);
@@ -59,10 +60,12 @@ public class AccountController extends ConfigPageBase {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void deleteAccount() {
         Task<Void> task = new Task<Void>() {
             private LocalClientUser user;
+
             @Override
             protected Void call() throws Exception {
                 user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();

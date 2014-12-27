@@ -1,14 +1,5 @@
 package net.orekyuu.javatter.core;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -24,11 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -36,20 +23,25 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
-import net.orekyuu.javatter.api.twitter.TweetBuilder;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
+import net.orekyuu.javatter.api.twitter.TweetBuilder;
 import net.orekyuu.javatter.core.column.Column;
 import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.column.ColumnPresenter;
 import net.orekyuu.javatter.core.column.ColumnState;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
-import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.TwitterException;
 
+import java.io.File;
+import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class MainWindowPresenter implements Initializable, CurrentWindow {
-	@FXML
-	private AnchorPane root;
+    @FXML
+    private AnchorPane root;
     @FXML
     private Text clientUserName;
     @FXML
@@ -92,7 +84,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         users = ClientUserRegister.getInstance().getUsers(s -> true);
         currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
-        
+
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
                 try {
@@ -134,7 +126,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             addColumn(state.getColumnName(), user, false);
         }
     }
-    
+
     private Optional<ClientUser> getCurrentUser() {
         if (users.isEmpty())
             return Optional.empty();
@@ -156,6 +148,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             appendedImagesViews.get(i).setHoverImageView(hoverImageViews.get(i));
         }
     }
+
     @FXML
     private void addColumn() {
         addColumn(null, Optional.empty(), true);
@@ -181,6 +174,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void removeColumn() {
         if (hbox.getChildren().size() != 0) {
@@ -205,8 +199,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         states.forEach(System.out::println);
     }
 
-	 @FXML
-	 private void openConfig() {
+    @FXML
+    private void openConfig() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent parent = loader.load(getClass().getResourceAsStream(
@@ -240,7 +234,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
                     .filter(p -> p.getPreviewFile() != null)
                     .map(PreviewImage::getPreviewFile)
                     .forEach(builder::addMedia);
-            if(isReply){
+            if (isReply) {
                 builder.setReplyTo(destinationId);
                 isReply = false;
             }
@@ -256,7 +250,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private void javaBeam() {
         getCurrentUser().ifPresent(user -> new TweetBuilderImpl().setClientUser(user)
-                        .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
+                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
@@ -308,7 +302,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         // サイズチェック
         if (images.size() > appendedImagesViews.size()) {
             throw new IllegalArgumentException("images size > apendedImageViews size. images size: "
-                            + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
+                    + images.size() + "appendedImageViews size: " + appendedImagesViews.size());
         }
         Platform.runLater(() -> {
             appendedImagesViews.forEach(p -> p.setPreviewFile(null));

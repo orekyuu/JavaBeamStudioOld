@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * ページ遷移機能のあるNode
+ *
  * @since 1.0.0
  */
 public class ControllablePane extends StackPane {
@@ -29,6 +30,7 @@ public class ControllablePane extends StackPane {
 
     /**
      * ページ遷移機能のあるNodeを作成します。
+     *
      * @since 1.0.0
      */
     public ControllablePane() {
@@ -44,6 +46,7 @@ public class ControllablePane extends StackPane {
 
     /**
      * 遷移時のアニメーションを設定します。
+     *
      * @param animator 遷移時のアニメーション
      * @since 1.0.0
      */
@@ -53,9 +56,10 @@ public class ControllablePane extends StackPane {
 
     /**
      * FXMLのロードを行います、
-     * @param id ページの識別ID
+     *
+     * @param id       ページの識別ID
      * @param resource ページのFXML
-     * @exception java.io.UncheckedIOException FXMLのロードに失敗した時
+     * @throws java.io.UncheckedIOException FXMLのロードに失敗した時
      * @since 1.0.0
      */
     public void loadNode(String id, InputStream resource) {
@@ -79,6 +83,7 @@ public class ControllablePane extends StackPane {
 
     /**
      * 識別IDに対応するノードを破棄します。
+     *
      * @param id Nodeの識別ID
      * @since 1.0.0
      */
@@ -88,9 +93,10 @@ public class ControllablePane extends StackPane {
 
     /**
      * IDに対応するページへ遷移します。
+     *
      * @param id 移動するページの識別ID
+     * @throws java.lang.NullPointerException idに対応するノードが見つからなかった時
      * @since 1.0.0
-     * @exception java.lang.NullPointerException idに対応するノードが見つからなかった時
      */
     public void setNode(String id) {
         if (nodes.get(id) == null) {

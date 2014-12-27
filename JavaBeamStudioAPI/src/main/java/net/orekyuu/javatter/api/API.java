@@ -38,6 +38,7 @@ public class API {
 
     /**
      * カラムのRegisterを返します。
+     *
      * @return カラムのRegister
      * @since 1.0.0
      */
@@ -47,6 +48,7 @@ public class API {
 
     /**
      * 通知を送信するためのオブジェクトを返します。
+     *
      * @return 通知を送信するためのオブジェクト
      * @since 1.0.0
      */
@@ -56,6 +58,7 @@ public class API {
 
     /**
      * 通知タイプを登録するためのオブジェクトを返します。
+     *
      * @return 通知タイプを登録するためのオブジェクト
      * @since 1.0.0
      */

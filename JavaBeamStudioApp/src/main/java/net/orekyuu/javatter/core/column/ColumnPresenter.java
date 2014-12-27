@@ -6,8 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
-import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 

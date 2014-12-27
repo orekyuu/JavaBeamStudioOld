@@ -23,6 +23,7 @@ public class GeneralConfigPresenter extends ConfigPageBase {
     @FXML
     private CheckBox isExpandURL;
     private GeneralConfigModel lasted;
+
     @Override
     protected void initializeBackground() {
         nameDisplayType.getItems().addAll(NameDisplayType.ID.configName(), NameDisplayType.NAME.configName(), NameDisplayType.ID_NAME.configName(), NameDisplayType.NAME_ID.configName());
@@ -34,6 +35,7 @@ public class GeneralConfigPresenter extends ConfigPageBase {
     protected void initializeUI() {
         setSelect(lasted);
     }
+
     @FXML
     private void save() {
         Task<Void> task = new Task<Void>() {
@@ -59,11 +61,12 @@ public class GeneralConfigPresenter extends ConfigPageBase {
         bindTask(task);
         TaskUtil.startTask(task);
     }
+
     @FXML
     private void cancel() {
         setSelect(lasted);
     }
-    
+
     private void setSelect(GeneralConfigModel model) {
         checkTweet.setSelected(model.isCheckTweet());
         checkReply.setSelected(model.isCheckReply());

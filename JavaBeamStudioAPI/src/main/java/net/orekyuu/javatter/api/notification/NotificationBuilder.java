@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 
 /**
  * {@link Notification}のビルダークラスです。
+ *
  * @since 1.0.0
  */
 public class NotificationBuilder {
@@ -15,7 +16,7 @@ public class NotificationBuilder {
 
     /**
      * @param type 通知ポップアップのタイプ
-     * @exception java.lang.NullPointerException NotificationTypeがnullの時
+     * @throws java.lang.NullPointerException NotificationTypeがnullの時
      * @since 1.0.0
      */
     public NotificationBuilder(NotificationType type) {
@@ -27,6 +28,7 @@ public class NotificationBuilder {
 
     /**
      * サブタイトルの画像を設定します。
+     *
      * @param subTitleImage サブタイトルの画像
      * @return {@link NotificationBuilder}
      * @since 1.0.0
@@ -38,6 +40,7 @@ public class NotificationBuilder {
 
     /**
      * サブタイトルを設定します。
+     *
      * @param subTitle サブタイトル
      * @return {@link NotificationBuilder}
      * @since 1.0.0
@@ -49,6 +52,7 @@ public class NotificationBuilder {
 
     /**
      * 通知の詳細メッセージを設定します。
+     *
      * @param message 詳細メッセージ
      * @return {@link NotificationBuilder}
      * @since 1.0.0
@@ -60,6 +64,7 @@ public class NotificationBuilder {
 
     /**
      * 設定された内容で{@link Notification}を作成します。
+     *
      * @return 値が設定された{@link Notification}
      * @since 1.0.0
      */

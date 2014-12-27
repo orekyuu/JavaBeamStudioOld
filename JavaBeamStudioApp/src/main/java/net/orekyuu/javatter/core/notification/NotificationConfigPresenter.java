@@ -31,7 +31,7 @@ public class NotificationConfigPresenter extends ConfigPageBase {
     private Text notificationSoundFileName;
     @FXML
     private ListView<NotificationTypeManager.NotificationConfig> notificationList;
-    
+
     private List<NotificationTypeManager.NotificationConfig> previousConfigList = new LinkedList<>();
     private NotificationTypeManager.NotificationSoundData previousSoundData = new NotificationTypeManager.NotificationSoundData();
     private NotificationTypeManager.NotificationSoundData currentSoundData = new NotificationTypeManager.NotificationSoundData();
@@ -48,9 +48,9 @@ public class NotificationConfigPresenter extends ConfigPageBase {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         previousSoundData = typeManager.loadNotificationSoundData().orElse(previousSoundData);
-        if(typeManager.soundDataIsEmpty()){
+        if (typeManager.soundDataIsEmpty()) {
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
-        }else{
+        } else {
             notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         }
         volumeText.textProperty().set(String.valueOf(previousSoundData.getNotificationSoundVolume()));
@@ -81,34 +81,36 @@ public class NotificationConfigPresenter extends ConfigPageBase {
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
         previousConfigList = createCopyList(notificationList.getItems());
     }
+
     @FXML
     private void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
-        
+
         Stage stage = API.getInstance().getApplication().getPrimaryStage();
-        
+
         chooser.setTitle("ファイル選択");
-        
+
         List<String> mp3Extensions = new ArrayList<>();
         mp3Extensions.add("*.mp3");
         mp3Extensions.add("*.MP3");
         List<String> wavExtensions = new ArrayList<>();
         wavExtensions.add("*.wav");
         wavExtensions.add("*.WAV");
-        
-        FileChooser.ExtensionFilter mp3Filter = new FileChooser.ExtensionFilter("MP3 形式サウンド",mp3Extensions);
-        FileChooser.ExtensionFilter wavFilter = new FileChooser.ExtensionFilter("WAV 形式サウンド",wavExtensions);
+
+        FileChooser.ExtensionFilter mp3Filter = new FileChooser.ExtensionFilter("MP3 形式サウンド", mp3Extensions);
+        FileChooser.ExtensionFilter wavFilter = new FileChooser.ExtensionFilter("WAV 形式サウンド", wavExtensions);
         chooser.getExtensionFilters().add(mp3Filter);
         chooser.getExtensionFilters().add(wavFilter);
         File file = chooser.showOpenDialog(stage);
-        
-        if(file != null){
+
+        if (file != null) {
             currentSoundData.setNotificationSoundPath(file.getPath());
             currentSoundData.setNotificationSoundName(file.getName());
             notificationSoundFileName.textProperty().set(file.getName());
         }
-        
+
     }
+
     @FXML
     private void save() {
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
@@ -128,6 +130,7 @@ public class NotificationConfigPresenter extends ConfigPageBase {
             return copy;
         }).collect(Collectors.toList());
     }
+
     @FXML
     private void cancel() {
         notificationList.getItems().setAll(createCopyList(previousConfigList));

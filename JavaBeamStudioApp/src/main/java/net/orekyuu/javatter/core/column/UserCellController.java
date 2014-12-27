@@ -1,9 +1,5 @@
 package net.orekyuu.javatter.core.column;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +21,10 @@ import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class UserCellController implements Initializable {
 
@@ -54,6 +54,7 @@ public class UserCellController implements Initializable {
         root.layoutXProperty().addListener(e -> root.setLayoutX(0));
         root.layoutYProperty().addListener(e -> root.setLayoutY(0));
     }
+
     @FXML
     private void openUserProfile() {
         FXMLLoader loader = new FXMLLoader();
@@ -80,8 +81,7 @@ public class UserCellController implements Initializable {
     /**
      * clientUserをセットする
      *
-     * @param clientUser
-     *            カラムの持ち主
+     * @param clientUser カラムの持ち主
      */
     public void setClientUser(ClientUser clientUser) {
         this.clientUser = clientUser;
@@ -89,29 +89,29 @@ public class UserCellController implements Initializable {
 
     /**
      * フォーマットに合わせた名前表示
+     *
      * @param user ユーザー
      * @return フォーマットに合った表示
      */
     private String getConfigFormatName(UserModel user) {
         switch (nameDisplayType) {
-        case NAME:
-            return user.getName();
-        case ID:
-            return "@" + user.getScreenName();
-        case ID_NAME:
-            return "@" + user.getScreenName() + " / " + user.getName();
-        case NAME_ID:
-            return user.getName() + " / " + "@" + user.getScreenName();
-        default:
-            throw new IllegalArgumentException(nameDisplayType.name());
+            case NAME:
+                return user.getName();
+            case ID:
+                return "@" + user.getScreenName();
+            case ID_NAME:
+                return "@" + user.getScreenName() + " / " + user.getName();
+            case NAME_ID:
+                return user.getName() + " / " + "@" + user.getScreenName();
+            default:
+                throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
 
     /**
      * ユーザー内容に合わせて内容を設定
      *
-     * @param user
-     *            ユーザーモデル
+     * @param user ユーザーモデル
      */
     public void updateUserCell(UserModel user) {
         this.user = user;

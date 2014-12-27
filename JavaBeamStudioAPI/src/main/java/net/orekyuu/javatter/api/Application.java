@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 
 /**
  * アプリケーションを表すインターフェースです。
+ *
  * @since 1.0.0
  */
 public interface Application {
@@ -19,6 +20,7 @@ public interface Application {
     /**
      * ロード処理を行います。<br>
      * このメソッドはonStartのあとに呼び出されてバックグラウンドスレッドで動作します。
+     *
      * @since 1.0.0
      */
     void onLoad();
@@ -33,12 +35,14 @@ public interface Application {
 
     /**
      * アプリケーションの再起動を行います。
+     *
      * @since 1.0.0
      */
     void restart();
 
     /**
      * CurrentWindowを返します。
+     *
      * @return {@link CurrentWindow}
      * @since 1.0.0
      */
@@ -46,6 +50,7 @@ public interface Application {
 
     /**
      * アプリケーションのStageを返します。
+     *
      * @return アプリケーションのStage
      * @since 1.0.0
      */

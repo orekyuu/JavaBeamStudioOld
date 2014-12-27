@@ -1,28 +1,35 @@
-.validation-error{
-	-fx-border-color: red;
+.validation-error {
+    -fx-border-color: red;
 }
-.validation-success{
-	-fx-border-color: lime;
+
+.validation-success {
+    -fx-border-color: lime;
 }
-.search{
-	-fx-font-size:16px;
+
+.search {
+    -fx-font-size: 16px;
 }
+
 /* Text Classes */
-Text.title{
-	-fx-font-size: 20px;
+Text.title {
+    -fx-font-size: 20px;
 }
-Text.item-caption{
-	-fx-font-size: 12px;
+
+Text.item-caption {
+    -fx-font-size: 12px;
 }
+
 /* Button classes */
-Button.ok{
-	-fx-font-size: 16px;
+Button.ok {
+    -fx-font-size: 16px;
 }
-Button.add{
-	-fx-graphic:url("./pict/add.png");
+
+Button.add {
+    -fx-graphic: url("./pict/add.png");
 }
-Button.delete{
-	-fx-graphic:url("./pict/delete.png");
+
+Button.delete {
+    -fx-graphic: url("./pict/delete.png");
 }
 
 .indicator {
@@ -40,7 +47,7 @@ ImageView.hoverImage {
 }
 
 ImageView.no-image {
-	-fx-image: url("./pict/noimage.bmp");
+    -fx-image: url("./pict/noimage.bmp");
 }
 
 .profile-icon {

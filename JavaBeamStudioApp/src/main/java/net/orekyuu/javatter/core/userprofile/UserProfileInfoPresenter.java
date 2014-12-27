@@ -1,8 +1,8 @@
 package net.orekyuu.javatter.core.userprofile;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.orekyuu.javatter.api.API;
@@ -43,6 +43,7 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
 
     private Relationship friendship;
     private UserModel user;
+
     @Override
     protected void initializeBackground(UserModel user) {
         this.user = user;

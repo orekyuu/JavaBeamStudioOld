@@ -1,12 +1,5 @@
 package net.orekyuu.javatter.core.userprofile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +19,13 @@ import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.Main;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
 
 public class UserProfilePresenter implements Initializable {
     @FXML

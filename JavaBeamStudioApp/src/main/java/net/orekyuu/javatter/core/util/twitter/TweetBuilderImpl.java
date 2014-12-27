@@ -1,19 +1,19 @@
 package net.orekyuu.javatter.core.util.twitter;
 
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.api.twitter.TweetBuilder;
+import net.orekyuu.javatter.api.twitter.TweetFailed;
+import net.orekyuu.javatter.api.twitter.TweetSuccess;
+import twitter4j.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import net.orekyuu.javatter.api.twitter.TweetFailed;
-import net.orekyuu.javatter.api.twitter.TweetSuccess;
-import twitter4j.*;
-import net.orekyuu.javatter.api.twitter.TweetBuilder;
-import net.orekyuu.javatter.api.twitter.ClientUser;
 /**
  * ツイートに関するクラス
- *
  */
 public class TweetBuilderImpl implements TweetBuilder {
     private List<File> files = new ArrayList<>();
@@ -27,11 +27,11 @@ public class TweetBuilderImpl implements TweetBuilder {
 
     @Override
     public void tweet() {
-        if(isTweeted)
+        if (isTweeted)
             throw new IllegalStateException("called tweet method.");
 
         isTweeted = true;
-        if(isAsync)
+        if (isAsync)
             CompletableFuture.runAsync(this::runTweetAction);
         else
             runTweetAction();

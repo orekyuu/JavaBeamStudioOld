@@ -1,7 +1,5 @@
 package net.orekyuu.javatter.core.column;
 
-import java.io.IOException;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +8,8 @@ import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
+
+import java.io.IOException;
 
 public class UserCell extends ListCell<UserModel> {
     /**
@@ -20,8 +20,8 @@ public class UserCell extends ListCell<UserModel> {
 
     /**
      * コンストラクタ
-     * @param clientuser
-     *            UserStreamの持つClientUser
+     *
+     * @param clientuser UserStreamの持つClientUser
      */
     public UserCell(ClientUser clientuser) {
         super();
@@ -31,10 +31,8 @@ public class UserCell extends ListCell<UserModel> {
     /**
      * アイテムの内容をUserに従って切り替える
      *
-     * @param user
-     *            受け取ったステータス
-     * @param empty
-     *            空かどうか
+     * @param user  受け取ったステータス
+     * @param empty 空かどうか
      */
     @Override
     protected void updateItem(UserModel user, boolean empty) {
@@ -62,7 +60,7 @@ public class UserCell extends ListCell<UserModel> {
                 userCellController = fxmlLoader.getController();
                 userCellController.setClientUser(clientUser);
             }
-            if(userCellController != null)
+            if (userCellController != null)
                 userCellController.updateUserCell(user);
         }
     }

@@ -97,6 +97,7 @@ public class ColumnManager implements ColumnRegister {
 
     /**
      * 登録されているカラムのリストを返します。
+     *
      * @return 登録されたカラム
      */
     public List<Column> getRegisteredColumns() {
@@ -105,6 +106,7 @@ public class ColumnManager implements ColumnRegister {
 
     /**
      * 指定された名前のカラムを探します。
+     *
      * @param columnName カラム名
      * @return columnNameに一致したカラム
      */
@@ -173,7 +175,7 @@ public class ColumnManager implements ColumnRegister {
 
     private void createFile() {
         try {
-            if(Files.notExists(path))
+            if (Files.notExists(path))
                 Files.createFile(path);
         } catch (IOException e) {
             e.printStackTrace();

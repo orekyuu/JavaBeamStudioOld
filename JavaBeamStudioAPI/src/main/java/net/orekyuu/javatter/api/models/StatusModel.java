@@ -10,7 +10,6 @@ import twitter4j.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * ツイートの情報を保持したクラス
+ *
  * @since 1.0.0
  */
 public final class StatusModel {
@@ -205,6 +205,7 @@ public final class StatusModel {
 
     /**
      * {@link StatusModel}を作成するビルダーです。
+     *
      * @since 1.0.0
      */
     public final static class Builder {
@@ -220,10 +221,11 @@ public final class StatusModel {
 
         /**
          * StatusModelを作成します。
+         *
          * @param status status 情報元
          * @return 引数のStatusを元に作られた{@link StatusModel}
+         * @throws com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          * @since 1.0.0
-         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          */
         public static StatusModel build(Status status) {
             try {
@@ -236,8 +238,9 @@ public final class StatusModel {
         /**
          * StatusModelをIDから取得します。<br>
          * キャッシュになければTwitterから取得し、キャッシュします。
+         *
          * @param statusId id ツイートID
-         * @param user user 取得するユーザー
+         * @param user     user 取得するユーザー
          * @return 取得した{@link StatusModel}
          * @since 1.0.0
          */
