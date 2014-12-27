@@ -226,7 +226,7 @@ public class TweetCellController implements Initializable {
         }
         if (entity instanceof UserMentionEntity) {
             Hyperlink hyperlink = new Hyperlink("@" + entity.getText());
-            hyperlink.setOnAction(e -> openUserProfile(entity.getText()));
+            hyperlink.setOnAction(e -> openUserProfile(((UserMentionEntity)entity).getId()));
             textFlow.getChildren().add(hyperlink);
         }
         if (entity instanceof HashtagEntity) {
@@ -354,17 +354,13 @@ public class TweetCellController implements Initializable {
         }
     }
 
-    private void openUserProfile(String username) {
-    	try {
-        	openUserProfile(UserModel.Builder.build(clientUser.getTwitter().showUser(username)));
-		} catch (TwitterException e) {
-			e.printStackTrace();
-		}
+    private void openUserProfile(long l) {
+        UserModel.Builder.build(l, clientUser);
     }
 
     @FXML
     private void openUserProfile() {
-    	openUserProfile(status.getOwner());
+        openUserProfile(status.getOwner());
     }
 
     private void openUserProfile(UserModel usermodel) {
