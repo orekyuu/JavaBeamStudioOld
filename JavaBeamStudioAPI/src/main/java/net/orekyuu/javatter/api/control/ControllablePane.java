@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import net.orekyuu.javatter.api.control.animator.NodeTransitionAnimator;
@@ -52,7 +53,9 @@ public class ControllablePane extends StackPane {
                 screen.setProgressNode(indicator, region);
                 screen.setup();
             }
-            nodes.put(id, loadNode);
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(loadNode);
+            nodes.put(id, scrollPane);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
