@@ -18,17 +18,28 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class UserProfileInfoPresenter extends UserProfileTabBase {
-    public Text tweet;
-    public Text follow;
-    public Text follower;
-    public Text list;
-    public Text favorite;
-    public Text isFriends;
-    public Button followButton;
-    public Text location;
-    public Hyperlink webSite;
-    public Text description;
-    public VBox rightPane;
+    @FXML
+    private Text tweet;
+    @FXML
+    private Text follow;
+    @FXML
+    private Text follower;
+    @FXML
+    private Text list;
+    @FXML
+    private Text favorite;
+    @FXML
+    private Text isFriends;
+    @FXML
+    private Button followButton;
+    @FXML
+    private Text location;
+    @FXML
+    private Hyperlink webSite;
+    @FXML
+    private Text description;
+    @FXML
+    private VBox rightPane;
 
     private Relationship friendship;
     private UserModel user;
