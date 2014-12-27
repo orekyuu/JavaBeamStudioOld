@@ -7,6 +7,7 @@ import java.util.Optional;
 /**
  * 通知ポップアップの情報をまとめたクラスです。<br>
  * この情報を使って通知ポップアップを表示します。
+ * @since 1.0.0
  */
 public final class Notification {
 
@@ -16,11 +17,12 @@ public final class Notification {
     private final NotificationType type;
 
     /**
-     * Notificationを作成します。
+     * {@link Notification}を作成します。
      * @param type ポップアップのタイプです
      * @param subTitle ポップアップのサブタイトル
      * @param subImage サブタイトルの画像
      * @param message ポップアップの詳細メッセージ
+     * @since 1.0.0
      */
     protected Notification(NotificationType type, String subTitle, Image subImage, String message) {
         if (type == null)
@@ -38,6 +40,7 @@ public final class Notification {
      * ポップアップのタイトルを返します。<br>
      * 戻り値のOptionalがemptyになることはありません。
      * @return ポップアップのタイトル
+     * @since 1.0.0
      */
     public Optional<String> getTitle() {
         return Optional.of(type.getPopupTitle());
@@ -46,6 +49,7 @@ public final class Notification {
     /**
      * サブタイトルの画像
      * @return サブタイトルの画像
+     * @since 1.0.0
      */
     public Optional<Image> getSubTitleImage() {
         return subTitleImage;
@@ -54,6 +58,7 @@ public final class Notification {
     /**
      * 通知の詳細メッセージ
      * @return 通知の詳細メッセージ
+     * @since 1.0.0
      */
     public Optional<String> getMessage() {
         return message;
@@ -62,6 +67,7 @@ public final class Notification {
     /**
      * 通知のサブタイトル
      * @return サブタイトル
+     * @since 1.0.0
      */
     public Optional<String> getSubTitle() {
         return subTitle;
@@ -70,6 +76,7 @@ public final class Notification {
     /**
      * 通知タイプを返します。
      * @return 通知タイプ
+     * @since 1.0.0
      */
     public NotificationType getType() {
         return type;

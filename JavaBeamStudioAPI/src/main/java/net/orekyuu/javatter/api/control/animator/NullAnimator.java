@@ -5,6 +5,7 @@ import net.orekyuu.javatter.api.control.ControllablePane;
 
 /**
  * アニメーションを行わずに画面遷移を行います
+ * @since 1.0.0
  */
 public class NullAnimator implements NodeTransitionAnimator {
 

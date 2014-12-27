@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * アイコンのキャッシュ
+ * @since 1.0.0
  */
 public class IconCache {
 
@@ -40,6 +41,7 @@ public class IconCache {
      * 画像を取得する
      * @param url 画像のURL
      * @return Image
+     * @since 1.0.0
      */
     public static Image getImage(String url) {
         try {

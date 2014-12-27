@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 /**
  * Columnの登録を行う
+ * @since 1.0.0
  */
 public interface ColumnRegister {
     /**
@@ -12,6 +13,7 @@ public interface ColumnRegister {
      * @param name カラムの名前
      * @param clazz class
      * @param fxmlPath FXMLのパス
+     * @since 1.0.0
      */
     void registerColumn(String name, Class<?> clazz, String fxmlPath);
 
@@ -19,6 +21,7 @@ public interface ColumnRegister {
      * PathからFXMLを探します。
      * @param name カラムの名前
      * @param fxmlPath FXMLのパス
+     * @since 1.0.0
      */
     void registerColumn(String name, Path fxmlPath);
 
@@ -26,6 +29,7 @@ public interface ColumnRegister {
      * URLからFXMLを探します。
      * @param name カラムの名前
      * @param url FXMLのurl
+     * @since 1.0.0
      */
     void registerColumn(String name, URL url);
 }

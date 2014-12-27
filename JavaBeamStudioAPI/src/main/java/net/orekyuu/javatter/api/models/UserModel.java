@@ -50,6 +50,7 @@ public class UserModel {
 
     /**
      * @return ユーザーが作成された日付
+     * @since 1.0.0
      */
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -57,6 +58,7 @@ public class UserModel {
 
     /**
      * @return ユーザーの説明文
+     * @since 1.0.0
      */
     public String getDescription() {
         return description;
@@ -64,6 +66,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのお気に入り数
+     * @since 1.0.0
      */
     public int getFavCount() {
         return favCount;
@@ -71,6 +74,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのフォロワー数
+     * @since 1.0.0
      */
     public int getFollowersCount() {
         return followersCount;
@@ -78,6 +82,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのフォロー数
+     * @since 1.0.0
      */
     public int getFriendsCount() {
         return friendsCount;
@@ -85,6 +90,7 @@ public class UserModel {
 
     /**
      * @return ユーザーID
+     * @since 1.0.0
      */
     public long getId() {
         return id;
@@ -92,6 +98,7 @@ public class UserModel {
 
     /**
      * @return 追加されているリストの数
+     * @since 1.0.0
      */
     public int getListedCount() {
         return listedCount;
@@ -99,6 +106,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのプロフィールに設定されている場所
+     * @since 1.0.0
      */
     public String getLocation() {
         return location;
@@ -106,6 +114,7 @@ public class UserModel {
 
     /**
      * @return ユーザーの名前
+     * @since 1.0.0
      */
     public String getName() {
         return name;
@@ -113,6 +122,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのスクリーンネーム
+     * @since 1.0.0
      */
     public String getScreenName() {
         return screenName;
@@ -120,6 +130,7 @@ public class UserModel {
 
     /**
      * @return ユーザーアイコンのURL
+     * @since 1.0.0
      */
     public String getProfileImageURL() {
         return profileImageURL;
@@ -127,6 +138,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのツイート数
+     * @since 1.0.0
      */
     public int getTweetCount() {
         return tweetCount;
@@ -134,6 +146,7 @@ public class UserModel {
 
     /**
      * @return ユーザーのWebサイト
+     * @since 1.0.0
      */
     public String getWebSite() {
         return webSite;
@@ -160,7 +173,8 @@ public class UserModel {
     }
 
     /**
-     * UserModelを作成するビルダーです
+     * {@link net.orekyuu.javatter.api.models.UserModel}を作成するビルダーです
+     * @since 1.0.0
      */
     public static class Builder {
         private static LoadingCache<User, UserModel> cache = CacheBuilder.newBuilder()
@@ -175,9 +189,11 @@ public class UserModel {
                 });
 
         /**
-         * UserModelを作成します
+         * {@link net.orekyuu.javatter.api.models.UserModel}を作成します
          * @param user 情報元
-         * @return 引数のユーザーを元に作られたUserModel
+         * @return 引数のユーザーを元に作られた{@link UserModel}
+         * @since 1.0.0
+         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          */
         public static UserModel build(User user) {
             try {
@@ -187,6 +203,15 @@ public class UserModel {
             }
         }
 
+        /**
+         * [@link ClientUser}のAPIを使用してidに対応するユーザーの{@link UserModel}を作成します。<br>
+         * TwitterAPIを使用するため、呼び出し回数と処理時間に気をつけてください。
+         * @param id ユーザーID
+         * @param clientUser 使用するユーザー
+         * @return 引数のユーザーを元に作られた{@link UserModel}
+         * @since 1.0.0
+         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
+         */
         public static UserModel build(long id, ClientUser clientUser) {
             Optional<UserModel> first = cache.asMap().values().stream()
                     .filter(user -> user.getId() == id).findFirst();

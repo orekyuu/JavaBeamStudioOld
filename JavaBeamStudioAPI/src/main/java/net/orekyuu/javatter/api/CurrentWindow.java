@@ -7,41 +7,55 @@ import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
+/**
+ * メインウィンドウを表すインターフェイスです。<br>
+ * @since 1.0.0
+ */
 public interface CurrentWindow {
     /**
-     * リプライの設定を行う。
+     * リプライ先を設定します。
      * @param id リプライ先のステータスid
      * @param destinationName リプライ先のユーザーの名前
+     * @since 1.0.0
      */
    void setReply(long id,String destinationName);
    /**
     * 投稿する画像ファイルを取得する。
-    * 投稿する画像ファイルがない場合はnullを返します。
-    * @return List<File>
+    * 投稿する画像ファイルがない場合は空のリストを返します。
+    * @return List 添付画像ファイルのリスト
+    * @since 1.0.0
     */
-   List<File> getappendedImages();
+   List<File> getAppendedImages();
    /**
     * 現在のツイートを行うユーザーを取得する
     * @return ClientUser
+    * @since 1.0.0
     */
    Property<ClientUser> getCurrentUserProperty();
    /**
-    * ツイートを行うユーザーを変更する。<br>
-    * 指定したユーザーが見つからなかった場合はその旨のlogを表示する。
-    * @param screenName 投稿したいユーザーのスクリーンネーム
+    * カレントユーザーを設定します。
+    * @param user 新しく設定したいユーザー
+    * @since 1.0.0
     */
    void assignUser(ClientUser user);
    /**
-    * TextArea内の文字を取得する.
-    * @return String
+    * ツイート用TextArea内の文字を取得する.
+    * @return ツイート用のTextArea二入力されている文字列
+    * @since 1.0.0
     */
-   String getText();
+   String getTweetText();
    /**
-    * TextAreaに文字列をセットする。
-    * @param text セットしたい文字列。
+    * ツイート用TextAreaに文字列をセットする。
+    * @param text ツイート用TextAreaにセットしたい文字列。
+    * @since 1.0.0
     */
-   void setText(String text);
-   
+   void setTweetText(String text);
+
+   /**
+    * ツイートのTextAreaのtextPropertyを返します。
+    * @return ツイートのプロパティ
+    * @since 1.0.0
+    */
    StringProperty getTweetTextProperty();
    
 }

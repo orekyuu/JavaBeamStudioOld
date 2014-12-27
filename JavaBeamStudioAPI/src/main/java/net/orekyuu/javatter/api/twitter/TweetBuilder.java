@@ -3,56 +3,56 @@ package net.orekyuu.javatter.api.twitter;
 import java.io.File;
 
 /**
- * ツイートに関するインターフェース
+ * ツイートを行うためのクラスです。
  */
 public interface TweetBuilder {
     /**
-     * ツイートにイメージを添付する<br>
-     * 最大4つまで
+     * ツイートにイメージを添付します。<br>
      * 
-     * @param mediaFile
-     *            ファイル
+     * @param mediaFile 添付するファイル
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder addMedia(File mediaFile);
 
     /**
-     * ツイートの実行
-     * 
+     * ツイートを行います。
+     * @since 1.0.0
      */
     void tweet();
 
     /**
-     * ツイートを行うクライアントユーザーをセットする
+     * ツイートを行うユーザーを設定します
      * 
-     * @param user
-     *            クライアントユーザー
+     * @param user 発言を行うユーザー
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder setClientUser(ClientUser user);
 
     /**
-     * リプライ先を設定する
+     * リプライ先を設定します
      * 
-     * @param id
-     *            ステータスID
+     * @param id リプライ先のStatusID
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder setReplyTo(long id);
 
     /**
-     * ツイートするテキストをセット
+     * ツイートの内容を設定します
      * 
-     * @param s
-     *            テキスト
+     * @param text 発言内容
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
-    TweetBuilder setText(String s);
+    TweetBuilder setText(String text);
 
     /**
-     * ツイート失敗時のイベントを設定する
+     * ツイート失敗時のイベントを設定します
      * @param callback ツイート失敗時の処理
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder setOnTweetFailed(TweetFailed callback);
 
@@ -60,12 +60,14 @@ public interface TweetBuilder {
      * ツイート成功時のイベントを設定する
      * @param callback ツイート成功時の処理
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder setOnTweetSuccess(TweetSuccess callback);
 
     /**
-     * 非同期ツイートを有効化する
+     * ツイートを非同期で行います
      * @return 自身のインスタンス
+     * @since 1.0.0
      */
     TweetBuilder setAsync();
 
