@@ -54,8 +54,8 @@ public class UserCellController implements Initializable {
         root.layoutXProperty().addListener(e -> root.setLayoutX(0));
         root.layoutYProperty().addListener(e -> root.setLayoutY(0));
     }
-
-    public void openUserProfile() {
+    @FXML
+    private void openUserProfile() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent root = loader.load(Main.class

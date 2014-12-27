@@ -81,8 +81,8 @@ public class NotificationConfigPresenter extends ConfigPageBase {
         typeManager.getConfigs().forEach(notificationList.getItems()::add);
         previousConfigList = createCopyList(notificationList.getItems());
     }
-
-    public void selectNotificationSound() {
+    @FXML
+    private void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
         
         Stage stage = API.getInstance().getApplication().getPrimaryStage();
@@ -109,11 +109,11 @@ public class NotificationConfigPresenter extends ConfigPageBase {
         }
         
     }
-
-    public void save() {
+    @FXML
+    private void save() {
         NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(notificationList.getItems());
-        
+
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));
         typeManager.saveNotificationSound(currentSoundData);
         previousSoundData = currentSoundData;
@@ -128,8 +128,8 @@ public class NotificationConfigPresenter extends ConfigPageBase {
             return copy;
         }).collect(Collectors.toList());
     }
-
-    public void cancel() {
+    @FXML
+    private void cancel() {
         notificationList.getItems().setAll(createCopyList(previousConfigList));
         notificationSoundFileName.textProperty().setValue(previousSoundData.getNotificationSoundName());
         volumeText.textProperty().set(String.valueOf(previousSoundData.getNotificationSoundVolume()));

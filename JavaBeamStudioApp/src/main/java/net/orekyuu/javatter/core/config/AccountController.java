@@ -43,8 +43,8 @@ public class AccountController extends ConfigPageBase {
                             }
         });
     }
-
-    public void addAccount() {
+    @FXML
+    private void addAccount() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent parent= loader.load(Main.class.getResourceAsStream("Signin.fxml"));
@@ -59,8 +59,8 @@ public class AccountController extends ConfigPageBase {
             e.printStackTrace();
         }
     }
-
-    public void deleteAccount() {
+    @FXML
+    private void deleteAccount() {
         Task<Void> task = new Task<Void>() {
             private LocalClientUser user;
             @Override

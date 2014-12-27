@@ -257,7 +257,7 @@ public class TweetCellController implements Initializable {
      * リプライボタンから呼び出される。 リプライを行う。
      */
     @FXML
-    protected void reply() {
+    private void reply(){
         API
                 .getInstance()
                 .getApplication()
@@ -271,7 +271,7 @@ public class TweetCellController implements Initializable {
      *
      */
     @FXML
-    protected void favoriten() {
+    private void favoriten() {
         Twitter twitter = clientUser.getTwitter();
         if (status.isFavorited()) {
             // お気に入りにあるなら
@@ -297,7 +297,7 @@ public class TweetCellController implements Initializable {
      *
      */
     @FXML
-    protected void retweet() {
+    private void retweet() {
         Twitter twitter = clientUser.getTwitter();
         // RTされたものでなければ
         if (!status.isRetweeted()) {
@@ -317,8 +317,8 @@ public class TweetCellController implements Initializable {
             }
         }
     }
-
-    public void openVia() {
+    @FXML
+    private void openVia() {
         try {
             Desktop.getDesktop().browse(new URL(status.getViaLink()).toURI());
         } catch (IOException | URISyntaxException e) {
@@ -352,8 +352,8 @@ public class TweetCellController implements Initializable {
             throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
-
-    public void openUserProfile() {
+    @FXML
+    private void openUserProfile() {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
