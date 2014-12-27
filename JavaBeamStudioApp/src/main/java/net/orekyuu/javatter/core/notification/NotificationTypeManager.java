@@ -30,6 +30,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
 
     public void initialize() {
         notificationConfigs = loadNotificationConfig();
+        soundData = loadNotificationSoundData().orElse(new NotificationSoundData());
     }
 
     public Set<NotificationType> getNotificationTypes() {
