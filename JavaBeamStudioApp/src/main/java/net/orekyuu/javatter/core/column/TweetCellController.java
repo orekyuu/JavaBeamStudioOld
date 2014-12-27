@@ -355,7 +355,7 @@ public class TweetCellController implements Initializable {
     }
 
     private void openUserProfile(long l) {
-        UserModel.Builder.build(l, clientUser);
+        openUserProfile(UserModel.Builder.build(l, clientUser));
     }
 
     @FXML
