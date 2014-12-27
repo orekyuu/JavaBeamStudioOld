@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 /**
  * Javatterのユーザーストリームを表します
+ *
  * @since 1.0.0
  */
 public interface JavatterStream {

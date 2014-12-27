@@ -8,8 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- *ImageViewerを生成するクラス 
- *
+ * ImageViewerを生成するクラス
  */
 public class ImageViewerBuilder {
     private String title;
@@ -17,10 +16,11 @@ public class ImageViewerBuilder {
     private final static double WIDTH = 921.6;
     private final static double HEIGHT = 518.4;
     private ImageView imageView;
-    
+
     /**
      * ImageViewerのウインドウにタイトルを付けます。<br>
      * このメソッドが呼ばれなかった場合デフォルトのタイトルは「プレビュー」です。
+     *
      * @param text タイトル
      * @return 自身のインスタンス
      */
@@ -28,9 +28,11 @@ public class ImageViewerBuilder {
         title = text;
         return this;
     }
+
     /**
      * ImageViewerに表示するImageをセットします。<br>
      * imageがnullの場合NullPointerExceptionが発生します。
+     *
      * @param image イメージ
      * @return 自身のインスタンス
      */
@@ -40,7 +42,7 @@ public class ImageViewerBuilder {
         this.image = image;
         return this;
     }
-    
+
     /**
      * ImageViewerを表示します。<br>
      * このメソッドが呼ばれた時、setMediaされていない場合はNullPointerExceptionが発生します。
@@ -53,7 +55,7 @@ public class ImageViewerBuilder {
         StackPane pane = new StackPane();
 
         fitImage();
-        
+
         imageView.setImage(image);
 
         pane.getChildren().add(imageView);

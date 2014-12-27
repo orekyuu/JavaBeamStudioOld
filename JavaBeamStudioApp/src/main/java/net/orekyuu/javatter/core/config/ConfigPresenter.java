@@ -8,10 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
-import net.orekyuu.javatter.api.util.tasks.TaskUtil;
-import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.api.control.ControllablePane;
 import net.orekyuu.javatter.api.control.animator.FadeAnimator;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import net.orekyuu.javatter.core.Main;
 
 import java.net.URL;
 import java.util.ResourceBundle;

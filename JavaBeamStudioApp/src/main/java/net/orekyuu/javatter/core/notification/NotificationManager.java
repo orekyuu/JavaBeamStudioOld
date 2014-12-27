@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core.notification;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -11,6 +11,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.notification.Notification;
 import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.api.notification.NotificationSender;
@@ -18,9 +21,7 @@ import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.api.cache.IconCache;
-import net.orekyuu.javatter.api.models.StatusModel;
-import net.orekyuu.javatter.api.models.UserModel;
+import twitter4j.UserMentionEntity;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,9 +29,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
-
-import twitter4j.UserMentionEntity;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class NotificationManager implements NotificationSender {
     private BlockingQueue<Notification> notificationQueue = new LinkedBlockingQueue<>();
@@ -104,33 +105,33 @@ public class NotificationManager implements NotificationSender {
                         .setSubTitleImage(image).setSubTitle(model.getName())
                         .setMessage(model.getDescription()).build();
                 sender.sendNotification(notification);
-            }).addOnStatus(status->{
-                
-                if(status.isRetweet()){
+            }).addOnStatus(status -> {
+
+                if (status.isRetweet()) {
                     UserModel userModel = UserModel.Builder.build(status.getRetweetedStatus().getUser());
-                    if(users.stream().anyMatch(user->user.getAccessToken().getUserId() == userModel.getId())){
+                    if (users.stream().anyMatch(user -> user.getAccessToken().getUserId() == userModel.getId())) {
                         StatusModel statusModel = StatusModel.Builder.build(status);
                         Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                         Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
-                            .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
-                            .setMessage(statusModel.getOwner().getName()+"さんにリツイートされました\n"+statusModel.getRetweetFrom().getText()).build();
+                                .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
+                                .setMessage(statusModel.getOwner().getName() + "さんにリツイートされました\n" + statusModel.getRetweetFrom().getText()).build();
                         sender.sendNotification(notification);
                     }
                 }
-                if(users.stream().anyMatch(user -> Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId()))){
+                if (users.stream().anyMatch(user -> Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId()))) {
                     StatusModel statusModel = StatusModel.Builder.build(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
-                        .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
-                        .setMessage(statusModel.getOwner().getName()+"さんからのリプライ\n"+statusModel.getText()).build();
+                            .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
+                            .setMessage(statusModel.getOwner().getName() + "さんからのリプライ\n" + statusModel.getText()).build();
                     sender.sendNotification(notification);
                 }
-            }).addOnUserMemberAdditon((user,user2,userList) ->{
+            }).addOnUserMemberAdditon((user, user2, userList) -> {
                 UserModel userModel = UserModel.Builder.build(user2);
                 Image image = IconCache.getImage(userModel.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.ADDED_LIST)
-                    .setSubTitleImage(image).setSubTitle(userModel.getName()+":"+userList.getName())
-                    .setMessage(user.getName()+"さんは"+userModel.getName()+"さんのリスト:"+"「"+userList.getName()+"」"+"に追加されました").build();
+                        .setSubTitleImage(image).setSubTitle(userModel.getName() + ":" + userList.getName())
+                        .setMessage(user.getName() + "さんは" + userModel.getName() + "さんのリスト:" + "「" + userList.getName() + "」" + "に追加されました").build();
                 sender.sendNotification(notification);
             });
         });

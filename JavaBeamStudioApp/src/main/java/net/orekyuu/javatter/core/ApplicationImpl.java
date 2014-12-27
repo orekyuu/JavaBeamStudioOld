@@ -1,13 +1,12 @@
 package net.orekyuu.javatter.core;
 
 import com.sun.javafx.css.StyleManager;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
-import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;

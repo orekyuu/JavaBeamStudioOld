@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 /**
  * ユーザープロファイルに表示するタブのベースクラス
+ *
  * @since 1.0.0
  */
 public abstract class UserProfileTabBase implements Initializable {
@@ -19,8 +20,9 @@ public abstract class UserProfileTabBase implements Initializable {
 
     /**
      * ページの初期化を行います。
+     *
      * @param indicator 待機中に表示するインジケーター
-     * @param region 待機中に表示するRegion
+     * @param region    待機中に表示するRegion
      * @since 1.0.0
      */
     public final void initialize(ProgressIndicator indicator, Region region) {
@@ -41,6 +43,7 @@ public abstract class UserProfileTabBase implements Initializable {
 
     /**
      * 非同期タスクをバインドし、実行します。
+     *
      * @param task 実行したい非同期タスク
      * @since 1.0.0
      */
@@ -53,6 +56,7 @@ public abstract class UserProfileTabBase implements Initializable {
 
     /**
      * 情報を表示するユーザーを設定します
+     *
      * @param user 表示するユーザー
      * @since 1.0.0
      */
@@ -91,6 +95,7 @@ public abstract class UserProfileTabBase implements Initializable {
 
     /**
      * タブの名前を返す
+     *
      * @return タブの名前
      * @since 1.0.0
      */

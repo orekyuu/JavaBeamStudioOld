@@ -64,6 +64,7 @@ public class SigninController implements Initializable {
     public void setThisStage(Stage stage) {
         this.stage = stage;
     }
+
     @FXML
     private void submit() {
         indicatorPane.setVisible(true);

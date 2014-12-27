@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.column.UserCellController">
-   <children>
-       <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
-       <Region />
-      <Button mnemonicParsing="false" onAction="#openUserProfile" text="ユーザプロファイルを開く" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
-      <Label fx:id="name" text="name" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="2.0">
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-      </Label>
-   <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-pr" text="自己紹介文" wrappingWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="30.0" />
-   </children>
+<?import javafx.scene.text.Text?>
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="net.orekyuu.javatter.core.column.UserCellController">
+    <children>
+        <ImageView fx:id="profileimage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0"/>
+        <Region/>
+        <Button mnemonicParsing="false" onAction="#openUserProfile" text="ユーザプロファイルを開く" AnchorPane.rightAnchor="2.0"
+                AnchorPane.topAnchor="2.0"/>
+        <Label fx:id="name" text="name" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="2.0">
+            <padding>
+                <Insets right="20.0"/>
+            </padding>
+        </Label>
+        <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-pr" text="自己紹介文"
+              wrappingWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="60.0"
+              AnchorPane.topAnchor="30.0"/>
+    </children>
 </AnchorPane>

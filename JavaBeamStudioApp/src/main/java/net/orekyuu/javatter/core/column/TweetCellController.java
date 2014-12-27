@@ -18,24 +18,27 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.util.tasks.GetIconTask;
-import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
-import net.orekyuu.javatter.api.models.StatusModel;
-import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
 import twitter4j.*;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class TweetCellController implements Initializable {
 
@@ -77,8 +80,7 @@ public class TweetCellController implements Initializable {
     /**
      * アイテムの内容をStatusに従って切り替える
      *
-     * @param status
-     *            受け取ったステータス
+     * @param status 受け取ったステータス
      */
     public void updateTweetCell(StatusModel status) {
 
@@ -209,13 +211,13 @@ public class TweetCellController implements Initializable {
         int start = 0;
         for (TweetEntity entity : entities) {
             if (entity.getStart() - start > 0)
-                textFlow.getChildren().add(new Text(status.getText().substring(start,entity.getStart())));
+                textFlow.getChildren().add(new Text(status.getText().substring(start, entity.getStart())));
             addTweetEntity(entity, textFlow);
             start = entity.getEnd();
         }
         TweetEntity last = entities.get(entities.size() - 1);
         if (status.getText().length() - last.getEnd() > 0)
-            textFlow.getChildren().add(new Text(status.getText().substring(last.getEnd(),status.getText().length())));
+            textFlow.getChildren().add(new Text(status.getText().substring(last.getEnd(), status.getText().length())));
     }
 
     private void addTweetEntity(TweetEntity entity, TextFlow textFlow) {
@@ -226,7 +228,7 @@ public class TweetCellController implements Initializable {
         }
         if (entity instanceof UserMentionEntity) {
             Hyperlink hyperlink = new Hyperlink("@" + entity.getText());
-            hyperlink.setOnAction(e -> openUserProfile(((UserMentionEntity)entity).getId()));
+            hyperlink.setOnAction(e -> openUserProfile(((UserMentionEntity) entity).getId()));
             textFlow.getChildren().add(hyperlink);
         }
         if (entity instanceof HashtagEntity) {
@@ -247,8 +249,7 @@ public class TweetCellController implements Initializable {
     /**
      * clientUserをセットする
      *
-     * @param clientUser
-     *            カラムの持ち主
+     * @param clientUser カラムの持ち主
      */
     public void setClientUser(ClientUser clientUser) {
         this.clientUser = clientUser;
@@ -258,7 +259,7 @@ public class TweetCellController implements Initializable {
      * リプライボタンから呼び出される。 リプライを行う。
      */
     @FXML
-    private void reply(){
+    private void reply() {
         API
                 .getInstance()
                 .getApplication()
@@ -269,7 +270,6 @@ public class TweetCellController implements Initializable {
 
     /**
      * お気に入りボタンから呼び出されるメソッド お気に入りの追加/解除を行う
-     *
      */
     @FXML
     private void favoriten() {
@@ -295,7 +295,6 @@ public class TweetCellController implements Initializable {
 
     /**
      * リツイートボタンから呼び出される。 リツイートとリツイートの解除を行う。
-     *
      */
     @FXML
     private void retweet() {
@@ -318,6 +317,7 @@ public class TweetCellController implements Initializable {
             }
         }
     }
+
     @FXML
     private void openVia() {
         try {
@@ -341,16 +341,16 @@ public class TweetCellController implements Initializable {
 
     private String getConfigFormatName(UserModel user) {
         switch (nameDisplayType) {
-        case NAME:
-            return user.getName();
-        case ID:
-            return "@" + user.getScreenName();
-        case ID_NAME:
-            return "@" + user.getScreenName() + " / " + user.getName();
-        case NAME_ID:
-            return user.getName() + " / " + "@" + user.getScreenName();
-        default:
-            throw new IllegalArgumentException(nameDisplayType.name());
+            case NAME:
+                return user.getName();
+            case ID:
+                return "@" + user.getScreenName();
+            case ID_NAME:
+                return "@" + user.getScreenName() + " / " + user.getName();
+            case NAME_ID:
+                return user.getName() + " / " + "@" + user.getScreenName();
+            default:
+                throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
 

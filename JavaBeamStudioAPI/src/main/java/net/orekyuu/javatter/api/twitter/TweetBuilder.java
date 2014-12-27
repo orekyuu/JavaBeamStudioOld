@@ -8,7 +8,7 @@ import java.io.File;
 public interface TweetBuilder {
     /**
      * ツイートにイメージを添付します。<br>
-     * 
+     *
      * @param mediaFile 添付するファイル
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -17,13 +17,14 @@ public interface TweetBuilder {
 
     /**
      * ツイートを行います。
+     *
      * @since 1.0.0
      */
     void tweet();
 
     /**
      * ツイートを行うユーザーを設定します
-     * 
+     *
      * @param user 発言を行うユーザー
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -32,7 +33,7 @@ public interface TweetBuilder {
 
     /**
      * リプライ先を設定します
-     * 
+     *
      * @param id リプライ先のStatusID
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -41,7 +42,7 @@ public interface TweetBuilder {
 
     /**
      * ツイートの内容を設定します
-     * 
+     *
      * @param text 発言内容
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -50,6 +51,7 @@ public interface TweetBuilder {
 
     /**
      * ツイート失敗時のイベントを設定します
+     *
      * @param callback ツイート失敗時の処理
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -58,6 +60,7 @@ public interface TweetBuilder {
 
     /**
      * ツイート成功時のイベントを設定する
+     *
      * @param callback ツイート成功時の処理
      * @return 自身のインスタンス
      * @since 1.0.0
@@ -66,6 +69,7 @@ public interface TweetBuilder {
 
     /**
      * ツイートを非同期で行います
+     *
      * @return 自身のインスタンス
      * @since 1.0.0
      */

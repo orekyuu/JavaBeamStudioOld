@@ -7,6 +7,7 @@ import net.orekyuu.javatter.api.control.ControllablePane;
 
 /**
  * フェードして画面遷移します。
+ *
  * @since 1.0.0
  */
 public class FadeAnimator implements NodeTransitionAnimator {

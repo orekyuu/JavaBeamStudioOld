@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * クライアントに認証されているユーザーのレジスタ
+ *
  * @since 1.0.0
  */
 public class ClientUserRegister {

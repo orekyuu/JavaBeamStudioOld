@@ -7,6 +7,7 @@ import twitter4j.auth.AccessToken;
 
 /**
  * クライアントを利用するユーザー
+ *
  * @since 1.0.0
  */
 public interface ClientUser {
@@ -21,6 +22,7 @@ public interface ClientUser {
 
     /**
      * ClientUserが所有するTwitterインスタンスを返します。
+     *
      * @return Twitter
      * @since 1.0.0
      */

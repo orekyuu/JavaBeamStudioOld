@@ -54,6 +54,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
 
     /**
      * 情報を保存する
+     *
      * @param configs 保存するコンフィグ情報
      */
     public void saveNotificationConfigs(List<NotificationConfig> configs) {
@@ -79,60 +80,65 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             }
         }
     }
+
     /**
      * 通知音についての情報を保存する
+     *
      * @param data 保存する通知音のデータ
      */
-    public void saveNotificationSound(NotificationSoundData data){
+    public void saveNotificationSound(NotificationSoundData data) {
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
-        try{
+        try {
             connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + dbName);
-            Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
+            Dao<NotificationSoundData, Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             dao.createOrUpdate(data);
             soundData = data;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            if(connectionSource != null){
-                try{
+        } finally {
+            if (connectionSource != null) {
+                try {
                     connectionSource.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
+
     /**
      * 通知音に関するデータを返す
+     *
      * @return 取得に失敗すると空のデータを返す。
      */
-    public Optional<NotificationSoundData> loadNotificationSoundData(){
+    public Optional<NotificationSoundData> loadNotificationSoundData() {
         makeFile();
         JdbcPooledConnectionSource connectionSource = null;
         NotificationSoundData data = null;
-        try{
+        try {
             connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + dbName);
-            Dao<NotificationSoundData,Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
+            Dao<NotificationSoundData, Integer> dao = DaoManager.createDao(connectionSource, NotificationSoundData.class);
             TableUtils.createTableIfNotExists(connectionSource, NotificationSoundData.class);
             data = dao.queryForId(0);
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            if(connectionSource != null){
-                try{
+        } finally {
+            if (connectionSource != null) {
+                try {
                     connectionSource.close();
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }
         return Optional.ofNullable(data);
     }
-    
+
     /**
      * 保存されている通知音のパスに実際にファイルが存在するかどうかを取得する。
+     *
      * @return 存在しなければければtrue、存在すればFalse
      */
     public boolean soundDataIsEmpty() {
@@ -146,6 +152,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
 
     /**
      * 通知するかを返す
+     *
      * @param type 通知タイプ
      * @return 通知設定がONならtrue
      */
@@ -158,6 +165,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
 
     /**
      * 通知音に関する設定を返す
+     *
      * @return 通知音の設定
      */
     public NotificationSoundData getNotificationSoundData() {
@@ -202,6 +210,7 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             e.printStackTrace();
         }
     }
+
     @DatabaseTable(tableName = "notification_config")
     public static class NotificationConfig {
         @DatabaseField(canBeNull = false, id = true)
@@ -225,40 +234,42 @@ public class NotificationTypeManager implements NotificationTypeRegister {
             this.isNotice = isNotice;
         }
     }
+
     @DatabaseTable(tableName = "sound")
     public static class NotificationSoundData {
         @DatabaseField(canBeNull = false)
         private String notificationSoundPath = "";
-        
+
         @DatabaseField(canBeNull = false)
         private String notificationSoundName = "";
-        
+
         @DatabaseField(canBeNull = false)
         private double notificationSoundvolume = 0.5;
-        
-        @DatabaseField(canBeNull = false,id = true)
+
+        @DatabaseField(canBeNull = false, id = true)
         private int id = 0;
-        
-        public void setNotificationSoundPath(String path){
+
+        public void setNotificationSoundPath(String path) {
             notificationSoundPath = path;
         }
-        
-        public void setNotificationSoundName(String name){
+
+        public void setNotificationSoundName(String name) {
             notificationSoundName = name;
         }
-        
-        public void setNotificationSoundVolume(double volume){
+
+        public void setNotificationSoundVolume(double volume) {
             notificationSoundvolume = volume;
         }
-        
-        public String getNotificationSoundPath(){
+
+        public String getNotificationSoundPath() {
             return notificationSoundPath;
         }
-        
-        public String getNotificationSoundName(){
+
+        public String getNotificationSoundName() {
             return notificationSoundName;
         }
-        public double getNotificationSoundVolume(){
+
+        public double getNotificationSoundVolume() {
             return notificationSoundvolume;
         }
 

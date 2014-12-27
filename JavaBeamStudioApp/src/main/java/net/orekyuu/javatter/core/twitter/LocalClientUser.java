@@ -1,28 +1,5 @@
 package net.orekyuu.javatter.core.twitter;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.stream.JavatterStream;
-import net.orekyuu.javatter.core.twitter.stream.JavatterStreamImpl;
-import twitter4j.DirectMessage;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.User;
-import twitter4j.UserList;
-import twitter4j.UserStreamAdapter;
-import twitter4j.auth.AccessToken;
-import twitter4j.conf.ConfigurationBuilder;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.field.DatabaseField;
@@ -31,6 +8,18 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.table.TableUtils;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.api.twitter.stream.JavatterStream;
+import net.orekyuu.javatter.core.twitter.stream.JavatterStreamImpl;
+import twitter4j.*;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * ローカルに保存されているユーザー

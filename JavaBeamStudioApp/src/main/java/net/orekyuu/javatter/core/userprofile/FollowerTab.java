@@ -23,7 +23,7 @@ public class FollowerTab extends UserProfileTabBase {
     protected void initializeBackground(UserModel user) {
         this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
-            users = clientUser.getTwitter().getFollowersList(user.getId(),-1L,FOLLOWERS_LIMIT);
+            users = clientUser.getTwitter().getFollowersList(user.getId(), -1L, FOLLOWERS_LIMIT);
         } catch (TwitterException e) {
             e.printStackTrace();
         }

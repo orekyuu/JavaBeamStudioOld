@@ -55,7 +55,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws IOException {
-        Thread.setDefaultUncaughtExceptionHandler((thread,throwable)->{
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             ExceptionDialogBuilder.create(new Exception(throwable));
         });
         launch(args);

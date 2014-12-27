@@ -1,36 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.orekyuu.javatter.core.userprofile.UserProfileInfoPresenter">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="net.orekyuu.javatter.core.userprofile.UserProfileInfoPresenter">
     <children>
-        <SplitPane dividerPositions="0.5" layoutX="10.0" layoutY="9.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <SplitPane dividerPositions="0.5" layoutX="10.0" layoutY="9.0" prefHeight="160.0" prefWidth="200.0"
+                   AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                   AnchorPane.topAnchor="5.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <Button fx:id="followButton" layoutY="176.0" mnemonicParsing="false" text="フォローする" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" />
-                        <Button onAction="#openBrowser" mnemonicParsing="false" text="Twitterユーザページへ" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="Tweet:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                        <Text fx:id="tweet" layoutX="234.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="10.0" />
-                        <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="Follow:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="30.0" />
-                        <Text layoutX="20.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="Follower:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0" />
-                        <Text layoutX="20.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="List:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="70.0" />
-                        <Text layoutX="30.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="Favolite:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="90.0" />
-                        <Text fx:id="follow" layoutX="244.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="30.0" />
-                        <Text fx:id="follower" layoutX="150.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="50.0" />
-                        <Text fx:id="list" layoutX="160.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="70.0" />
-                        <Text fx:id="favorite" layoutX="170.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="90.0" />
-                        <Text fx:id="isFriends" layoutX="14.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="10.0" />
+                        <Button fx:id="followButton" layoutY="176.0" mnemonicParsing="false" text="フォローする"
+                                AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0"/>
+                        <Button onAction="#openBrowser" mnemonicParsing="false" text="Twitterユーザページへ"
+                                AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-unit" text="Tweet:"
+                              AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+                        <Text fx:id="tweet" layoutX="234.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0"
+                              AnchorPane.topAnchor="10.0"/>
+                        <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-unit" text="Follow:" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="30.0"/>
+                        <Text layoutX="20.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-unit" text="Follower:" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="50.0"/>
+                        <Text layoutX="20.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-unit" text="List:" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="70.0"/>
+                        <Text layoutX="30.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-unit" text="Favolite:" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="90.0"/>
+                        <Text fx:id="follow" layoutX="244.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0"
+                              AnchorPane.topAnchor="30.0"/>
+                        <Text fx:id="follower" layoutX="150.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0"
+                              AnchorPane.topAnchor="50.0"/>
+                        <Text fx:id="list" layoutX="160.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0"
+                              AnchorPane.topAnchor="70.0"/>
+                        <Text fx:id="favorite" layoutX="170.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-number" text="N" AnchorPane.leftAnchor="150.0"
+                              AnchorPane.topAnchor="90.0"/>
+                        <Text fx:id="isFriends" layoutX="14.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              text="N" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="10.0"/>
                     </children>
                 </AnchorPane>
                 <VBox fx:id="rightPane" minHeight="0.0" minWidth="0.0">
                     <children>
-                        <Text fx:id="location" layoutX="11.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-location" text="location" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                        <Hyperlink fx:id="webSite" onAction="#openWebSite" wrapText="true" layoutX="11.0" layoutY="36.0" styleClass="profile-site" text="website.com" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="40.0" />
-                        <Text fx:id="description" layoutX="11.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profile-pr" text="自己紹介文" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="70.0" />
+                        <Text fx:id="location" layoutX="11.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-location" text="location" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="10.0"/>
+                        <Hyperlink fx:id="webSite" onAction="#openWebSite" wrapText="true" layoutX="11.0" layoutY="36.0"
+                                   styleClass="profile-site" text="website.com" AnchorPane.leftAnchor="10.0"
+                                   AnchorPane.topAnchor="40.0"/>
+                        <Text fx:id="description" layoutX="11.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="profile-pr" text="自己紹介文" AnchorPane.leftAnchor="10.0"
+                              AnchorPane.topAnchor="70.0"/>
                     </children>
                 </VBox>
             </items>

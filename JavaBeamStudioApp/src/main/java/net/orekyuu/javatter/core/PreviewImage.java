@@ -53,6 +53,7 @@ public class PreviewImage extends ImageView {
 
     /**
      * プレビューで表示しているFileを返します。
+     *
      * @return プレビューしているファイル
      */
     public File getPreviewFile() {
@@ -61,6 +62,7 @@ public class PreviewImage extends ImageView {
 
     /**
      * プレビューで表示しているファイルのプロパティです。
+     *
      * @return 表示しているファイルのプロパティ
      */
     public ObjectProperty<File> previewFileProperty() {
@@ -69,6 +71,7 @@ public class PreviewImage extends ImageView {
 
     /**
      * プレビューに表示するファイルを設定します。
+     *
      * @param previewFile 表示したい画像ファイル
      */
     public void setPreviewFile(File previewFile) {

@@ -6,6 +6,7 @@ import net.orekyuu.javatter.api.twitter.ClientUser;
 
 /**
  * {@link StatusModel}を取得する非同期タスクです。
+ *
  * @since 1.0.0
  */
 public class GetStatusModelTask extends Task<StatusModel> {
@@ -14,7 +15,8 @@ public class GetStatusModelTask extends Task<StatusModel> {
 
     /**
      * 指定のIDの{@link StatusModel}を取得する非同期タスクを作成します。
-     * @param id ツイートID
+     *
+     * @param id   ツイートID
      * @param user ツイートを取得する{@link ClientUser}
      * @since 1.0.0
      */

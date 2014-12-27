@@ -5,9 +5,9 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
+import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.api.models.StatusModel;
 
 import java.io.IOException;
 
@@ -20,8 +20,8 @@ public class TweetCell extends ListCell<StatusModel> {
 
     /**
      * コンストラクタ
-     * @param clientuser
-     *            UserStreamの持つClientUser
+     *
+     * @param clientuser UserStreamの持つClientUser
      */
     public TweetCell(ClientUser clientuser) {
         super();
@@ -31,10 +31,8 @@ public class TweetCell extends ListCell<StatusModel> {
     /**
      * アイテムの内容をStatusに従って切り替える
      *
-     * @param status
-     *            受け取ったステータス
-     * @param empty
-     *            空かどうか
+     * @param status 受け取ったステータス
+     * @param empty  空かどうか
      */
     @Override
     protected void updateItem(StatusModel status, boolean empty) {
@@ -62,7 +60,7 @@ public class TweetCell extends ListCell<StatusModel> {
                 tweetCellController = fxmlLoader.getController();
                 tweetCellController.setClientUser(clientUser);
             }
-            if(tweetCellController != null)
+            if (tweetCellController != null)
                 tweetCellController.updateTweetCell(status);
         }
     }

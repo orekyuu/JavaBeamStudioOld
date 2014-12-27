@@ -174,6 +174,7 @@ public final class UserModel {
 
     /**
      * {@link net.orekyuu.javatter.api.models.UserModel}を作成するビルダーです
+     *
      * @since 1.0.0
      */
     public final static class Builder {
@@ -189,10 +190,11 @@ public final class UserModel {
 
         /**
          * {@link net.orekyuu.javatter.api.models.UserModel}を作成します
+         *
          * @param user 情報元
          * @return 引数のユーザーを元に作られた{@link UserModel}
+         * @throws com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          * @since 1.0.0
-         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          */
         public static UserModel build(User user) {
             try {
@@ -205,11 +207,12 @@ public final class UserModel {
         /**
          * [@link ClientUser}のAPIを使用してidに対応するユーザーの{@link UserModel}を作成します。<br>
          * TwitterAPIを使用するため、呼び出し回数と処理時間に気をつけてください。
-         * @param id ユーザーID
+         *
+         * @param id         ユーザーID
          * @param clientUser 使用するユーザー
          * @return 引数のユーザーを元に作られた{@link UserModel}
+         * @throws com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          * @since 1.0.0
-         * @exception com.google.common.util.concurrent.UncheckedExecutionException キャッシュに失敗した時
          */
         public static UserModel build(long id, ClientUser clientUser) {
             Optional<UserModel> first = cache.asMap().values().stream()

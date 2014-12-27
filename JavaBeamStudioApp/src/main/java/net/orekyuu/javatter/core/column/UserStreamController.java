@@ -1,8 +1,5 @@
 package net.orekyuu.javatter.core.column;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -14,6 +11,9 @@ import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.TwitterException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * userstreamのコントローラです。
@@ -37,7 +37,9 @@ public class UserStreamController implements ColumnController {
                     e.printStackTrace();
                 }
                 return new ArrayList<>();
-            };
+            }
+
+            ;
 
             @Override
             protected void succeeded() {
