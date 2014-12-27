@@ -226,6 +226,7 @@ public class TweetCellController implements Initializable {
         }
         if (entity instanceof UserMentionEntity) {
             Hyperlink hyperlink = new Hyperlink("@" + entity.getText());
+            hyperlink.setOnAction(e -> openUserProfile(entity.getText()));
             textFlow.getChildren().add(hyperlink);
         }
         if (entity instanceof HashtagEntity) {
@@ -352,13 +353,26 @@ public class TweetCellController implements Initializable {
             throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
+
+    private void openUserProfile(String username) {
+    	try {
+        	openUserProfile(UserModel.Builder.build(clientUser.getTwitter().showUser(username)));
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+    }
+
     @FXML
     private void openUserProfile() {
+    	openUserProfile(status.getOwner());
+    }
+
+    private void openUserProfile(UserModel usermodel) {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
             UserProfilePresenter presenter = loader.getController();
-            presenter.setUser(status.getOwner());
+            presenter.setUser(usermodel);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.getScene().getStylesheets().add(
