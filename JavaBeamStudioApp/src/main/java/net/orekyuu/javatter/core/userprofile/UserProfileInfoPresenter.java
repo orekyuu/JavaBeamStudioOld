@@ -121,14 +121,14 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
                 ClientUser clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
                 if (followButton.isSelected()) {
                     try {
-                        clientUser.getTwitter().destroyFriendship(user.getId());
+                        clientUser.getTwitter().createFriendship(user.getId());
                     } catch (TwitterException e) {
                         e.printStackTrace();
                     }
                     return false;
                 } else {
                     try {
-                        clientUser.getTwitter().createFriendship(user.getId());
+                        clientUser.getTwitter().destroyFriendship(user.getId());
                     } catch (TwitterException e) {
                         e.printStackTrace();
                     }
