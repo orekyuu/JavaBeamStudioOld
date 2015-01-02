@@ -108,4 +108,9 @@ public class ApplicationImpl implements Application {
         }
     }
 
+    @Override
+    public String getVersion() {
+        return "1.0.0";
+    }
+
 }

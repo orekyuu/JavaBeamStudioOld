@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.core.plugin.loader;
 
 import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.util.VersionComparator;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 
 import java.io.File;
@@ -54,6 +55,12 @@ public class JavatterPluginLoader {
                 }
             }
         }
+
+        String version = API.getInstance().getApplication().getVersion();
+        VersionComparator comparator = new VersionComparator();
+        containers.stream().filter(container -> comparator.compare(version, container.getRequireVersion()) < 0).forEach(container -> {
+            loadError(container.getName() + "(" + container.getVersion() + ")は" + container.getRequireVersion() + "以上のJavaビーム工房でしか使えません。");
+        });
     }
 
     private void loadError(String message) {
