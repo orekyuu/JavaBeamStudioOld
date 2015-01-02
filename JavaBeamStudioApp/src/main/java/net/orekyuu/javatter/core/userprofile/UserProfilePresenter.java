@@ -15,8 +15,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.Main;
 
@@ -63,14 +65,13 @@ public class UserProfilePresenter implements Initializable {
         };
         Executors.newSingleThreadExecutor().submit(task);
 
-        Arrays.asList("profiletab.fxml", "tweet_tab.fxml",
-                "favorites_tab.fxml", "follow_tab.fxml", "follower_tab.fxml")
-                .stream().map(this::createTab).forEach(tabpane.getTabs()::add);
-
+        UserProfileRegister userProfileRegister = API.getInstance().getUserProfileRegister();
+        UserProfileTabManager manager = (UserProfileTabManager) userProfileRegister;
+        manager.getRegisteredTabs().stream().map(this::createTab).forEach(tabpane.getTabs()::add);
     }
 
-    private Tab createTab(String path) {
-        InputStream stream = Main.class.getResourceAsStream(path);
+    private Tab createTab(UserProfileTabManager.TabInfo info) {
+        InputStream stream = info.createInputStream();
         Tab tab = new Tab();
         StackPane stackPane = new StackPane();
         ProgressIndicator indicator = new ProgressIndicator();
