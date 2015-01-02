@@ -1,0 +1,7 @@
+{
+  "id": "example_plugin",
+  "name": "example",
+  "version": "1.0",
+  "requireVersion": "1.0.0",
+  "entryPoint": "com.example.Main"
+}

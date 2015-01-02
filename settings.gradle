@@ -1,3 +1,4 @@
 rootProject.name = 'IS_Javatter'
 
-include 'JavaBeamStudioAPI', 'JavaBeamStudioApp'
+include 'JavaBeamStudioAPI', 'JavaBeamStudioApp', 'SamplePlugin'
+
