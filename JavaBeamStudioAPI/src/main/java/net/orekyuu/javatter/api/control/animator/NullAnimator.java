@@ -8,7 +8,7 @@ import net.orekyuu.javatter.api.control.ControllablePane;
  *
  * @since 1.0.0
  */
-public class NullAnimator implements NodeTransitionAnimator {
+public final class NullAnimator implements NodeTransitionAnimator {
 
     @Override
     public void transition(ControllablePane pane, Node before, Node after) {

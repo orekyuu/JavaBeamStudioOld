@@ -10,7 +10,7 @@ import net.orekyuu.javatter.api.control.ControllablePane;
  *
  * @since 1.0.0
  */
-public class ScrollAnimator implements NodeTransitionAnimator {
+public final class ScrollAnimator implements NodeTransitionAnimator {
 
     private int duration;
 

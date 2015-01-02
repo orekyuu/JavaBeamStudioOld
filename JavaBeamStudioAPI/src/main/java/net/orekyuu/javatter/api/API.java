@@ -7,7 +7,7 @@ import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 /**
  * Javaビーム工房が提供するAPIです
  */
-public class API {
+public final class API {
     private static final API instance = new API();
     private Application application;
     private ColumnRegister columnRegister;

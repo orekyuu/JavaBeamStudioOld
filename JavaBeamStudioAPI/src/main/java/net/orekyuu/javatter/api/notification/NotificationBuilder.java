@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
  *
  * @since 1.0.0
  */
-public class NotificationBuilder {
+public final class NotificationBuilder {
 
     private NotificationType type;
     private Image subTitleImage;

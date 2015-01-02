@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  *
  * @since 1.0.0
  */
-public class ClientUserRegister {
+public final class ClientUserRegister {
 
     private static ClientUserRegister instance = new ClientUserRegister();
     private final List<ClientUser> users = new LinkedList<>();

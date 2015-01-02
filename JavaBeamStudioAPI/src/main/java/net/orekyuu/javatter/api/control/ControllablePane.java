@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @since 1.0.0
  */
-public class ControllablePane extends StackPane {
+public final class ControllablePane extends StackPane {
     private Map<String, Node> nodes = new HashMap<>();
     private NodeTransitionAnimator animator = new NullAnimator();
 
