@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.core.column;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,6 +42,20 @@ public class ColumnPresenter implements Initializable {
 
         columnType.getSelectionModel().selectedItemProperty().addListener(listener -> changeColumn());
         account.getSelectionModel().selectedItemProperty().addListener(listener -> changeColumn());
+    }
+
+    public void changeUserInfo() {
+        String item = account.getSelectionModel().getSelectedItem();
+        Platform.runLater(() ->{
+            account.getItems().clear();
+            ClientUserRegister.getInstance().registeredUserList()
+                    .stream()
+                    .map(ClientUser::getName)
+                    .forEach(account.getItems()::add);
+            if (account.getItems().contains(item)) {
+                account.getSelectionModel().select(item);
+            }
+        });
     }
 
     private void changeColumn() {

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
@@ -17,6 +18,7 @@ import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AccountController extends ConfigPageBase {
     @FXML
@@ -55,7 +57,11 @@ public class AccountController extends ConfigPageBase {
             stage.setScene(new Scene(parent));
             stage.setTitle("認証");
             stage.centerOnScreen();
-            stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            accountList.getItems().clear();
+            List<ClientUser> userList = ClientUserRegister.getInstance().registeredUserList();
+            userList.forEach(accountList.getItems()::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,9 +73,10 @@ public class AccountController extends ConfigPageBase {
             private LocalClientUser user;
 
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();
                 user.delete();
+                ClientUserRegister.getInstance().removeUsers(u -> user.getName().equals(user.getName()));
                 return null;
             }
 

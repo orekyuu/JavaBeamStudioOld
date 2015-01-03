@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import twitter4j.Twitter;
@@ -40,7 +41,7 @@ public class SigninController implements Initializable {
         indicatorPane.setVisible(true);
         Task<Void> task = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     twitter = new TwitterFactory().getInstance();
                     twitter.setOAuthConsumer("rMvLmU5qMgbZwg92Is5g", "RD28Uuu44KeMOs90UuqXAAoVTWXRTmD4H8xYKZSgBk");
@@ -70,11 +71,12 @@ public class SigninController implements Initializable {
         indicatorPane.setVisible(true);
         Task<Boolean> task = new Task<Boolean>() {
             @Override
-            protected Boolean call() throws Exception {
+            protected Boolean call() {
                 try {
                     AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
                     LocalClientUser localClientUser = new LocalClientUser(accessToken);
                     localClientUser.save();
+                    ClientUserRegister.getInstance().registerUser(localClientUser);
                     return true;
                 } catch (TwitterException e) {
                     e.printStackTrace();
