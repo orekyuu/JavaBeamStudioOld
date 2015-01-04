@@ -56,7 +56,7 @@ public class MentionsController implements ColumnController {
     private void onStatus(Status status) {
         boolean match = Arrays.stream(status.getUserMentionEntities())
                 .map(UserMentionEntity::getScreenName).anyMatch(name -> name.equals(user.getName()));
-        if (!match) {
+        if (!match && status.isRetweet()) {
             return;
         }
 
