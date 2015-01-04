@@ -20,12 +20,9 @@ public class Main {
         System.out.println("load");
         CurrentWindow currentWindow = API.getInstance().getApplication().getCurrentWindow();
         StringProperty textProperty = currentWindow.getTweetTextProperty();
-        textProperty.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                if (textProperty.getValue().equals("/hoge")) {
-                    textProperty.setValue("ほげらりおん");
-                }
+        textProperty.addListener(observable -> {
+            if (textProperty.getValue().equals("/hoge")) {
+                textProperty.setValue("ほげらりおん");
             }
         });
     }
