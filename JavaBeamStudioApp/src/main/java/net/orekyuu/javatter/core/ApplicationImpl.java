@@ -13,6 +13,7 @@ import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
+import net.orekyuu.javatter.core.plugin.PluginManager;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class ApplicationImpl implements Application {
     public void onLoad() {
         loadClientUsers();
         registerColumns();
+        PluginManager.getInstance().load();
         StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
 
         NotificationTypeRegister notificationTypeRegister = API.getInstance().getNotificationTypeRegister();
@@ -83,6 +85,7 @@ public class ApplicationImpl implements Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        PluginManager.getInstance().callOnLoad();
         primaryStage.setTitle("Javaビーム工房");
         primaryStage.centerOnScreen();
         primaryStage.show();
@@ -103,6 +106,11 @@ public class ApplicationImpl implements Application {
         } else {
             throw new InternalError("返されるオブジェクトがCurrentWindowを実装していない。もしくは何らかの理由でnullになっています。");
         }
+    }
+
+    @Override
+    public String getVersion() {
+        return "1.0.0";
     }
 
 }

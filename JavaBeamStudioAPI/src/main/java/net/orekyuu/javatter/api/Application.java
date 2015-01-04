@@ -56,4 +56,11 @@ public interface Application {
      */
     Stage getPrimaryStage();
 
+    /**
+     * Javaビーム工房のバージョンを返します。
+     * @return 現在のバージョン
+     * @since 1.0.0
+     */
+    String getVersion();
+
 }

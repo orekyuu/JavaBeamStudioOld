@@ -23,6 +23,7 @@ dependencies {
     compile 'org.twitter4j:twitter4j-async:4.0.2'
     compile 'org.twitter4j:twitter4j-stream:4.0.2'
     compile group: 'com.google.guava', name: 'guava', version: '12.0'
+    compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-jdbc:4.48'
     compile 'org.xerial:sqlite-jdbc:3.8.6'

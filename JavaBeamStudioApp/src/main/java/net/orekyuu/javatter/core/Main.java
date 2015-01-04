@@ -9,6 +9,7 @@ import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
+import net.orekyuu.javatter.core.userprofile.UserProfileTabManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -26,6 +27,7 @@ public class Main extends Application {
         setField("columnRegister", new ColumnManager());
         setField("notificationSender", new NotificationManager());
         setField("notificationTypeRegister", new NotificationTypeManager());
+        setField("userProfileRegister", new UserProfileTabManager());
     }
 
     private void setField(String fieldName, Object value) throws ReflectiveOperationException {

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @since 1.0.0
  */
-public class IconCache {
+public final class IconCache {
 
     private static LoadingCache<String, Image> cache;
 
