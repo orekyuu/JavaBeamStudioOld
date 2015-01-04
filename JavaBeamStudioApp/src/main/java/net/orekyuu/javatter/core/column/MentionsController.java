@@ -56,15 +56,13 @@ public class MentionsController implements ColumnController {
     private void onStatus(Status status) {
         boolean match = Arrays.stream(status.getUserMentionEntities())
                 .map(UserMentionEntity::getScreenName).anyMatch(name -> name.equals(user.getName()));
-        if (!match && status.isRetweet()) {
-            return;
+        if (match && !status.isRetweet()) {
+            Platform.runLater(() -> {
+                mentionsList.getItems().add(0,
+                        StatusModel.Builder.build(status));
+                if (mentionsList.getItems().size() > STATUSES_LIMIT)
+                    mentionsList.getItems().remove(STATUSES_LIMIT);
+            });
         }
-
-        Platform.runLater(() -> {
-            mentionsList.getItems().add(0,
-                    StatusModel.Builder.build(status));
-            if (mentionsList.getItems().size() > STATUSES_LIMIT)
-                mentionsList.getItems().remove(STATUSES_LIMIT);
-        });
     }
 }
