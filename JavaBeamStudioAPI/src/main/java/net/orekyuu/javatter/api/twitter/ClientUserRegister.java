@@ -14,6 +14,7 @@ public final class ClientUserRegister {
 
     private static ClientUserRegister instance = new ClientUserRegister();
     private final List<ClientUser> users = new LinkedList<>();
+    private List<UserRegisterListener> listeners = new LinkedList<>();
 
     private ClientUserRegister() {
 
@@ -37,6 +38,7 @@ public final class ClientUserRegister {
      */
     public void registerUser(ClientUser user) {
         users.add(user);
+        listeners.forEach(i -> i.onChanged(registeredUserList()));
     }
 
     /**
@@ -67,6 +69,7 @@ public final class ClientUserRegister {
      */
     public void removeUsers(Predicate<ClientUser> condition) {
         users.removeIf(condition);
+        listeners.forEach(i -> i.onChanged(registeredUserList()));
     }
 
     /**
@@ -78,5 +81,28 @@ public final class ClientUserRegister {
      */
     public List<ClientUser> getUsers(Predicate<ClientUser> condition) {
         return users.stream().filter(condition).collect(Collectors.toList());
+    }
+
+    /**
+     * 登録情報変更時のリスナーを追加します。
+     * @param listener {@link net.orekyuu.javatter.api.twitter.UserRegisterListener}
+     */
+    public void addUserChangeListener(UserRegisterListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * 登録情報変更時のリスナーを削除します。
+     * @param listener 削除したい{@link net.orekyuu.javatter.api.twitter.UserRegisterListener}
+     */
+    public void removeUserChangeListener(UserRegisterListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * 登録情報変更時のリスナーを空にします。
+     */
+    public void clearUserChangeListener() {
+        listeners.clear();
     }
 }

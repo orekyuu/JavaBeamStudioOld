@@ -82,8 +82,27 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         users = ClientUserRegister.getInstance().getUsers(s -> true);
+        ClientUserRegister.getInstance().addUserChangeListener(list -> {
+            users = list;
+            initUser();
+            columnPresenterList.forEach(ColumnPresenter::changeUserInfo);
+        });
+        initUser();
+
+        initPreviewImageViews();
+        tweetTextArea.setOnDragOver(this::onDrop);
+        tweetTextArea.setOnDragDropped(this::onDroped);
+        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
+        remaining.textProperty().bind(Bindings.convert(length));
+        tweetTextArea.setOnKeyPressed(this::tweetShortCut);
+        initColumns();
+    }
+
+    private void initUser() {
         currentUser.setValue(getCurrentUser().orElse(null));
         currentUserProperty.bind(currentUser);
+        myProfileImage.clear();
+        nowUserIndex = 0;
 
         if (!users.isEmpty()) {
             Platform.runLater(() -> {
@@ -98,15 +117,12 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
                     e.printStackTrace();
                 }
             });
-
+        } else {
+            Platform.runLater(() -> {
+                clientUserImage.setImage(null);
+                clientUserName.setText("null");
+            });
         }
-        initPreviewImageViews();
-        tweetTextArea.setOnDragOver(this::onDrop);
-        tweetTextArea.setOnDragDropped(this::onDroped);
-        NumberBinding length = Bindings.subtract(140, Bindings.length(tweetTextArea.textProperty()));
-        remaining.textProperty().bind(Bindings.convert(length));
-        tweetTextArea.setOnKeyPressed(this::tweetShortCut);
-        initColumns();
     }
 
     private void tweetShortCut(KeyEvent keyEvent) {
