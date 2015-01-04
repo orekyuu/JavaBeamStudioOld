@@ -1,5 +1,7 @@
 package net.orekyuu.javatter.core.plugin.loader;
 
+import java.util.Optional;
+
 public final class PluginContainer {
 
     private final String name;
@@ -8,6 +10,7 @@ public final class PluginContainer {
     private final String entryPoint;
     private final String requireVersion;
     private final String filePath;
+    private final Optional<String> configResource;
 
     PluginContainer(PluginInfoFile info, String filePath) {
         name = info.getName();
@@ -15,6 +18,7 @@ public final class PluginContainer {
         version = info.getVersion();
         entryPoint = info.getEntryPoint();
         requireVersion = info.getRequireVersion();
+        configResource = Optional.ofNullable(info.getConfigResource());
         this.filePath = filePath;
     }
 
@@ -24,6 +28,7 @@ public final class PluginContainer {
         version = container.version;
         entryPoint = container.entryPoint;
         requireVersion = container.requireVersion;
+        configResource = container.configResource;
         filePath = container.filePath;
     }
 
@@ -51,6 +56,10 @@ public final class PluginContainer {
         return filePath;
     }
 
+    public Optional<String> getConfigResource() {
+        return configResource;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PluginContainer{");
@@ -59,6 +68,7 @@ public final class PluginContainer {
         sb.append(", version='").append(version).append('\'');
         sb.append(", entryPoint='").append(entryPoint).append('\'');
         sb.append(", requireVersion='").append(requireVersion).append('\'');
+        sb.append(", configResource='").append(configResource).append('\'');
         sb.append(", filePath='").append(filePath).append('\'');
         sb.append('}');
         return sb.toString();
