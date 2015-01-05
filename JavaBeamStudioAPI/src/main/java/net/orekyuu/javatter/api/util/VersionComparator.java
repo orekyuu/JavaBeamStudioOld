@@ -3,6 +3,10 @@ package net.orekyuu.javatter.api.util;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * バージョンを比較するコンパレータ
+ * @since 1.0.0
+ */
 public class VersionComparator implements Comparator<String> {
     @Override
     public int compare(String o1, String o2) {
