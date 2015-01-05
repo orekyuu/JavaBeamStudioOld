@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <Text text="プラグイン設定" styleClass="title" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"/>
+    <Text text="読み込んだプラグインの設定一覧です。" styleClass="item-caption" AnchorPane.topAnchor="50" AnchorPane.leftAnchor="10"/>
+</AnchorPane>
