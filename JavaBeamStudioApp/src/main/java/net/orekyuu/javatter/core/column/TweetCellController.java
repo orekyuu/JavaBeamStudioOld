@@ -28,6 +28,7 @@ import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
+import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.*;
 
 import java.awt.*;
@@ -381,5 +382,9 @@ public class TweetCellController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    private void shootJavaBeam(){
+        new TweetBuilderImpl().setAsync().setClientUser(clientUser).setText("@"+status.getOwner().getScreenName()+" Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").setReplyTo(status.getStatusId()).tweet();
     }
 }
