@@ -7,8 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -69,9 +70,11 @@ public class TweetCellController implements Initializable {
     private Label time;
     @FXML
     private ImageView profileimage;
+    @FXML
+    private MenuButton actions;
 
     private ClientUser clientUser;
-
+    private boolean addedShowConversationItem = false;
     /**
      * timeラベル用の時刻フォーマット
      */
@@ -113,9 +116,24 @@ public class TweetCellController implements Initializable {
         } else {
             startRtweetIconTask(status, retweetFrom);
         }
+        box.getChildren().remove(replyRoot);
+        replyRoot.setVisible(false);
+        replyName.setText("");
+        replyText.getChildren().clear();
+        replyImage.setImage(null);
 
         // リプライ先
-        if (s.getReplyStatusId() != -1) {
+        if (s.getReplyStatusId() != -1 && !addedShowConversationItem) {
+            MenuItem item = new MenuItem();
+            item.setText("会話を表示");
+            item.setOnAction(e -> showConversation(s));
+            actions.getItems().add(item);
+            addedShowConversationItem = true;
+        }
+    }
+
+
+    private void showConversation(StatusModel s) {
             Task<StatusModel> modelTask = new Task<StatusModel>() {
                 @Override
                 protected StatusModel call() throws Exception {
@@ -134,13 +152,6 @@ public class TweetCellController implements Initializable {
                 }
             };
             TaskUtil.startTask(modelTask);
-        } else {
-            box.getChildren().remove(replyRoot);
-            replyRoot.setVisible(false);
-            replyName.setText("");
-            replyText.getChildren().clear();
-            replyImage.setImage(null);
-        }
     }
 
     private void startRtweetIconTask(StatusModel status, StatusModel rt) {
@@ -383,8 +394,9 @@ public class TweetCellController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
-    private void shootJavaBeam(){
-        new TweetBuilderImpl().setAsync().setClientUser(clientUser).setText("@"+status.getOwner().getScreenName()+" Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").setReplyTo(status.getStatusId()).tweet();
+    private void shootJavaBeam() {
+        new TweetBuilderImpl().setAsync().setClientUser(clientUser).setText("@" + status.getOwner().getScreenName() + " Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").setReplyTo(status.getStatusId()).tweet();
     }
 }
