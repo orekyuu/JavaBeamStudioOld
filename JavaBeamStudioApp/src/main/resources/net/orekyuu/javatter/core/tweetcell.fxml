@@ -39,7 +39,7 @@
                         <Button mnemonicParsing="false" onAction="#reply" text="Reply"/>
                         <Button mnemonicParsing="false" onAction="#retweet" text="RT"/>
                         <Button mnemonicParsing="false" onAction="#favoriten" text="★"/>
-                        <MenuButton mnemonicParsing="false" text="Actions">
+                        <MenuButton fx:id = "actions" mnemonicParsing="false" text="Actions">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="ユーザープロファイルを開く" onAction="#openUserProfile"/>
                                 <MenuItem mnemonicParsing="false" text="Javaビームを撃つ" onAction="#shootJavaBeam"/>
