@@ -31,7 +31,6 @@ import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.column.ColumnPresenter;
 import net.orekyuu.javatter.core.column.ColumnState;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
-import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.TwitterException;
 
 import java.io.File;
@@ -225,9 +224,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private void tweet() {
         getCurrentUser().ifPresent(user -> {
-            TweetBuilder builder = new TweetBuilderImpl()
+            TweetBuilder builder = user.createTweet()
                     .setText(tweetTextArea.getText())
-                    .setClientUser(user)
                     .setOnTweetSuccess(s -> System.out.println(s.getText()))
                     .setAsync();
             appendedImagesViews.stream()
@@ -249,7 +247,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     // Javaビームです。
     @FXML
     private void javaBeam() {
-        getCurrentUser().ifPresent(user -> new TweetBuilderImpl().setClientUser(user)
+        getCurrentUser().ifPresent(user -> user.createTweet()
                 .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
     }
 
