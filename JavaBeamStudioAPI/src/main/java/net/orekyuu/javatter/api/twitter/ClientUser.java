@@ -37,6 +37,14 @@ public interface ClientUser {
     JavatterStream getStream();
 
     /**
+     * ツイートを行うためのビルダーを作成します。
+     * @return このユーザーでツイートを行うためのTweetBuilder
+     */
+    default TweetBuilder createTweet() {
+        return new TweetBuilder(this);
+    }
+
+    /**
      * ユーザーの名前を返します。<br>
      *
      * @return クライアントで表示用の名前
