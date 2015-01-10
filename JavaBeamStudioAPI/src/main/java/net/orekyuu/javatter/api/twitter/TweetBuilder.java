@@ -30,7 +30,7 @@ public final class TweetBuilder {
     }
 
     /**
-     * ツイートを行います。</br>
+     * ツイートを行います。<br>
      * tweetを行った後は再利用できません。<br>
      * @since 1.0.0
      * @exception IllegalStateException このメソッドが複数回呼び出された時
