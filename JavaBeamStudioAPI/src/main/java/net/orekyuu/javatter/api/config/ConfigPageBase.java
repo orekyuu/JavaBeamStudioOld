@@ -1,4 +1,4 @@
-package net.orekyuu.javatter.core.config;
+package net.orekyuu.javatter.api.config;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
