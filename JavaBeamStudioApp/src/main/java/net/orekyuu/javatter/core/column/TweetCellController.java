@@ -77,6 +77,8 @@ public class TweetCellController implements Initializable {
     private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private StatusModel status;
 
+    private Task<Image> imageTask;
+
     /**
      * アイテムの内容をStatusに従って切り替える
      *
@@ -95,19 +97,15 @@ public class TweetCellController implements Initializable {
         via.setText(s.getViaName());
         // イメージ設定(非同期処理)
         if (retweetFrom == null) {
-            Task<Image> imageTask = new Task<Image>() {
-                @Override
-                protected Image call() throws Exception {
-                    return IconCache.getImage(status.getOwner().getProfileImageURL());
-                }
-
-                @Override
-                protected void succeeded() {
-                    profileimage.setImage(getValue());
-                    rtSourceUser.setImage(null);
-                    rtSourceUser.setVisible(false);
-                }
-            };
+            if (imageTask != null && imageTask.isRunning()) {
+                imageTask.cancel();
+            }
+            imageTask = new GetIconTask(status.getOwner());
+            imageTask.setOnSucceeded( e-> {
+                profileimage.setImage(imageTask.getValue());
+                rtSourceUser.setImage(null);
+                rtSourceUser.setVisible(false);
+            });
             TaskUtil.startTask(imageTask);
         } else {
             startRtweetIconTask(status, retweetFrom);
@@ -142,31 +140,35 @@ public class TweetCellController implements Initializable {
         }
     }
 
+    private GetIconTask sourceIconTask;
+    private GetIconTask rtOwnerIconTask;
     private void startRtweetIconTask(StatusModel status, StatusModel rt) {
-        GetIconTask sourceIconTask = new GetIconTask(status.getOwner());
+        if (sourceIconTask != null && sourceIconTask.isRunning()) {
+            sourceIconTask.cancel();
+        }
+        sourceIconTask = new GetIconTask(status.getOwner());
         sourceIconTask.setOnSucceeded(e -> {
             rtSourceUser.setImage(sourceIconTask.getValue());
             rtSourceUser.setVisible(true);
         });
-        GetIconTask iconTask = new GetIconTask(rt.getOwner());
-        iconTask.setOnSucceeded(e -> profileimage.setImage(iconTask.getValue()));
+        if (rtOwnerIconTask != null && rtOwnerIconTask.isRunning()) {
+            rtOwnerIconTask.cancel();
+        }
+        rtOwnerIconTask = new GetIconTask(rt.getOwner());
+        rtOwnerIconTask.setOnSucceeded(e -> profileimage.setImage(rtOwnerIconTask.getValue()));
         TaskUtil.startTask(sourceIconTask);
-        TaskUtil.startTask(iconTask);
+        TaskUtil.startTask(rtOwnerIconTask);
     }
 
+    private GetIconTask replyIconTask;
     private void setReplyImage(StatusModel status) {
-        Task task = new Task<Image>() {
-            @Override
-            protected Image call() throws Exception {
-                return IconCache.getImage(status.getOwner().getProfileImageURL());
-            }
+        if (replyIconTask != null && replyIconTask.isRunning()) {
+            replyIconTask.cancel();
+        }
 
-            @Override
-            protected void succeeded() {
-                replyImage.setImage(getValue());
-            }
-        };
-        TaskUtil.startTask(task);
+        replyIconTask = new GetIconTask(status.getOwner());
+        replyIconTask.setOnSucceeded(e -> replyImage.setImage(replyIconTask.getValue()));
+        TaskUtil.startTask(replyIconTask);
     }
 
     private void updateImagePreview(StatusModel status) {
