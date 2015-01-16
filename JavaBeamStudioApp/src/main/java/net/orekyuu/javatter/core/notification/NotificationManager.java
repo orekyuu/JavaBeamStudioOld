@@ -122,6 +122,7 @@ public class NotificationManager implements NotificationSender {
                 for(ClientUser user : users){
                     if(Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId())){
                         matchUser = true;
+                        break;
                     }
                 }
                 if (matchUser && !status.isRetweet()) {
