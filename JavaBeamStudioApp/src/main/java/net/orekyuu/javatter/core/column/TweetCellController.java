@@ -29,7 +29,6 @@ import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
 import net.orekyuu.javatter.core.userprofile.UserProfilePresenter;
-import net.orekyuu.javatter.core.util.twitter.TweetBuilderImpl;
 import twitter4j.*;
 
 import java.awt.*;
@@ -48,14 +47,6 @@ public class TweetCellController implements Initializable {
     private VBox box;
     @FXML
     private TextFlow tweet;
-    @FXML
-    private HBox replyRoot;
-    @FXML
-    private ImageView replyImage;
-    @FXML
-    private Label replyName;
-    @FXML
-    private TextFlow replyText;
     @FXML
     private HBox imgPreview;
     @FXML
@@ -84,7 +75,8 @@ public class TweetCellController implements Initializable {
     /**
      * アイテムの内容をStatusに従って切り替える
      *
-     * @param status 受け取ったステータス
+     * @param status
+     *            受け取ったステータス
      */
     public void updateTweetCell(StatusModel status) {
 
@@ -92,8 +84,7 @@ public class TweetCellController implements Initializable {
         StatusModel s = retweetFrom == null ? status : retweetFrom;
         this.status = s;
         name.setText(getConfigFormatName(s.getOwner()));
-        time.setText(s.getCreatedAt().format(
-                DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        time.setText(s.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         updateTweetTextFlow(s, tweet);
         updateImagePreview(s);
         via.setText(s.getViaName());
@@ -116,42 +107,19 @@ public class TweetCellController implements Initializable {
         } else {
             startRtweetIconTask(status, retweetFrom);
         }
-        box.getChildren().remove(replyRoot);
-        replyRoot.setVisible(false);
-        replyName.setText("");
-        replyText.getChildren().clear();
-        replyImage.setImage(null);
-
         // リプライ先
         if (s.getReplyStatusId() != -1 && !addedShowConversationItem) {
             MenuItem item = new MenuItem();
             item.setText("会話を表示");
-            item.setOnAction(e -> showConversation(s));
+            item.setOnAction(e -> showConversation(this.status));
             actions.getItems().add(item);
             addedShowConversationItem = true;
         }
     }
 
-
     private void showConversation(StatusModel s) {
-            Task<StatusModel> modelTask = new Task<StatusModel>() {
-                @Override
-                protected StatusModel call() throws Exception {
-                    StatusModel model = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
-                    setReplyImage(model);
-                    return model;
-                }
+        new ConversationWindowBuilder(clientUser, s.getStatusId()).show();
 
-                @Override
-                protected void succeeded() {
-                    updateTweetTextFlow(getValue(), replyText);
-                    replyName.setText(getConfigFormatName(getValue().getOwner()));
-                    replyRoot.setVisible(true);
-                    box.getChildren().remove(replyRoot);
-                    box.getChildren().add(replyRoot);
-                }
-            };
-            TaskUtil.startTask(modelTask);
     }
 
     private void startRtweetIconTask(StatusModel status, StatusModel rt) {
@@ -164,21 +132,6 @@ public class TweetCellController implements Initializable {
         iconTask.setOnSucceeded(e -> profileimage.setImage(iconTask.getValue()));
         TaskUtil.startTask(sourceIconTask);
         TaskUtil.startTask(iconTask);
-    }
-
-    private void setReplyImage(StatusModel status) {
-        Task task = new Task<Image>() {
-            @Override
-            protected Image call() throws Exception {
-                return IconCache.getImage(status.getOwner().getProfileImageURL());
-            }
-
-            @Override
-            protected void succeeded() {
-                replyImage.setImage(getValue());
-            }
-        };
-        TaskUtil.startTask(task);
     }
 
     private void updateImagePreview(StatusModel status) {
@@ -261,7 +214,8 @@ public class TweetCellController implements Initializable {
     /**
      * clientUserをセットする
      *
-     * @param clientUser カラムの持ち主
+     * @param clientUser
+     *            カラムの持ち主
      */
     public void setClientUser(ClientUser clientUser) {
         this.clientUser = clientUser;
@@ -272,12 +226,8 @@ public class TweetCellController implements Initializable {
      */
     @FXML
     private void reply() {
-        API
-                .getInstance()
-                .getApplication()
-                .getCurrentWindow()
-                .setReply(status.getStatusId(),
-                        "@" + status.getOwner().getScreenName() + " ");
+        API.getInstance().getApplication().getCurrentWindow()
+                .setReply(status.getStatusId(), "@" + status.getOwner().getScreenName() + " ");
     }
 
     /**
@@ -353,16 +303,16 @@ public class TweetCellController implements Initializable {
 
     private String getConfigFormatName(UserModel user) {
         switch (nameDisplayType) {
-            case NAME:
-                return user.getName();
-            case ID:
-                return "@" + user.getScreenName();
-            case ID_NAME:
-                return "@" + user.getScreenName() + " / " + user.getName();
-            case NAME_ID:
-                return user.getName() + " / " + "@" + user.getScreenName();
-            default:
-                throw new IllegalArgumentException(nameDisplayType.name());
+        case NAME:
+            return user.getName();
+        case ID:
+            return "@" + user.getScreenName();
+        case ID_NAME:
+            return "@" + user.getScreenName() + " / " + user.getName();
+        case NAME_ID:
+            return user.getName() + " / " + "@" + user.getScreenName();
+        default:
+            throw new IllegalArgumentException(nameDisplayType.name());
         }
     }
 
@@ -383,9 +333,7 @@ public class TweetCellController implements Initializable {
             presenter.setUser(usermodel);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.getScene().getStylesheets().add(
-                    Main.class.getResource("javabeamstudio.css")
-                            .toExternalForm());
+            stage.getScene().getStylesheets().add(Main.class.getResource("javabeamstudio.css").toExternalForm());
             stage.setTitle(status.getOwner().getName() + "さんのプロファイル");
             stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
@@ -397,6 +345,8 @@ public class TweetCellController implements Initializable {
 
     @FXML
     private void shootJavaBeam() {
-        new TweetBuilderImpl().setAsync().setClientUser(clientUser).setText("@" + status.getOwner().getScreenName() + " Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").setReplyTo(status.getStatusId()).tweet();
+        clientUser.createTweet().setAsync()
+                .setText("@" + status.getOwner().getScreenName() + " Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww")
+                .setReplyTo(status.getStatusId()).tweet();
     }
 }
