@@ -374,7 +374,7 @@ public class TweetCellController implements Initializable {
             stage.getScene().getStylesheets().add(
                     Main.class.getResource("javabeamstudio.css")
                             .toExternalForm());
-            stage.setTitle(status.getOwner().getName() + "さんのプロファイル");
+            stage.setTitle(usermodel.getName() + "さんのプロファイル");
             stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
