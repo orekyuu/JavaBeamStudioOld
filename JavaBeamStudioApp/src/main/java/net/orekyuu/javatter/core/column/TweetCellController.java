@@ -239,11 +239,21 @@ public class TweetCellController implements Initializable {
 
     private void openBrowser(ActionEvent event) {
         Hyperlink link = (Hyperlink) event.getSource();
-        try {
-            Desktop.getDesktop().browse(new URL(link.getText()).toURI());
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        openBrowser(link.getText());
+    }
+
+    private void openBrowser(String url) {
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                try {
+                    Desktop.getDesktop().browse(new URL(url).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
     }
 
     /**
@@ -274,23 +284,29 @@ public class TweetCellController implements Initializable {
     @FXML
     private void favoriten() {
         Twitter twitter = clientUser.getTwitter();
-        if (status.isFavorited()) {
-            // お気に入りにあるなら
-            try {
-                // お気に入りから解除
-                twitter.destroyFavorite(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                if (status.isFavorited()) {
+                    // お気に入りにあるなら
+                    try {
+                        // お気に入りから解除
+                        twitter.destroyFavorite(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    // お気に入りにないなら
+                    try {
+                        // お気に入りに追加
+                        twitter.createFavorite(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                return null;
             }
-        } else {
-            // お気に入りにないなら
-            try {
-                // お気に入りに追加
-                twitter.createFavorite(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
-            }
-        }
+        });
     }
 
     /**
@@ -299,32 +315,34 @@ public class TweetCellController implements Initializable {
     @FXML
     private void retweet() {
         Twitter twitter = clientUser.getTwitter();
-        // RTされたものでなければ
-        if (!status.isRetweeted()) {
-            // RTする
-            try {
-                twitter.retweetStatus(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                // RTされたものでなければ
+                if (!status.isRetweeted()) {
+                    // RTする
+                    try {
+                        twitter.retweetStatus(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                    // RTされたものならば
+                } else {
+                    try {
+                        // RTから削除
+                        twitter.destroyStatus(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                return null;
             }
-            // RTされたものならば
-        } else {
-            try {
-                // RTから削除
-                twitter.destroyStatus(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
-            }
-        }
+        });
     }
 
     @FXML
     private void openVia() {
-        try {
-            Desktop.getDesktop().browse(new URL(status.getViaLink()).toURI());
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        openBrowser(status.getViaLink());
     }
 
     private static NameDisplayType nameDisplayType;
