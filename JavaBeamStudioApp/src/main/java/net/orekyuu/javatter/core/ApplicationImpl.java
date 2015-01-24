@@ -31,7 +31,8 @@ public class ApplicationImpl implements Application {
 
     @Override
     public void onStart(String[] args) {
-
+        javafx.application.Application.setUserAgentStylesheet(null);
+        StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
     }
 
     @Override
@@ -39,7 +40,6 @@ public class ApplicationImpl implements Application {
         loadClientUsers();
         registerColumns();
         PluginManager.getInstance().load();
-        StyleManager.getInstance().addUserAgentStylesheet(Main.class.getResource("javabeamstudio.css").toExternalForm());
 
         NotificationTypeRegister notificationTypeRegister = API.getInstance().getNotificationTypeRegister();
         Arrays.stream(NotificationTypes.values()).forEach(notificationTypeRegister::register);
