@@ -399,4 +399,9 @@ public class TweetCellController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openStatusURL() {
+        openBrowser(String.format("https://twitter.com/%s/status/%d", status.getOwner().getScreenName(), status.getStatusId()));
+    }
 }
