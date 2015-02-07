@@ -42,6 +42,7 @@
                         <MenuButton mnemonicParsing="false" text="Actions">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="ユーザープロファイルを開く" onAction="#openUserProfile"/>
+                                <MenuItem text="ツイートのURLを開く" onAction="#openStatusURL"/>
                             </items>
                         </MenuButton>
                         <Region HBox.hgrow="ALWAYS"/>
