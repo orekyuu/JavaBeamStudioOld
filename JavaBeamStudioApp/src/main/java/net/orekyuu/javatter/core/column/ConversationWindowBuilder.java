@@ -29,8 +29,6 @@ public class ConversationWindowBuilder {
 
     private ClientUser clientUser;
     private long statusId;
-    private static final int WIDTH = 550;
-    private static final int MIN_HEIGHT = 600;
 
     /**
      * コンストラクタ
@@ -52,11 +50,10 @@ public class ConversationWindowBuilder {
         ObservableList<StatusModel> conversationList = FXCollections.observableArrayList();
         ListView<StatusModel> conversationListView = new ListView<>(conversationList);
         conversationListView.setCellFactory(cell -> new TweetCell(clientUser));
-        conversationListView.setMinHeight(MIN_HEIGHT);
-        conversationListView.setMinWidth(WIDTH);
         Stage stage = new Stage();
         Scene scene = new Scene(conversationListView);
         stage.setScene(scene);
+        stage.setTitle("会話");
         stage.show();
         Task<List<StatusModel>> getConversation = new Task<List<StatusModel>>() {
 
