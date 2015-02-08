@@ -57,21 +57,21 @@
                 </HBox>
                 <HBox fx:id="imgPreview"/>
                 <HBox fx:id="replyRoot">
- 					<children>
-						<ImageView fx:id="replyImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
- 								preserveRatio="true"/>
- 						<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
- 							<children>
- 								<Label fx:id="replyName" text="\@screen_name"/>
- 								<TextFlow fx:id="replyText" maxHeight="1.7976931348623157E308"
- 										maxWidth="1.7976931348623157E308"/>
- 							</children>
-						 	<HBox.margin>
-								 <Insets left="10.0"/>
-							 </HBox.margin>
-						</VBox>
-					</children>
-				 </HBox>
+                    <children>
+                        <ImageView fx:id="replyImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                 preserveRatio="true"/>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                            <children>
+                                 <Label fx:id="replyName" text="\@screen_name"/>
+                                 <TextFlow fx:id="replyText" maxHeight="1.7976931348623157E308"
+                                         maxWidth="1.7976931348623157E308"/>
+                                 </children>
+                            <HBox.margin>
+                                <Insets left="10.0"/>
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
             </children>
         </VBox>
     </children>
