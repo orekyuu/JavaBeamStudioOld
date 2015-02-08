@@ -49,7 +49,11 @@ public class ConversationWindowBuilder {
     public void show() {
         ObservableList<StatusModel> conversationList = FXCollections.observableArrayList();
         ListView<StatusModel> conversationListView = new ListView<>(conversationList);
-        conversationListView.setCellFactory(cell -> new TweetCell(clientUser));
+        conversationListView.setCellFactory(cell ->{ 
+            TweetCell tweetCell = new TweetCell(clientUser);
+            tweetCell.byDisplayingConversation();
+            return tweetCell;
+            });
         Stage stage = new Stage();
         Scene scene = new Scene(conversationListView);
         stage.setScene(scene);

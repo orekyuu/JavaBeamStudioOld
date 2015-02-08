@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -50,6 +49,14 @@ public class TweetCellController implements Initializable {
     @FXML
     private HBox imgPreview;
     @FXML
+    private HBox replyRoot;
+    @FXML
+    private ImageView replyImage;
+    @FXML
+    private Label replyName;
+    @FXML
+    private TextFlow replyText;
+    @FXML
     private AnchorPane root;
     @FXML
     private Hyperlink via;
@@ -66,11 +73,14 @@ public class TweetCellController implements Initializable {
 
     private ClientUser clientUser;
     private boolean addedShowConversationItem = false;
+    private boolean byDisplayingConversation = false;
     /**
      * timeラベル用の時刻フォーマット
      */
     private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private StatusModel status;
+
+    private Task<Image> imageTask;
 
     /**
      * アイテムの内容をStatusに従って切り替える
@@ -90,31 +100,57 @@ public class TweetCellController implements Initializable {
         via.setText(s.getViaName());
         // イメージ設定(非同期処理)
         if (retweetFrom == null) {
-            Task<Image> imageTask = new Task<Image>() {
-                @Override
-                protected Image call() throws Exception {
-                    return IconCache.getImage(status.getOwner().getProfileImageURL());
-                }
-
-                @Override
-                protected void succeeded() {
-                    profileimage.setImage(getValue());
-                    rtSourceUser.setImage(null);
-                    rtSourceUser.setVisible(false);
-                }
-            };
+            if (imageTask != null && imageTask.isRunning()) {
+                imageTask.cancel();
+            }
+            imageTask = new GetIconTask(status.getOwner());
+            imageTask.setOnSucceeded(e -> {
+                profileimage.setImage(imageTask.getValue());
+                rtSourceUser.setImage(null);
+                rtSourceUser.setVisible(false);
+            });
             TaskUtil.startTask(imageTask);
         } else {
             startRtweetIconTask(status, retweetFrom);
         }
         // リプライ先
-        if (s.getReplyStatusId() != -1 && !addedShowConversationItem) {
-            MenuItem item = new MenuItem();
-            item.setText("会話を表示");
-            item.setOnAction(e -> showConversation(this.status));
-            actions.getItems().add(item);
-            addedShowConversationItem = true;
+        if (s.getReplyStatusId() != -1 && !byDisplayingConversation) {
+                Task<StatusModel> modelTask = new Task<StatusModel>() {
+                    @Override
+                    protected StatusModel call() throws Exception {
+                        StatusModel model = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
+                        setReplyImage(model);
+                        return model;
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        updateTweetTextFlow(getValue(), replyText);
+                        replyName.setText(getConfigFormatName(getValue().getOwner()));
+                        replyRoot.setVisible(true);
+                        box.getChildren().remove(replyRoot);
+                        box.getChildren().add(replyRoot);
+                    }
+                };
+                TaskUtil.startTask(modelTask);
+            if (!addedShowConversationItem) {
+                MenuItem item = new MenuItem();
+                item.setText("会話を表示");
+                item.setOnAction(e -> showConversation(this.status));
+                actions.getItems().add(item);
+                addedShowConversationItem = true;
+            }
+        } else {
+            box.getChildren().remove(replyRoot);
+            replyRoot.setVisible(false);
+            replyName.setText("");
+            replyText.getChildren().clear();
+            replyImage.setImage(null);
         }
+    }
+
+    public void byDisplayingtConversation() {
+        byDisplayingConversation = true;
     }
 
     private void showConversation(StatusModel s) {
@@ -122,16 +158,37 @@ public class TweetCellController implements Initializable {
 
     }
 
+    private GetIconTask sourceIconTask;
+    private GetIconTask rtOwnerIconTask;
+
     private void startRtweetIconTask(StatusModel status, StatusModel rt) {
-        GetIconTask sourceIconTask = new GetIconTask(status.getOwner());
+        if (sourceIconTask != null && sourceIconTask.isRunning()) {
+            sourceIconTask.cancel();
+        }
+        sourceIconTask = new GetIconTask(status.getOwner());
         sourceIconTask.setOnSucceeded(e -> {
             rtSourceUser.setImage(sourceIconTask.getValue());
             rtSourceUser.setVisible(true);
         });
-        GetIconTask iconTask = new GetIconTask(rt.getOwner());
-        iconTask.setOnSucceeded(e -> profileimage.setImage(iconTask.getValue()));
+        if (rtOwnerIconTask != null && rtOwnerIconTask.isRunning()) {
+            rtOwnerIconTask.cancel();
+        }
+        rtOwnerIconTask = new GetIconTask(rt.getOwner());
+        rtOwnerIconTask.setOnSucceeded(e -> profileimage.setImage(rtOwnerIconTask.getValue()));
         TaskUtil.startTask(sourceIconTask);
-        TaskUtil.startTask(iconTask);
+        TaskUtil.startTask(rtOwnerIconTask);
+    }
+
+    private GetIconTask replyIconTask;
+
+    private void setReplyImage(StatusModel status) {
+        if (replyIconTask != null && replyIconTask.isRunning()) {
+            replyIconTask.cancel();
+        }
+
+        replyIconTask = new GetIconTask(status.getOwner());
+        replyIconTask.setOnSucceeded(e -> replyImage.setImage(replyIconTask.getValue()));
+        TaskUtil.startTask(replyIconTask);
     }
 
     private void updateImagePreview(StatusModel status) {
@@ -204,11 +261,21 @@ public class TweetCellController implements Initializable {
 
     private void openBrowser(ActionEvent event) {
         Hyperlink link = (Hyperlink) event.getSource();
-        try {
-            Desktop.getDesktop().browse(new URL(link.getText()).toURI());
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        openBrowser(link.getText());
+    }
+
+    private void openBrowser(String url) {
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                try {
+                    Desktop.getDesktop().browse(new URL(url).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
     }
 
     /**
@@ -236,23 +303,29 @@ public class TweetCellController implements Initializable {
     @FXML
     private void favoriten() {
         Twitter twitter = clientUser.getTwitter();
-        if (status.isFavorited()) {
-            // お気に入りにあるなら
-            try {
-                // お気に入りから解除
-                twitter.destroyFavorite(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                if (status.isFavorited()) {
+                    // お気に入りにあるなら
+                    try {
+                        // お気に入りから解除
+                        twitter.destroyFavorite(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    // お気に入りにないなら
+                    try {
+                        // お気に入りに追加
+                        twitter.createFavorite(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                return null;
             }
-        } else {
-            // お気に入りにないなら
-            try {
-                // お気に入りに追加
-                twitter.createFavorite(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
-            }
-        }
+        });
     }
 
     /**
@@ -261,32 +334,34 @@ public class TweetCellController implements Initializable {
     @FXML
     private void retweet() {
         Twitter twitter = clientUser.getTwitter();
-        // RTされたものでなければ
-        if (!status.isRetweeted()) {
-            // RTする
-            try {
-                twitter.retweetStatus(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
+        TaskUtil.startTask(new Task() {
+            @Override
+            protected Object call() {
+                // RTされたものでなければ
+                if (!status.isRetweeted()) {
+                    // RTする
+                    try {
+                        twitter.retweetStatus(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                    // RTされたものならば
+                } else {
+                    try {
+                        // RTから削除
+                        twitter.destroyStatus(status.getStatusId());
+                    } catch (TwitterException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                return null;
             }
-            // RTされたものならば
-        } else {
-            try {
-                // RTから削除
-                twitter.destroyStatus(status.getStatusId());
-            } catch (TwitterException e1) {
-                e1.printStackTrace();
-            }
-        }
+        });
     }
 
     @FXML
     private void openVia() {
-        try {
-            Desktop.getDesktop().browse(new URL(status.getViaLink()).toURI());
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        openBrowser(status.getViaLink());
     }
 
     private static NameDisplayType nameDisplayType;
@@ -333,8 +408,7 @@ public class TweetCellController implements Initializable {
             presenter.setUser(usermodel);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.getScene().getStylesheets().add(Main.class.getResource("javabeamstudio.css").toExternalForm());
-            stage.setTitle(status.getOwner().getName() + "さんのプロファイル");
+            stage.setTitle(usermodel.getName() + "さんのプロファイル");
             stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
@@ -348,5 +422,10 @@ public class TweetCellController implements Initializable {
         clientUser.createTweet().setAsync()
                 .setText("@" + status.getOwner().getScreenName() + " Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww")
                 .setReplyTo(status.getStatusId()).tweet();
+    }
+    @FXML
+    private void openStatusURL() {
+        openBrowser(String.format("https://twitter.com/%s/status/%d", status.getOwner().getScreenName(),
+                status.getStatusId()));
     }
 }
