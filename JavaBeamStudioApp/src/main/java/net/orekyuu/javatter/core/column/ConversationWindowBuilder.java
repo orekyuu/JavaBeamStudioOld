@@ -1,7 +1,11 @@
 package net.orekyuu.javatter.core.column;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import javafx.concurrent.Task;
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import javafx.application.Platform;
@@ -13,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 
 /**
  * 会話を表示するためのWindowを生成するクラス
@@ -50,28 +55,30 @@ public class ConversationWindowBuilder {
         conversationListView.setMinHeight(MIN_HEIGHT);
         conversationListView.setMinWidth(WIDTH);
         Stage stage = new Stage();
-        HBox hBox = new HBox();
-        hBox.getChildren().add(conversationListView);
-        hBox.setMinWidth(WIDTH);
-        Scene scene = new Scene(hBox);
-        stage.setTitle("会話");
+        Scene scene = new Scene(conversationListView);
         stage.setScene(scene);
-        stage.setMinWidth(WIDTH);
-        stage.setMaxWidth(WIDTH);
-        stage.setMinHeight(MIN_HEIGHT);
         stage.show();
-        CompletableFuture.runAsync(() -> {
-            long nextStatusId = this.statusId;
-            while (nextStatusId != -1)
-                try {
-                    Status status = clientUser.getTwitter().showStatus(nextStatusId);
-                    Platform.runLater(() -> conversationList.add(StatusModel.Builder.build(status)));
-                    nextStatusId = status.getInReplyToStatusId();
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                    nextStatusId = -1;
-                }
-        });
-    }
+        Task<List<StatusModel>> getConversation = new Task<List<StatusModel>>() {
 
+            @Override
+            protected List<StatusModel> call() throws Exception {
+                long nextStatusId = statusId;
+                List<StatusModel> statusList = new ArrayList<>();
+                while (nextStatusId != -1) {
+                    StatusModel status = StatusModel.Builder.build(nextStatusId, clientUser);
+                    if (status == null) {
+                        break;
+                    }
+                    nextStatusId = status.getReplyStatusId();
+                    statusList.add(status);
+                }
+                return statusList;
+            }
+
+            protected void succeeded() {
+                getValue().forEach(status -> conversationList.add(status));
+            };
+        };
+        TaskUtil.startTask(getConversation);
+    }
 }

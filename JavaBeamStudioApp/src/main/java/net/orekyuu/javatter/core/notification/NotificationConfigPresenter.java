@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.core.config.ConfigPageBase;
+import net.orekyuu.javatter.api.config.ConfigPageBase;
 
 import java.io.File;
 import java.util.ArrayList;

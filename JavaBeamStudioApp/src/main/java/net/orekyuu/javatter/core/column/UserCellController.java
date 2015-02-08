@@ -65,10 +65,6 @@ public class UserCellController implements Initializable {
             presenter.setUser(user);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.getScene()
-                    .getStylesheets()
-                    .add(Main.class.getResource("javabeamstudio.css")
-                            .toExternalForm());
             stage.setTitle(user.getName() + "さんのプロファイル");
             stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();

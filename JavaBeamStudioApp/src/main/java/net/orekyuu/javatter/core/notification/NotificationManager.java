@@ -118,7 +118,14 @@ public class NotificationManager implements NotificationSender {
                         sender.sendNotification(notification);
                     }
                 }
-                if (users.stream().anyMatch(user -> Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId()))) {
+                boolean matchUser = false;
+                for(ClientUser user : users){
+                    if(Arrays.stream(status.getUserMentionEntities()).map(UserMentionEntity::getId).anyMatch(id -> id == user.getAccessToken().getUserId())){
+                        matchUser = true;
+                        break;
+                    }
+                }
+                if (matchUser && !status.isRetweet()) {
                     StatusModel statusModel = StatusModel.Builder.build(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
