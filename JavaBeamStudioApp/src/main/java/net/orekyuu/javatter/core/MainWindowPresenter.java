@@ -261,7 +261,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private void javaBeam() {
         getCurrentUser().ifPresent(user -> user.createTweet()
-                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet());
+                .setText("Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").setAsync().tweet());
     }
 
     // ユーザーアイコンのクリックによりツイートを行うユーザーを変更します。
