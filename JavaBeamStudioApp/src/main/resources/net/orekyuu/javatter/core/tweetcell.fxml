@@ -5,7 +5,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.control.Menu?>
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="net.orekyuu.javatter.core.column.TweetCellController">
@@ -40,11 +39,11 @@
                         <Button mnemonicParsing="false" onAction="#reply" text="Reply"/>
                         <Button mnemonicParsing="false" onAction="#retweet" text="RT"/>
                         <Button mnemonicParsing="false" onAction="#favoriten" text="★"/>
-                        <MenuButton fx:id = "actions" mnemonicParsing="false" text="Actions">
+                        <MenuButton mnemonicParsing="false" text="Actions">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="ユーザープロファイルを開く" onAction="#openUserProfile"/>
                                 <MenuItem mnemonicParsing="false" text="Javaビームを撃つ" onAction="#shootJavaBeam"/>
-                                 <MenuItem mnemonicParsing="false" text="ツイートのURLを開く" onAction="#openStatusURL"/>
+                                <MenuItem text="ツイートのURLを開く" onAction="#openStatusURL"/>
                             </items>
                         </MenuButton>
                         <Region HBox.hgrow="ALWAYS"/>
@@ -59,13 +58,13 @@
                 <HBox fx:id="replyRoot">
                     <children>
                         <ImageView fx:id="replyImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                 preserveRatio="true"/>
+                                   preserveRatio="true"/>
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                             <children>
-                                 <Label fx:id="replyName" text="\@screen_name"/>
-                                 <TextFlow fx:id="replyText" maxHeight="1.7976931348623157E308"
-                                         maxWidth="1.7976931348623157E308"/>
-                                 </children>
+                                <Label fx:id="replyName" text="\@screen_name"/>
+                                <TextFlow fx:id="replyText" maxHeight="1.7976931348623157E308"
+                                          maxWidth="1.7976931348623157E308"/>
+                            </children>
                             <HBox.margin>
                                 <Insets left="10.0"/>
                             </HBox.margin>
