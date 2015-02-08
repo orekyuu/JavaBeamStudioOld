@@ -17,6 +17,7 @@ public class TweetCell extends ListCell<StatusModel> {
      */
     private TweetCellController tweetCellController;
     private ClientUser clientUser;
+    private boolean byDisplayingConversation = false;
 
     /**
      * コンストラクタ
@@ -26,6 +27,10 @@ public class TweetCell extends ListCell<StatusModel> {
     public TweetCell(ClientUser clientuser) {
         super();
         clientUser = clientuser;
+    }
+    
+    public void byDisplayingConversation(){
+        byDisplayingConversation = true;
     }
 
     /**
@@ -60,8 +65,11 @@ public class TweetCell extends ListCell<StatusModel> {
                 tweetCellController = fxmlLoader.getController();
                 tweetCellController.setClientUser(clientUser);
             }
-            if (tweetCellController != null)
+            if (tweetCellController != null){
+                if(byDisplayingConversation)
+                    tweetCellController.byDisplayingtConversation();
                 tweetCellController.updateTweetCell(status);
+            }
         }
     }
 }
