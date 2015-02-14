@@ -404,4 +404,8 @@ public class TweetCellController implements Initializable {
     private void openStatusURL() {
         openBrowser(String.format("https://twitter.com/%s/status/%d", status.getOwner().getScreenName(), status.getStatusId()));
     }
+    @FXML
+    private void sendJavaBeam(){
+        clientUser.createTweet().setAsync().setReplyTo(status.getStatusId()).setText("@"+status.getOwner().getScreenName()+" Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet();
+    }
 }
