@@ -43,6 +43,7 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" text="ユーザープロファイルを開く" onAction="#openUserProfile"/>
                                 <MenuItem text="ツイートのURLを開く" onAction="#openStatusURL"/>
+                                <MenuItem text="Javaビームを送る" onAction="#sendJavaBeam"/>
                             </items>
                         </MenuButton>
                         <Region HBox.hgrow="ALWAYS"/>
