@@ -93,6 +93,9 @@ public class NotificationManager implements NotificationSender {
             stream.addOnFavorite((user1, user2, status) -> {
                 StatusModel model = StatusModel.Builder.build(status);
                 UserModel userModel = UserModel.Builder.build(user1);
+                if(users.stream().map(user -> user.getAccessToken().getUserId()).anyMatch(id->id == userModel.getId())){
+                    return;
+                }
                 javafx.scene.image.Image image = IconCache.getImage(userModel.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.FAVORITE)
                         .setSubTitleImage(image).setSubTitle(userModel.getName())
