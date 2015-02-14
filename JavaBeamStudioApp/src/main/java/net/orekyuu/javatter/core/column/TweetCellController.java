@@ -406,6 +406,7 @@ public class TweetCellController implements Initializable {
     }
     @FXML
     private void sendJavaBeam(){
-        clientUser.createTweet().setAsync().setReplyTo(status.getStatusId()).setText("@"+status.getOwner().getScreenName()+" Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet();
+        clientUser.createTweet().setAsync().setReplyTo(status.getStatusId())
+        .setText("@"+status.getOwner().getScreenName()+" Javaビームﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞﾋﾞwwwwww").tweet();
     }
 }
