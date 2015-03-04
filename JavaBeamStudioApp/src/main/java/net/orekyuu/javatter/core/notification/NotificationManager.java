@@ -74,6 +74,7 @@ public class NotificationManager implements NotificationSender {
         stage.setX(screen.getWidth() - root.getPrefWidth());
         stage.setY(screen.getHeight() - root.getPrefHeight());
         stage.initOwner(API.getInstance().getApplication().getPrimaryStage());
+        stage.setAlwaysOnTop(true);
         stage.show();
 
         setupNotification();
