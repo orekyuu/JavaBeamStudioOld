@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence">
+
+    <persistence-unit name="javatter" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>net.orekyuu.javatter.api.entity.Account</class>
+        <class>net.orekyuu.javatter.api.entity.StatusEntity</class>
+        <class>net.orekyuu.javatter.api.entity.UserEntity</class>
+
+        <properties>
+
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.ddl-generation" value="create-tables" />
+        </properties>
+    </persistence-unit>
+</persistence>

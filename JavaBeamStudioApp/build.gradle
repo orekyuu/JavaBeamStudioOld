@@ -43,6 +43,7 @@ javadoc {
 
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     manifest {
         attributes 'Main-Class': 'net.orekyuu.javatter.core.Main'
         attributes 'JavaFX-Application-Class': 'net.orekyuu.javatter.core.Main'
