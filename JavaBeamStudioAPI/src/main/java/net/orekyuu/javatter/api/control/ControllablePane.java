@@ -1,6 +1,5 @@
 package net.orekyuu.javatter.api.control;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ProgressIndicator;
@@ -9,6 +8,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import net.orekyuu.javatter.api.control.animator.NodeTransitionAnimator;
 import net.orekyuu.javatter.api.control.animator.NullAnimator;
+import net.orekyuu.javatter.api.loader.FxLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public final class ControllablePane extends StackPane {
      */
     public void loadNode(String id, InputStream resource) {
         try {
-            FXMLLoader loader = new FXMLLoader();
+            FxLoader loader = new FxLoader();
             Parent loadNode = loader.load(resource);
             Object obj = loader.getController();
             if (obj instanceof ControllablePaneController) {

@@ -7,7 +7,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
@@ -170,7 +170,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     private void addColumn(String columnName, Optional<ClientUser> user, boolean useSave) {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
         Optional<Column> column = manager.findColumn(columnName);
         try {
@@ -216,7 +216,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @FXML
     private void openConfig() {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent parent = loader.load(getClass().getResourceAsStream(
                     "config.fxml"));

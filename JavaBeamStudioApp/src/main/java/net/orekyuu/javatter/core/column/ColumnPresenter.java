@@ -2,13 +2,13 @@ package net.orekyuu.javatter.core.column;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.column.ColumnController;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 
@@ -90,7 +90,7 @@ public class ColumnPresenter implements Initializable {
         }
 
         user.ifPresent(u -> columnState = Optional.of(new ColumnState(column.get().getName(), user.get())));
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent p = loader.load(column.get().createInputStream());
             Object controller = loader.getController();

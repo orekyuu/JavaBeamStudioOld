@@ -3,7 +3,6 @@ package net.orekyuu.javatter.core.column;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +18,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
@@ -384,7 +384,7 @@ public class TweetCellController implements Initializable {
     }
 
     private void openUserProfile(UserModel usermodel) {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
             UserProfilePresenter presenter = loader.getController();

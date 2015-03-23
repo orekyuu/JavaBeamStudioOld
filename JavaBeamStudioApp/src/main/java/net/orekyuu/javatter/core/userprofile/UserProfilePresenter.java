@@ -2,7 +2,6 @@ package net.orekyuu.javatter.core.userprofile;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ProgressIndicator;
@@ -17,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
@@ -80,7 +80,7 @@ public class UserProfilePresenter implements Initializable {
         indicator.getStyleClass().add("progress-indicator");
 
         tab.setContent(stackPane);
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent root = loader.load(stream);
             UserProfileTabBase presenter = loader.getController();

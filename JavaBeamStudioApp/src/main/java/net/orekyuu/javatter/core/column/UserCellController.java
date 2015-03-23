@@ -2,7 +2,6 @@ package net.orekyuu.javatter.core.column;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -57,7 +57,7 @@ public class UserCellController implements Initializable {
 
     @FXML
     private void openUserProfile() {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent root = loader.load(Main.class
                     .getResourceAsStream("userprofile.fxml"));

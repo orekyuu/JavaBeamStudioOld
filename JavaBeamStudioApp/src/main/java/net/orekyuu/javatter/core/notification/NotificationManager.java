@@ -1,6 +1,5 @@
 package net.orekyuu.javatter.core.notification;
 
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -12,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.StatusModel;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.notification.Notification;
@@ -60,7 +60,7 @@ public class NotificationManager implements NotificationSender {
     }
 
     public void initializeNotificationManager() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         VBox root = loader.load(Main.class.getResourceAsStream("notification.fxml"));
         presenter = loader.getController();
         presenter.setNotificationQueue(notificationQueue);

@@ -3,7 +3,6 @@ package net.orekyuu.javatter.core.config;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.config.ConfigPageBase;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -49,7 +49,7 @@ public class AccountController extends ConfigPageBase {
 
     @FXML
     private void addAccount() {
-        FXMLLoader loader = new FXMLLoader();
+        FxLoader loader = new FxLoader();
         try {
             Parent parent = loader.load(Main.class.getResourceAsStream("Signin.fxml"));
             SigninController controller = loader.getController();

@@ -2,9 +2,9 @@ package net.orekyuu.javatter.core.column;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
+import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
@@ -46,7 +46,7 @@ public class UserCell extends ListCell<UserModel> {
             // 空でない場合は
             // 名前の取得と表示
             if (userCellController == null) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
+                FxLoader fxmlLoader = new FxLoader();
                 try {
                     AnchorPane root = fxmlLoader.load(Main.class
                             .getResourceAsStream("usercell.fxml"));
