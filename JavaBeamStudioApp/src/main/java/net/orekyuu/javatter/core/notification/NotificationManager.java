@@ -19,7 +19,6 @@ import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.Main;
 import twitter4j.UserMentionEntity;
 
@@ -28,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -89,7 +89,8 @@ public class NotificationManager implements NotificationSender {
 
     private void setupNotification() {
         NotificationSender sender = API.getInstance().getNotificationSender();
-        List<ClientUser> users = ClientUserRegister.getInstance().getUsers(s -> true);
+        //TODO NotificationManager削除
+        List<ClientUser> users = Collections.emptyList();
         users.stream().map(ClientUser::getStream).forEach(stream -> {
             stream.addOnFavorite((user1, user2, status) -> {
                 StatusModel model = StatusModel.Builder.build(status);

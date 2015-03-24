@@ -9,12 +9,10 @@ import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
 import net.orekyuu.javatter.core.plugin.PluginManager;
-import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,7 +35,6 @@ public class ApplicationImpl implements Application {
 
     @Override
     public void onLoad() {
-        loadClientUsers();
         registerColumns();
         PluginManager.getInstance().load();
 
@@ -49,7 +46,6 @@ public class ApplicationImpl implements Application {
 
     @Override
     public void restart() {
-        ClientUserRegister.getInstance().removeUsers(user -> true);
         try {
             main.start(new Stage());
         } catch (Exception e) {
@@ -61,11 +57,6 @@ public class ApplicationImpl implements Application {
     @Override
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    private void loadClientUsers() {
-        LocalClientUser.loadClientUsers().stream().forEach(ClientUserRegister.getInstance()::registerUser);
-
     }
 
     private void registerColumns() {

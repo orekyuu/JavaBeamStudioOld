@@ -8,9 +8,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.column.ColumnController;
+import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,12 +31,12 @@ public class ColumnPresenter implements Initializable {
     private Optional<ColumnState> columnState = Optional.empty();
     private Consumer<String> onColumnChange;
 
+    @Inject
+    private AccountService accountService;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ClientUserRegister.getInstance().registeredUserList()
-                .stream()
-                .map(ClientUser::getName)
-                .forEach(account.getItems()::add);
+        accountService.findAll().stream().map(Account::getScreenName).forEach(account.getItems()::add);
         root.setCollapsible(false);
 
         ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
@@ -48,10 +50,7 @@ public class ColumnPresenter implements Initializable {
         String item = account.getSelectionModel().getSelectedItem();
         Platform.runLater(() ->{
             account.getItems().clear();
-            ClientUserRegister.getInstance().registeredUserList()
-                    .stream()
-                    .map(ClientUser::getName)
-                    .forEach(account.getItems()::add);
+            accountService.findAll().stream().map(Account::getScreenName).forEach(account.getItems()::add);
             if (account.getItems().contains(item)) {
                 account.getSelectionModel().select(item);
             }
@@ -63,8 +62,7 @@ public class ColumnPresenter implements Initializable {
         String name = columnType.getSelectionModel().selectedItemProperty().get();
         Optional<Column> column = manager.findColumn(name);
         String userName = account.getSelectionModel().getSelectedItem();
-        Optional<ClientUser> user = ClientUserRegister.getInstance()
-                .getUsers(c -> c.getName().equals(userName)).stream().findFirst();
+        Optional<Account> user = accountService.findByScreenName(userName);
         setColumn(column, user);
         if (onColumnChange == null)
             return;
@@ -79,7 +77,7 @@ public class ColumnPresenter implements Initializable {
         return columnState;
     }
 
-    public void setColumn(Optional<Column> column, Optional<ClientUser> user) {
+    public void setColumn(Optional<Column> column, Optional<Account> user) {
         columnState = Optional.empty();
         if (!column.isPresent()) {
             root.setContent(null);
@@ -88,19 +86,21 @@ public class ColumnPresenter implements Initializable {
         if (!user.isPresent()) {
             return;
         }
+        Account account = user.get();
+        ClientUser clientUser = accountService.getClientUser(account);
 
-        user.ifPresent(u -> columnState = Optional.of(new ColumnState(column.get().getName(), user.get())));
+        user.ifPresent(u -> columnState = Optional.of(new ColumnState(column.get().getName(), clientUser)));
         FxLoader loader = new FxLoader();
         try {
             Parent p = loader.load(column.get().createInputStream());
-            Object controller = loader.getController();
-            user.ifPresent(((ColumnController) controller)::setClientUser);
+            ColumnController controller = loader.getController();
+            controller.setClientUser(clientUser);
             root.setContent(p);
         } catch (IOException e) {
             e.printStackTrace();
         }
         columnType.setValue(columnState.get().getColumnName());
-        account.setValue(user.get().getName());
+        this.account.setValue(user.get().getScreenName());
     }
 
     public void setOnChangeEvent(Consumer<String> onColumnChange) {

@@ -8,9 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
+import net.orekyuu.javatter.api.inject.Inject;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
-import net.orekyuu.javatter.core.twitter.LocalClientUser;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -35,6 +35,9 @@ public class SigninController implements Initializable {
     private Twitter twitter;
     private RequestToken token;
     private Stage stage;
+
+    @Inject
+    private AccountService accountService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -74,9 +77,7 @@ public class SigninController implements Initializable {
             protected Boolean call() {
                 try {
                     AccessToken accessToken = twitter.getOAuthAccessToken(token, pincode.getText());
-                    LocalClientUser localClientUser = new LocalClientUser(accessToken);
-                    localClientUser.save();
-                    ClientUserRegister.getInstance().registerUser(localClientUser);
+                    accountService.createAccount(accessToken.getScreenName(), accessToken.getToken(), accessToken.getTokenSecret());
                     return true;
                 } catch (TwitterException e) {
                     e.printStackTrace();

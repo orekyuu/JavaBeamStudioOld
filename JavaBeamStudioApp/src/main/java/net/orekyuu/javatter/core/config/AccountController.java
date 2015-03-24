@@ -11,36 +11,39 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.config.ConfigPageBase;
+import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.Main;
-import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
 import java.io.IOException;
 import java.util.List;
 
 public class AccountController extends ConfigPageBase {
     @FXML
-    private ListView<ClientUser> accountList;
+    private ListView<Account> accountList;
     @FXML
     private Button deleteAccountButton;
 
+    @Inject
+    private AccountService accountService;
+
     @Override
     protected void initializeBackground() {
-        ClientUserRegister.getInstance().registeredUserList().stream().forEach(accountList.getItems()::add);
+        accountService.findAll().stream().forEach(accountList.getItems()::add);
     }
 
     @Override
     protected void initializeUI() {
         deleteAccountButton.disableProperty().bind(Bindings.isNull(accountList.getSelectionModel().selectedItemProperty()));
-        accountList.setCellFactory(c -> new ListCell<ClientUser>() {
+        accountList.setCellFactory(c -> new ListCell<Account>() {
             @Override
-            protected void updateItem(ClientUser item, boolean empty) {
+            protected void updateItem(Account item, boolean empty) {
                 super.updateItem(item, empty);
                 if (!empty)
-                    setText(item.getName());
+                    setText(item.getScreenName());
                 else
                     setText(null);
             }
@@ -61,8 +64,8 @@ public class AccountController extends ConfigPageBase {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             accountList.getItems().clear();
-            List<ClientUser> userList = ClientUserRegister.getInstance().registeredUserList();
-            userList.forEach(accountList.getItems()::add);
+            List<Account> accounts = accountService.findAll();
+            accounts.forEach(accountList.getItems()::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,13 +74,12 @@ public class AccountController extends ConfigPageBase {
     @FXML
     private void deleteAccount() {
         Task<Void> task = new Task<Void>() {
-            private LocalClientUser user;
+            private Account user;
 
             @Override
             protected Void call() {
-                user = (LocalClientUser) accountList.getSelectionModel().getSelectedItem();
-                user.delete();
-                ClientUserRegister.getInstance().removeUsers(u -> user.getName().equals(user.getName()));
+                user = accountList.getSelectionModel().getSelectedItem();
+                accountService.removeAccount(user);
                 return null;
             }
 

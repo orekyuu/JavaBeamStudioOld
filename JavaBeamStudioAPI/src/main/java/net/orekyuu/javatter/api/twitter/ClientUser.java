@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.api.twitter;
 
+import net.orekyuu.javatter.api.entity.Account;
 import net.orekyuu.javatter.api.twitter.stream.JavatterStream;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -18,7 +19,15 @@ public interface ClientUser {
      * @return このユーザーのAccessToken
      * @since 1.0.0
      */
+    @Deprecated
     AccessToken getAccessToken();
+
+    /**
+     * アカウントを返します。
+     * @return このユーザーのアカウント
+     * @since 1.0.0
+     */
+    Account getAccount();
 
     /**
      * ClientUserが所有するTwitterインスタンスを返します。

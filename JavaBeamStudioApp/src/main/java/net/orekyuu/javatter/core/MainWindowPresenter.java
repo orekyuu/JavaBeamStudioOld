@@ -22,9 +22,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
+import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
 import net.orekyuu.javatter.core.column.Column;
 import net.orekyuu.javatter.core.column.ColumnManager;
@@ -68,6 +70,9 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private ImageView hoverImageView4;
 
+    @Inject
+    private AccountService accountService;
+
     private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
@@ -80,12 +85,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        users = ClientUserRegister.getInstance().getUsers(s -> true);
-        ClientUserRegister.getInstance().addUserChangeListener(list -> {
-            users = list;
-            initUser();
-            columnPresenterList.forEach(ColumnPresenter::changeUserInfo);
-        });
+        users = accountService.findAll().stream().map(accountService::getClientUser).collect(Collectors.toList());
         initUser();
 
         initPreviewImageViews();
@@ -137,7 +137,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
         List<ColumnState> columnStates = manager.loadColumnState();
         for (ColumnState state : columnStates) {
-            Optional<ClientUser> user = ClientUserRegister.getInstance().getUsers(u -> u.getName().equals(state.getUserName())).stream().findFirst();
+            Optional<Account> user = accountService.findByScreenName(state.getUserName());
             addColumn(state.getColumnName(), user, false);
         }
     }
@@ -169,7 +169,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         addColumn(null, Optional.empty(), true);
     }
 
-    private void addColumn(String columnName, Optional<ClientUser> user, boolean useSave) {
+    private void addColumn(String columnName, Optional<Account> user, boolean useSave) {
         FxLoader loader = new FxLoader();
         ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
         Optional<Column> column = manager.findColumn(columnName);

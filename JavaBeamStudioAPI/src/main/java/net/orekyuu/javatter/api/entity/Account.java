@@ -1,13 +1,17 @@
 package net.orekyuu.javatter.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "ACCOUNT")
+@NamedQueries({
+        @NamedQuery(name = Account.FIND_BY_SCREEN_NAME, query = "SELECT a FROM Account a WHERE a.screenName = ':name'"),
+        @NamedQuery(name = Account.FIND_ALL, query = "SELECT a FROM Account a")
+})
 public class Account {
+    public static final String FIND_BY_SCREEN_NAME = "Account.findByScreenName";
+    public static final String FIND_ALL = "Account.findAll";
+
     @Id
     private String screenName;
     @Column(nullable = false)

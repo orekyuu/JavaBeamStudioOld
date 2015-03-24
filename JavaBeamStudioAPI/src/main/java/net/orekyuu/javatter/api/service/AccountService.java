@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.api.service;
 
 import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,4 +38,11 @@ public interface AccountService {
      * @param account 削除するアカウント
      */
     void removeAccount(Account account);
+
+    /**
+     * アカウントに紐付けされたClientUserを取得します。
+     * @param account アカウント
+     * @return ClientUser
+     */
+    ClientUser getClientUser(Account account);
 }

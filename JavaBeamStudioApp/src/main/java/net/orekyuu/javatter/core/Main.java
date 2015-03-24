@@ -4,22 +4,36 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.application.FXApplication;
+import net.orekyuu.javatter.api.inject.InjectProperty;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
+import net.orekyuu.javatter.core.service.AccountServiceImpl;
 import net.orekyuu.javatter.core.userprofile.UserProfileTabManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.concurrent.ExecutionException;
 
-public class Main extends Application {
+public class Main extends FXApplication {
+
     @Override
-    public void start(Stage stage) throws Exception {
-        setupGlobalAccess();
-        setupApplication(stage);
+    public void setup(InjectProperty property) {
+        property.in(AccountService.class).inject(AccountServiceImpl.class);
+    }
+
+    @Override
+    public void onStart(Stage primaryStage) {
+        try {
+            setupGlobalAccess();
+            setupApplication(primaryStage);
+        } catch (ReflectiveOperationException | InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupGlobalAccess() throws ReflectiveOperationException {
