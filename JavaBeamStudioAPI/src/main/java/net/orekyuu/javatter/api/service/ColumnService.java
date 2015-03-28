@@ -21,6 +21,15 @@ public interface ColumnService {
     OpenColumnEntity create(Column column, Account account);
 
     /**
+     * カラムの状態を更新します。
+     * @param index カラムのインデックス
+     * @param column カラムのタイプ
+     * @param account アカウント
+     * @return 更新されたColumn
+     */
+    OpenColumnEntity update(int index, Column column, Account account);
+
+    /**
      * IDから現在開かれているColumnを取得します
      * @param pluginId プラグインID
      * @param columnId ColumnID

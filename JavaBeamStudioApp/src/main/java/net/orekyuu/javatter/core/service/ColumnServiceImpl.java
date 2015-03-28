@@ -42,6 +42,29 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
+    public OpenColumnEntity update(int index, Column column, Account account) {
+        EntityTransaction transaction = em.getTransaction();
+        OpenColumnEntity entity = null;
+        try {
+            transaction.begin();
+            List<OpenColumnEntity> result = em.createNamedQuery(OpenColumnEntity.FIND_BY_INDEX, OpenColumnEntity.class).setParameter("columnIndex", index).getResultList();
+            if (!result.isEmpty()) {
+                entity = result.get(0);
+                entity.setAccount(account);
+                entity.setColumnId(column.getPluginId() + ":" + column.getColumnId());
+                entity.setColumnType(column.getType());
+                entity.setPath(column.getColumnPath());
+                em.merge(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return entity;
+    }
+
+    @Override
     public Optional<OpenColumnEntity> findColumnById(String pluginId, String columnId) {
         return Optional.empty();
     }

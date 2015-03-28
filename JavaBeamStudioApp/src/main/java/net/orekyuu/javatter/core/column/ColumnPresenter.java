@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.core.column;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -50,6 +51,8 @@ public class ColumnPresenter implements Initializable {
 
     private Optional<ColumnController> contentController = Optional.empty();
 
+    private int index;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         columnType.setConverter(new StringConverter<Column>() {
@@ -67,25 +70,37 @@ public class ColumnPresenter implements Initializable {
         accountService.findAll().stream().map(Account::getScreenName).forEach(account.getItems()::add);
         columnManager.findAll().forEach(columnType.getItems()::add);
 
-        columnType.getSelectionModel().selectedItemProperty().addListener(listener -> changeColumn());
-        account.getSelectionModel().selectedItemProperty().addListener(listener -> {
-            Optional<Account> byScreenName = accountService.findByScreenName(account.getValue());
-            if (byScreenName.isPresent()) {
-                ClientUser clientUser = accountService.getClientUser(byScreenName.get());
-                contentController.ifPresent(c -> c.setClientUser(Optional.of(clientUser)));
-            } else {
-                contentController.ifPresent(c -> c.setClientUser(Optional.empty()));
+        //Columnのプロパティとチェックボックスを双方向バインド
+        columnType.valueProperty().bindBidirectional(column);
+        //アカウントのプロパティとチェックボックスを双方向バインド
+        Bindings.bindBidirectional(account.valueProperty(), owner, new StringConverter<Account>() {
+            @Override
+            public String toString(Account object) {
+                if (object == null) {
+                    return "null";
+                }
+                return object.getScreenName();
+            }
+
+            @Override
+            public Account fromString(String string) {
+                if (string == null) {
+                    return null;
+                }
+                return accountService.findByScreenName(string).get();
             }
         });
 
         //カラムの持ち主が変更されればChoiceBoxの選択をあわせる
         owner.addListener((observable, oldValue, newValue) -> {
-            account.setValue(newValue.getScreenName());
+            changeColumn();
+            updateColumnState();
         });
 
         //カラムのタイプが変更されればChoiceBoxの選択をあわせる
         column.addListener((observable, oldValue, newValue) -> {
-            columnType.setValue(newValue);
+            changeColumn();
+            updateColumnState();
         });
 
     }
@@ -101,23 +116,19 @@ public class ColumnPresenter implements Initializable {
         }
     }
 
-    public void changeUserInfo() {
-        String item = account.getSelectionModel().getSelectedItem();
-        Platform.runLater(() -> {
-            account.getItems().clear();
-            accountService.findAll().stream().map(Account::getScreenName).forEach(account.getItems()::add);
-            if (account.getItems().contains(item)) {
-                account.getSelectionModel().select(item);
-            }
-        });
+    private void updateColumnState() {
+        if (column.get() != null) {
+            OpenColumnEntity update = columnService.update(index, column.get(), accountService.findByScreenName(account.getValue()).orElse(null));
+            setColumn(update);
+        }
     }
 
     private void changeColumn() {
-        Column column = columnType.getSelectionModel().selectedItemProperty().get();
-        loadContent(column == null ? ApplicationImpl.EMPTY_COLUMN : column);
+        loadContent(column.get() == null ? ApplicationImpl.EMPTY_COLUMN : column.get());
     }
 
     public void setColumn(OpenColumnEntity column) {
+        index = column.getColumnIndex().intValue();
         owner.set(column.getAccount());
         Optional<Column> columnById = columnManager.findColumnById(column.getColumnId());
         this.column.set(columnById.orElse(ApplicationImpl.EMPTY_COLUMN));

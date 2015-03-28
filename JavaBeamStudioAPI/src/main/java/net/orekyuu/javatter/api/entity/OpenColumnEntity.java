@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.api.entity;
 
 import net.orekyuu.javatter.api.column.ColumnType;
+import net.orekyuu.javatter.api.listener.ColumnListener;
 
 import javax.persistence.*;
 
@@ -8,12 +9,15 @@ import javax.persistence.*;
 @Table(name = "OPEN_COLUMN")
 @NamedQueries({
     @NamedQuery(name = OpenColumnEntity.FIND_ALL, query = "SELECT e FROM OpenColumnEntity e"),
+    @NamedQuery(name = OpenColumnEntity.FIND_BY_INDEX, query = "SELECT e FROM OpenColumnEntity e WHERE e.columnIndex = :columnIndex"),
     @NamedQuery(name = OpenColumnEntity.DELETE_ALL, query = "DELETE FROM OpenColumnEntity e"),
     @NamedQuery(name = OpenColumnEntity.DELETE_BY_INDEX, query = "DELETE FROM OpenColumnEntity e WHERE e.columnIndex = :columnIndex"),
 })
+@EntityListeners({ColumnListener.class})
 public class OpenColumnEntity implements Comparable<OpenColumnEntity> {
 
     public static final String FIND_ALL = "OpenColumnEntity.findAll";
+    public static final String FIND_BY_INDEX = "OpenColumnEntity.findByIndex";
     public static final String DELETE_ALL = "OpenColumnEntity.deleteAll";
     public static final String DELETE_BY_INDEX = "OpenColumnEntity.deleteByIndex";
 
