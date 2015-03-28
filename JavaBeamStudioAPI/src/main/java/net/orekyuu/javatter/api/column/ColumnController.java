@@ -2,6 +2,8 @@ package net.orekyuu.javatter.api.column;
 
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
+import java.util.Optional;
+
 /**
  * カラムを表すインターフェース
  */
@@ -11,5 +13,5 @@ public interface ColumnController {
      *
      * @param clientUser ClientUser
      */
-    void setClientUser(ClientUser clientUser);
+    void setClientUser(Optional<ClientUser> clientUser);
 }

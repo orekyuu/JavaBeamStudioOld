@@ -6,9 +6,15 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
+import net.orekyuu.javatter.api.application.FXApplication;
+import net.orekyuu.javatter.api.column.Column;
+import net.orekyuu.javatter.api.column.ColumnType;
+import net.orekyuu.javatter.api.inject.Inject;
+import net.orekyuu.javatter.api.inject.Injector;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
+import net.orekyuu.javatter.api.service.ColumnManager;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
@@ -19,9 +25,13 @@ import java.util.Arrays;
 
 public class ApplicationImpl implements Application {
 
+    public static final Column EMPTY_COLUMN = new Column("BuildIn", "empty", ColumnType.JAR, "Empty", "/column/empty.fxml");
     private Main main;
     private MainWindowPresenter mainWindowPresenter;
     private Stage primaryStage;
+
+    @Inject
+    private ColumnManager columnManager;
 
     public ApplicationImpl(Main main) {
         this.main = main;
@@ -35,6 +45,8 @@ public class ApplicationImpl implements Application {
 
     @Override
     public void onLoad() {
+        FXApplication.getInjector().inject(this);
+
         registerColumns();
         PluginManager.getInstance().load();
 
@@ -60,8 +72,7 @@ public class ApplicationImpl implements Application {
     }
 
     private void registerColumns() {
-        API.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
-        API.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
+        columnManager.registerColumn(EMPTY_COLUMN);
     }
 
     @Override

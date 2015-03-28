@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
-<TitledPane fx:id="root" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<TitledPane fx:id="root" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" collapsible="false"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="net.orekyuu.javatter.core.column.ColumnPresenter">
     <graphic>
@@ -14,7 +14,4 @@
             <ChoiceBox fx:id="account"/>
         </HBox>
     </graphic>
-    <content>
-        <ListView prefHeight="200.0" prefWidth="200.0"/>
-    </content>
 </TitledPane>

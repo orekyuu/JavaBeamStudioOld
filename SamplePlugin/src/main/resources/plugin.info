@@ -1,5 +1,5 @@
 {
-  "id": "example_plugin",
+  "columnIndex": "example_plugin",
   "name": "example",
   "version": "1.0",
   "requireVersion": "1.0.0",

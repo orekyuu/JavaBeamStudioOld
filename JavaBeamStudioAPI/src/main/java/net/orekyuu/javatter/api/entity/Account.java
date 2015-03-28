@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ACCOUNT")
 @NamedQueries({
-        @NamedQuery(name = Account.FIND_BY_SCREEN_NAME, query = "SELECT a FROM Account a WHERE a.screenName = ':name'"),
+        @NamedQuery(name = Account.FIND_BY_SCREEN_NAME, query = "SELECT a FROM Account a WHERE a.screenName = :name"),
         @NamedQuery(name = Account.FIND_ALL, query = "SELECT a FROM Account a")
 })
 public class Account {

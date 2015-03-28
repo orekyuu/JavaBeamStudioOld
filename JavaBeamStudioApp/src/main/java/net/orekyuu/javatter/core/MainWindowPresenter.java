@@ -8,10 +8,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -22,16 +22,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
+import net.orekyuu.javatter.api.column.Column;
 import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.service.AccountService;
+import net.orekyuu.javatter.api.service.ColumnManager;
+import net.orekyuu.javatter.api.service.ColumnService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
-import net.orekyuu.javatter.core.column.Column;
-import net.orekyuu.javatter.core.column.ColumnManager;
 import net.orekyuu.javatter.core.column.ColumnPresenter;
-import net.orekyuu.javatter.core.column.ColumnState;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import twitter4j.TwitterException;
 
@@ -73,6 +74,12 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @Inject
     private AccountService accountService;
 
+    @Inject
+    private ColumnService columnService;
+
+    @Inject
+    private ColumnManager columnManager;
+
     private int nowUserIndex = 0;
     private List<Image> myProfileImage = new ArrayList<>();
     private List<ClientUser> users;
@@ -81,7 +88,6 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private Property<ClientUser> currentUser = new SimpleObjectProperty<>();
     private boolean isReply = false;
     private long destinationId;
-    private List<ColumnPresenter> columnPresenterList = new LinkedList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -134,12 +140,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     private void initColumns() {
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
-        List<ColumnState> columnStates = manager.loadColumnState();
-        for (ColumnState state : columnStates) {
-            Optional<Account> user = accountService.findByScreenName(state.getUserName());
-            addColumn(state.getColumnName(), user, false);
-        }
+        List<OpenColumnEntity> allColumn = columnService.findAllColumn();
+        allColumn.forEach(this::addColumn);
     }
 
     private Optional<ClientUser> getCurrentUser() {
@@ -166,52 +168,44 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @FXML
     private void addColumn() {
-        addColumn(null, Optional.empty(), true);
+        getAccount().ifPresent(account -> {
+            OpenColumnEntity entity = columnService.create(ApplicationImpl.EMPTY_COLUMN, account);
+            addColumn(entity);
+        });
     }
 
-    private void addColumn(String columnName, Optional<Account> user, boolean useSave) {
-        FxLoader loader = new FxLoader();
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
-        Optional<Column> column = manager.findColumn(columnName);
-        try {
-            Node node = loader.load(getClass().getResourceAsStream(
-                    "column.fxml"));
-            HBox.setHgrow(node, Priority.ALWAYS);
-            hbox.getChildren().add(node);
-            ColumnPresenter presenter = loader.getController();
-            presenter.setColumn(column, user);
-            presenter.setOnChangeEvent(this::onColumnChange);
-            columnPresenterList.add(presenter);
-            if (useSave) {
-                saveColumn();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private Optional<Account> getAccount() {
+        if (users.isEmpty()) {
+            return Optional.empty();
         }
+        ClientUser user = users.get(nowUserIndex);
+        return accountService.findByScreenName(user.getName());
+    }
+
+    private void addColumn(OpenColumnEntity entity) {
+        Optional<Column> columnById = columnManager.findColumnById(entity.getColumnId());
+        columnById.ifPresent(column -> {
+
+            FxLoader loader = new FxLoader();
+            try {
+                TitledPane node = loader.load(getClass().getResourceAsStream("column.fxml"));
+                HBox.setHgrow(node, Priority.ALWAYS);
+                ColumnPresenter presenter = loader.getController();
+                presenter.setColumn(entity);
+                hbox.getChildren().add(node);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
     private void removeColumn() {
         if (hbox.getChildren().size() != 0) {
-            hbox.getChildren().remove(hbox.getChildren().size() - 1);
-            columnPresenterList.remove(columnPresenterList.size() - 1);
-            saveColumn();
+            int size = hbox.getChildren().size();
+            hbox.getChildren().remove(size - 1);
+            columnService.removeByIndex(size - 1);
         }
-    }
-
-    private void onColumnChange(String columnName) {
-        saveColumn();
-    }
-
-    private void saveColumn() {
-        List<ColumnState> states = columnPresenterList.stream()
-                .filter(p -> p.getColumnState().isPresent())
-                .map(p -> p.getColumnState().get())
-                .collect(Collectors.toList());
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
-        manager.saveColumnState(states);
-        System.out.println("saveColumn");
-        states.forEach(System.out::println);
     }
 
     @FXML

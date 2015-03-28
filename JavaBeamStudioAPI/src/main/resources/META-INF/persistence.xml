@@ -9,6 +9,7 @@
         <class>net.orekyuu.javatter.api.entity.Account</class>
         <class>net.orekyuu.javatter.api.entity.StatusEntity</class>
         <class>net.orekyuu.javatter.api.entity.UserEntity</class>
+        <class>net.orekyuu.javatter.api.entity.OpenColumnEntity</class>
 
         <properties>
 

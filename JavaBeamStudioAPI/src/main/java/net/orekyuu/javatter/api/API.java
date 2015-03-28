@@ -1,6 +1,5 @@
 package net.orekyuu.javatter.api;
 
-import net.orekyuu.javatter.api.column.ColumnRegister;
 import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
@@ -11,7 +10,6 @@ import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
 public final class API {
     private static final API instance = new API();
     private Application application;
-    private ColumnRegister columnRegister;
     private NotificationSender notificationSender;
     private NotificationTypeRegister notificationTypeRegister;
     private UserProfileRegister userProfileRegister;
@@ -36,16 +34,6 @@ public final class API {
      */
     public static API getInstance() {
         return instance;
-    }
-
-    /**
-     * カラムのRegisterを返します。
-     *
-     * @return カラムのRegister
-     * @since 1.0.0
-     */
-    public ColumnRegister getColumnRegister() {
-        return columnRegister;
     }
 
     /**
