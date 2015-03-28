@@ -3,7 +3,7 @@ package net.orekyuu.javatter.core.service;
 import net.orekyuu.javatter.api.entity.Account;
 import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
-import net.orekyuu.javatter.core.persistence.JavatterEntityManagerFactory;
+import net.orekyuu.javatter.core.jpa.JavatterEntityManagerFactory;
 import net.orekyuu.javatter.core.twitter.ClientUserImpl;
 
 import javax.persistence.EntityManager;

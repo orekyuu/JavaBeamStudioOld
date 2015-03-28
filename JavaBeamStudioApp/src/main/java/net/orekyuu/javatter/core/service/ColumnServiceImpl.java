@@ -4,7 +4,7 @@ import net.orekyuu.javatter.api.column.Column;
 import net.orekyuu.javatter.api.entity.Account;
 import net.orekyuu.javatter.api.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.service.ColumnService;
-import net.orekyuu.javatter.core.persistence.JavatterEntityManagerFactory;
+import net.orekyuu.javatter.core.jpa.JavatterEntityManagerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
