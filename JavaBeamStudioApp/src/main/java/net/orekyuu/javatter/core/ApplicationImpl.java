@@ -26,6 +26,8 @@ import java.util.Arrays;
 public class ApplicationImpl implements Application {
 
     public static final Column EMPTY_COLUMN = new Column("BuildIn", "empty", ColumnType.JAR, "Empty", "/column/empty.fxml");
+    public static final Column HOME_TIMELINE = new Column("BuildIn", "timeline", ColumnType.JAR, "タイムライン", "/column/userstream.fxml");
+    public static final Column MENTION = new Column("BuildIn", "mention", ColumnType.JAR, "メンション", "/column/mentions.fxml");
     private Main main;
     private MainWindowPresenter mainWindowPresenter;
     private Stage primaryStage;
@@ -73,6 +75,8 @@ public class ApplicationImpl implements Application {
 
     private void registerColumns() {
         columnManager.registerColumn(EMPTY_COLUMN);
+        columnManager.registerColumn(HOME_TIMELINE);
+        columnManager.registerColumn(MENTION);
     }
 
     @Override

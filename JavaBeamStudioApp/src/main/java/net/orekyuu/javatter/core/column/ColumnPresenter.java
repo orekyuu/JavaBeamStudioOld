@@ -121,6 +121,17 @@ public class ColumnPresenter implements Initializable {
         owner.set(column.getAccount());
         Optional<Column> columnById = columnManager.findColumnById(column.getColumnId());
         this.column.set(columnById.orElse(ApplicationImpl.EMPTY_COLUMN));
+
+        Account account = column.getAccount();
+        Optional<ClientUser> clientUser = Optional.empty();
+        if (account != null) {
+            Optional<Account> byScreenName = accountService.findByScreenName(account.getScreenName());
+            if (byScreenName.isPresent()) {
+                clientUser = Optional.ofNullable(accountService.getClientUser(byScreenName.get()));
+            }
+        }
+        final Optional<ClientUser> finalClientUser = clientUser;
+        contentController.ifPresent(c -> c.setClientUser(finalClientUser));
     }
 
 }
