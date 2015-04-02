@@ -37,7 +37,7 @@ public class JavatterEntityManagerFactory {
 
         Map<String, String> prop = new HashMap<>();
         try {
-            prop.put("javax.jpa.jdbc.url", "jdbc:sqlite:" + String.valueOf(file.toURI().toURL()).substring(5));
+            prop.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + String.valueOf(file.toURI().toURL()).substring(5));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

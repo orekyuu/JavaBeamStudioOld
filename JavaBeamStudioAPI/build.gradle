@@ -24,7 +24,7 @@ dependencies {
     compile 'org.twitter4j:twitter4j-stream:4.0.2'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-jdbc:4.48'
-    compile 'org.eclipse.jpa:org.eclipse.jpa.jpa:2.5.1'
+    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.0'
     compile 'org.xerial:sqlite-jdbc:3.8.6'
     compile group: 'com.google.guava', name: 'guava', version: '12.0'
     testCompile 'com.googlecode.jmockit:jmockit:1.6'
