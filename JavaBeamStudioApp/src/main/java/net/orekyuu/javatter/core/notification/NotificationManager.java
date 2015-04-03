@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
-import net.orekyuu.javatter.api.entity.StatusEntity;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.models.Status;

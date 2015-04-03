@@ -1,6 +1,6 @@
 package net.orekyuu.javatter.core.service;
 
-import net.orekyuu.javatter.api.entity.StatusEntity;
+import net.orekyuu.javatter.core.entity.StatusEntity;
 import net.orekyuu.javatter.api.models.Status;
 import net.orekyuu.javatter.api.service.StatusService;
 import net.orekyuu.javatter.core.models.StatusModel;

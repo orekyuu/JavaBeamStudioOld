@@ -23,8 +23,9 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.CurrentWindow;
 import net.orekyuu.javatter.api.column.Column;
-import net.orekyuu.javatter.api.entity.Account;
-import net.orekyuu.javatter.api.entity.OpenColumnEntity;
+import net.orekyuu.javatter.api.models.OpenColumnInfo;
+import net.orekyuu.javatter.core.entity.Account;
+import net.orekyuu.javatter.core.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.service.AccountService;
@@ -91,7 +92,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        users = accountService.findAll().stream().map(accountService::getClientUser).collect(Collectors.toList());
+        users = accountService.findAll().stream().collect(Collectors.toList());
         initUser();
 
         initPreviewImageViews();
@@ -140,7 +141,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     private void initColumns() {
-        List<OpenColumnEntity> allColumn = columnService.findAllColumn();
+        List<OpenColumnInfo> allColumn = columnService.findAllColumn();
         allColumn.forEach(this::addColumn);
     }
 
@@ -169,12 +170,12 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     @FXML
     private void addColumn() {
         getAccount().ifPresent(account -> {
-            OpenColumnEntity entity = columnService.create(ApplicationImpl.EMPTY_COLUMN, account);
-            addColumn(entity);
+            OpenColumnInfo info = columnService.create(ApplicationImpl.EMPTY_COLUMN, account);
+            addColumn(info);
         });
     }
 
-    private Optional<Account> getAccount() {
+    private Optional<ClientUser> getAccount() {
         if (users.isEmpty()) {
             return Optional.empty();
         }
@@ -182,7 +183,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
         return accountService.findByScreenName(user.getName());
     }
 
-    private void addColumn(OpenColumnEntity entity) {
+    private void addColumn(OpenColumnInfo entity) {
         Optional<Column> columnById = columnManager.findColumnById(entity.getColumnId());
         columnById.ifPresent(column -> {
 

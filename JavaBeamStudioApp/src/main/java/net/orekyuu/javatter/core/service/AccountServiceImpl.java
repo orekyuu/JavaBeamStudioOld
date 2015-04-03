@@ -1,6 +1,6 @@
 package net.orekyuu.javatter.core.service;
 
-import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.core.entity.Account;
 import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.jpa.JavatterEntityManagerFactory;
@@ -10,11 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NonUniqueResultException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AccountServiceImpl implements AccountService {
 
     private final EntityManager entityManager;
-    private static Map<String, ClientUser> clientUserMap = new HashMap<>();
 
     public AccountServiceImpl() {
         JavatterEntityManagerFactory factory = new JavatterEntityManagerFactory();
@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createAccount(String name, String token, String tokenSecret) {
+    public ClientUser createAccount(String name, String token, String tokenSecret) {
         Account account = new Account(name, token, tokenSecret);
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -31,24 +31,24 @@ public class AccountServiceImpl implements AccountService {
         } finally {
             transaction.commit();
         }
-        return account;
+        return new ClientUserImpl(account);
     }
 
     @Override
-    public Optional<Account> findByScreenName(String screenName) {
+    public Optional<ClientUser> findByScreenName(String screenName) {
         List<Account> accounts = entityManager.createNamedQuery(Account.FIND_BY_SCREEN_NAME, Account.class)
                 .setParameter("name", screenName).getResultList();
         if (accounts.isEmpty()) {
             return Optional.empty();
         }
         if (accounts.size() == 1) {
-            return Optional.of(accounts.get(0));
+            return Optional.of(new ClientUserImpl(accounts.get(0)));
         }
         throw new NonUniqueResultException(screenName);
     }
 
     @Override
-    public List<Account> findAll() {
+    public List<ClientUser> findAll() {
         List<Account> result = Collections.emptyList();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -58,11 +58,12 @@ public class AccountServiceImpl implements AccountService {
         } finally {
             transaction.commit();
         }
-        return result;
+        return result.stream().map(ClientUserImpl::new).collect(Collectors.toList());
     }
 
     @Override
-    public void removeAccount(Account account) {
+    public void removeAccount(ClientUser clientUser) {
+        Account account = new Account(clientUser.getName(), clientUser.getAccessToken().getToken(), clientUser.getAccessToken().getTokenSecret());
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
@@ -70,15 +71,5 @@ public class AccountServiceImpl implements AccountService {
         } finally {
             transaction.commit();
         }
-    }
-
-    @Override
-    public ClientUser getClientUser(Account account) {
-        ClientUser user = clientUserMap.get(account.getScreenName());
-        if (user == null) {
-            user = new ClientUserImpl(account);
-            clientUserMap.put(account.getScreenName(), user);
-        }
-        return user;
     }
 }

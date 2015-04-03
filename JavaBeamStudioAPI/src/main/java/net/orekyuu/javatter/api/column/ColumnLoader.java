@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * ƒJƒ‰ƒ€‚Ìƒ[ƒh‚ğs‚¤ƒ[ƒ_[‚Å‚·B
+ * Columnã®ãƒ­ãƒ¼ãƒ€ãƒ¼ã§ã™ã€‚
  */
 public class ColumnLoader {
 
@@ -16,8 +16,8 @@ public class ColumnLoader {
     private boolean isLoaded;
 
     /**
-     * ƒJƒ‰ƒ€‚ğƒ[ƒh‚·‚éƒ[ƒ_[‚ğì¬‚µ‚Ü‚·B
-     * @param column ƒ[ƒh‚·‚éƒJƒ‰ƒ€
+     * Columnã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ColumnLoaderã‚’ä½œæˆã—ã¾ã™ã€‚
+     * @param column ãƒ­ãƒ¼ãƒ‰ã™ã‚‹Column
      */
     public ColumnLoader(Column column) {
         this.column = column;
@@ -25,9 +25,9 @@ public class ColumnLoader {
     }
 
     /**
-     * ƒJƒ‰ƒ€‚ğƒ[ƒh‚µ‚Ü‚·B
-     * @throws IOException FXML‚Ì“Ç‚İ‚İ‚Å—áŠO”­¶
-     * @throws IllegalStateException ‚·‚Å‚Éƒ[ƒh‚³‚ê‚Ä‚¢‚½
+     * ãƒ­ãƒ¼ãƒ‰ã—ã¾ã™ã€‚
+     * @throws IOException FXMLã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸæ™‚
+     * @throws IllegalStateException ã™ã§ã«ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ãŸæ™‚
      */
     public void load() throws IOException {
         if (isLoaded) {
@@ -39,9 +39,9 @@ public class ColumnLoader {
     }
 
     /**
-     * ƒJƒ‰ƒ€‚ÌƒRƒ“ƒgƒ[ƒ‰
-     * @return ƒJƒ‰ƒ€‚ÌƒRƒ“ƒgƒ[ƒ‰
-     * @throws IllegalStateException ƒ[ƒh‚³‚ê‚Ä‚¢‚È‚¢ê‡
+     * Columnã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã‚’è¿”ã—ã¾ã™ã€‚
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸColumnã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©
+     * @throws IllegalStateException ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã§å‘¼ã³å‡ºã•ã‚ŒãŸæ™‚
      */
     public ColumnController getController() {
         if (!isLoaded) {
@@ -51,10 +51,10 @@ public class ColumnLoader {
     }
 
     /**
-     * ƒJƒ‰ƒ€‚Ìƒ‹[ƒgNode‚ğ•Ô‚µ‚Ü‚·B
-     * @param <T> ƒ‹[ƒgNode‚ÌŒ^
-     * @return ƒJƒ‰ƒ€‚Ìƒ‹[ƒgNode
-     * @throws IllegalStateException ƒ[ƒh‚³‚ê‚Ä‚¢‚È‚¢ê‡
+     * Columnã®ãƒ«ãƒ¼ãƒˆè¦ç´ ã‚’è¿”ã—ã¾ã™ã€‚
+     * @param <T> ãƒ«ãƒ¼ãƒˆãƒãƒ¼ãƒ‰ã®å‹
+     * @return ãƒ«ãƒ¼ãƒˆãƒãƒ¼ãƒ‰
+     * @throws IllegalStateException ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã§å‘¼ã³å‡ºã•ã‚ŒãŸæ™‚
      */
     public <T extends Parent> T getRoot() {
         if (!isLoaded) {

@@ -1,6 +1,6 @@
 package net.orekyuu.javatter.core.twitter;
 
-import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.core.entity.Account;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.stream.JavatterStream;
 import net.orekyuu.javatter.core.twitter.stream.JavatterStreamImpl;
@@ -22,11 +22,6 @@ public class ClientUserImpl implements ClientUser {
     @Override
     public AccessToken getAccessToken() {
         return new AccessToken(account.getAccessToken(), account.getAccessTokenSecret());
-    }
-
-    @Override
-    public Account getAccount() {
-        return account;
     }
 
     @Override

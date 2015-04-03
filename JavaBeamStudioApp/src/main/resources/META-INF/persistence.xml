@@ -6,10 +6,10 @@
 
     <persistence-unit name="javatter" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>net.orekyuu.javatter.api.entity.Account</class>
-        <class>net.orekyuu.javatter.api.entity.StatusEntity</class>
-        <class>net.orekyuu.javatter.api.entity.UserEntity</class>
-        <class>net.orekyuu.javatter.api.entity.OpenColumnEntity</class>
+        <class>net.orekyuu.javatter.core.entity.Account</class>
+        <class>net.orekyuu.javatter.core.entity.StatusEntity</class>
+        <class>net.orekyuu.javatter.core.entity.UserEntity</class>
+        <class>net.orekyuu.javatter.core.entity.OpenColumnEntity</class>
 
         <properties>
 

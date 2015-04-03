@@ -1,7 +1,8 @@
 package net.orekyuu.javatter.core.service;
 
-import net.orekyuu.javatter.api.entity.Account;
-import net.orekyuu.javatter.api.entity.UserEntity;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.entity.Account;
+import net.orekyuu.javatter.core.entity.UserEntity;
 import net.orekyuu.javatter.core.models.UserModel;
 import net.orekyuu.javatter.api.service.UserService;
 import net.orekyuu.javatter.core.jpa.JavatterEntityManagerFactory;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public net.orekyuu.javatter.api.models.User createIfNotExist(User user, Account account) {
+    public net.orekyuu.javatter.api.models.User createIfNotExist(User user, ClientUser account) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         net.orekyuu.javatter.api.models.User result = null;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 result = id.get();
             } else {
                 UserEntity entity = new UserEntity(account, user);
-                //em.persist(entity);
+                em.persist(entity);
                 result = new UserModel(entity);
             }
         } finally {
@@ -43,18 +44,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public net.orekyuu.javatter.api.models.User update(net.orekyuu.javatter.api.models.User user, Account account) {
+    public net.orekyuu.javatter.api.models.User update(net.orekyuu.javatter.api.models.User user, ClientUser account) {
         return null;
     }
 
     @Override
-    public Optional<net.orekyuu.javatter.api.models.User> findByScreenName(String screenName, Account account) {
+    public Optional<net.orekyuu.javatter.api.models.User> findByScreenName(String screenName, ClientUser account) {
 
         return null;
     }
 
     @Override
-    public Optional<net.orekyuu.javatter.api.models.User> findByID(long id, Account account) {
+    public Optional<net.orekyuu.javatter.api.models.User> findByID(long id, ClientUser account) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         Optional<net.orekyuu.javatter.api.models.User> findUser = Optional.empty();

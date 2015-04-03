@@ -11,8 +11,9 @@ import javafx.util.StringConverter;
 import net.orekyuu.javatter.api.column.Column;
 import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.column.ColumnLoader;
-import net.orekyuu.javatter.api.entity.Account;
-import net.orekyuu.javatter.api.entity.OpenColumnEntity;
+import net.orekyuu.javatter.api.models.OpenColumnInfo;
+import net.orekyuu.javatter.core.entity.Account;
+import net.orekyuu.javatter.core.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.service.ColumnManager;
@@ -33,7 +34,7 @@ public class ColumnPresenter implements Initializable {
     @FXML
     private ChoiceBox<String> account;
 
-    private ObjectProperty<Account> owner = new SimpleObjectProperty<>();
+    private ObjectProperty<ClientUser> owner = new SimpleObjectProperty<>();
 
     private ObjectProperty<Column> column = new SimpleObjectProperty<>();
 
@@ -62,23 +63,21 @@ public class ColumnPresenter implements Initializable {
             }
         });
 
-        accountService.findAll().stream().map(Account::getScreenName).forEach(account.getItems()::add);
+        accountService.findAll().stream().map(ClientUser::getName).forEach(account.getItems()::add);
         columnManager.findAll().forEach(columnType.getItems()::add);
 
-        //Columnのプロパティとチェックボックスを双方向バインド
         columnType.valueProperty().bindBidirectional(column);
-        //アカウントのプロパティとチェックボックスを双方向バインド
-        Bindings.bindBidirectional(account.valueProperty(), owner, new StringConverter<Account>() {
+        Bindings.bindBidirectional(account.valueProperty(), owner, new StringConverter<ClientUser>() {
             @Override
-            public String toString(Account object) {
+            public String toString(ClientUser object) {
                 if (object == null) {
                     return "null";
                 }
-                return object.getScreenName();
+                return object.getName();
             }
 
             @Override
-            public Account fromString(String string) {
+            public ClientUser fromString(String string) {
                 if (string == null) {
                     return null;
                 }
@@ -86,13 +85,11 @@ public class ColumnPresenter implements Initializable {
             }
         });
 
-        //カラムの持ち主が変更されればChoiceBoxの選択をあわせる
         owner.addListener((observable, oldValue, newValue) -> {
             changeColumn();
             updateColumnState();
         });
 
-        //カラムのタイプが変更されればChoiceBoxの選択をあわせる
         column.addListener((observable, oldValue, newValue) -> {
             changeColumn();
             updateColumnState();
@@ -113,7 +110,7 @@ public class ColumnPresenter implements Initializable {
 
     private void updateColumnState() {
         if (column.get() != null) {
-            OpenColumnEntity update = columnService.update(index, column.get(), accountService.findByScreenName(account.getValue()).orElse(null));
+            OpenColumnInfo update = columnService.update(index, column.get(), accountService.findByScreenName(account.getValue()).orElse(null));
             setColumn(update);
         }
     }
@@ -122,22 +119,14 @@ public class ColumnPresenter implements Initializable {
         loadContent(column.get() == null ? ApplicationImpl.EMPTY_COLUMN : column.get());
     }
 
-    public void setColumn(OpenColumnEntity column) {
+    public void setColumn(OpenColumnInfo column) {
         index = column.getColumnIndex().intValue();
-        owner.set(column.getAccount());
+        owner.set(column.getClientUser().orElse(null));
         Optional<Column> columnById = columnManager.findColumnById(column.getColumnId());
         this.column.set(columnById.orElse(ApplicationImpl.EMPTY_COLUMN));
 
-        Account account = column.getAccount();
-        Optional<ClientUser> clientUser = Optional.empty();
-        if (account != null) {
-            Optional<Account> byScreenName = accountService.findByScreenName(account.getScreenName());
-            if (byScreenName.isPresent()) {
-                clientUser = Optional.ofNullable(accountService.getClientUser(byScreenName.get()));
-            }
-        }
-        final Optional<ClientUser> finalClientUser = clientUser;
-        contentController.ifPresent(c -> c.setClientUser(finalClientUser));
+        Optional<ClientUser> clientUser = column.getClientUser();
+        contentController.ifPresent(c -> c.setClientUser(clientUser));
     }
 
 }

@@ -4,79 +4,79 @@ import java.time.LocalDateTime;
 
 public interface User {
     /**
-     * @return ƒ†[ƒU[‚ªì¬‚³‚ê‚½“ú•t
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒä½œæˆã•ã‚ŒãŸæ—¥ä»˜
      * @since 1.0.0
      */
     LocalDateTime getCreatedAt();
 
     /**
-     * @return ƒ†[ƒU[‚Ìà–¾•¶
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®èª¬æ˜æ–‡
      * @since 1.0.0
      */
     String getDescription();
 
     /**
-     * @return ƒ†[ƒU[‚Ì‚¨‹C‚É“ü‚è”
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãŠæ°—ã«å…¥ã‚Šæ•°
      * @since 1.0.0
      */
     int getFavCount();
 
     /**
-     * @return ƒ†[ƒU[‚ÌƒtƒHƒƒ[”
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ•ã‚©ãƒ­ãƒ¯ãƒ¼æ•°
      * @since 1.0.0
      */
     int getFollowersCount();
 
     /**
-     * @return ƒ†[ƒU[‚ÌƒtƒHƒ[”
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ•ã‚©ãƒ­ãƒ¼æ•°
      * @since 1.0.0
      */
     int getFriendsCount();
 
     /**
-     * @return ƒ†[ƒU[ID
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ID
      * @since 1.0.0
      */
     long getId();
 
     /**
-     * @return ’Ç‰Á‚³‚ê‚Ä‚¢‚éƒŠƒXƒg‚Ì”
+     * @return è¿½åŠ ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒˆã®æ•°
      * @since 1.0.0
      */
     int getListedCount();
 
     /**
-     * @return ƒ†[ƒU[‚ÌƒvƒƒtƒB[ƒ‹‚Éİ’è‚³‚ê‚Ä‚¢‚éêŠ
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´æ‰€
      * @since 1.0.0
      */
     String getLocation();
 
     /**
-     * @return ƒ†[ƒU[‚Ì–¼‘O
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®åå‰
      * @since 1.0.0
      */
     String getName();
 
     /**
-     * @return ƒ†[ƒU[‚ÌƒXƒNƒŠ[ƒ“ƒl[ƒ€
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ 
      * @since 1.0.0
      */
     String getScreenName();
 
     /**
-     * @return ƒ†[ƒU[ƒAƒCƒRƒ“‚ÌURL
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚¢ã‚¤ã‚³ãƒ³ã®URL
      * @since 1.0.0
      */
     String getProfileImageURL();
 
     /**
-     * @return ƒ†[ƒU[‚ÌƒcƒC[ƒg”
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ„ã‚¤ãƒ¼ãƒˆæ•°
      * @since 1.0.0
      */
     int getTweetCount();
 
     /**
-     * @return ƒ†[ƒU[‚ÌWebƒTƒCƒg
+     * @return ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®Webã‚µã‚¤ãƒˆ
      * @since 1.0.0
      */
     String getWebSite();

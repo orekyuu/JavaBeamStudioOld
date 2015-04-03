@@ -11,7 +11,8 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.config.ConfigPageBase;
-import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.entity.Account;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.service.AccountService;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class AccountController extends ConfigPageBase {
     @FXML
-    private ListView<Account> accountList;
+    private ListView<ClientUser> accountList;
     @FXML
     private Button deleteAccountButton;
 
@@ -38,12 +39,12 @@ public class AccountController extends ConfigPageBase {
     @Override
     protected void initializeUI() {
         deleteAccountButton.disableProperty().bind(Bindings.isNull(accountList.getSelectionModel().selectedItemProperty()));
-        accountList.setCellFactory(c -> new ListCell<Account>() {
+        accountList.setCellFactory(c -> new ListCell<ClientUser>() {
             @Override
-            protected void updateItem(Account item, boolean empty) {
+            protected void updateItem(ClientUser item, boolean empty) {
                 super.updateItem(item, empty);
                 if (!empty)
-                    setText(item.getScreenName());
+                    setText(item.getName());
                 else
                     setText(null);
             }
@@ -64,7 +65,7 @@ public class AccountController extends ConfigPageBase {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             accountList.getItems().clear();
-            List<Account> accounts = accountService.findAll();
+            List<ClientUser> accounts = accountService.findAll();
             accounts.forEach(accountList.getItems()::add);
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,7 +75,7 @@ public class AccountController extends ConfigPageBase {
     @FXML
     private void deleteAccount() {
         Task<Void> task = new Task<Void>() {
-            private Account user;
+            private ClientUser user;
 
             @Override
             protected Void call() {

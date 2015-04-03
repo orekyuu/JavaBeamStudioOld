@@ -10,85 +10,85 @@ import java.util.List;
 
 public interface Status {
     /**
-     * @return ƒcƒC[ƒgID
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã®ID
      * @since 1.0.0
      */
     long getStatusId();
 
     /**
-     * @return ƒcƒC[ƒg‚ÌƒeƒLƒXƒg
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã®ç™ºè¨€å†…å®¹
      * @since 1.0.0
      */
     String getText();
 
     /**
-     * @return ƒcƒC[ƒg‚³‚ê‚½“ú
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã•ã‚ŒãŸæ™‚é–“
      * @since 1.0.0
      */
     LocalDateTime getCreatedAt();
 
     /**
-     * @return ƒŠƒvƒ‰ƒCæ
+     * @return ãƒªãƒ—ãƒ©ã‚¤å…ˆã®ãƒ„ã‚¤ãƒ¼ãƒˆID
      * @since 1.0.0
      */
     long getReplyStatusId();
 
     /**
-     * @return ƒcƒC[ƒg‚³‚ê‚½ƒNƒ‰ƒCƒAƒ“ƒg–¼
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå
      * @since 1.0.0
      */
     String getViaName();
 
     /**
-     * @return ƒNƒ‰ƒCƒAƒ“ƒg‚ÌƒŠƒ“ƒN
+     * @return ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ãƒªãƒ³ã‚¯
      * @since 1.0.0
      */
     String getViaLink();
 
     /**
-     * @return ƒŠƒcƒC[ƒgŒ³‚ÌƒcƒC[ƒg
+     * @return ãƒªãƒ„ã‚¤ãƒ¼ãƒˆå…ƒã®ãƒ„ã‚¤ãƒ¼ãƒˆ
      * @since 1.0.0
      */
     Status getRetweetFrom();
 
     /**
-     * @return ƒcƒC[ƒg‚µ‚½ƒ†[ƒU[
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼
      * @since 1.0.0
      */
     User getOwner();
 
     /**
-     * @return ‚±‚ÌƒcƒC[ƒg‚ğƒŠƒcƒC[ƒg‚µ‚½‚©
+     * @return ã“ã®ãƒ„ã‚¤ãƒ¼ãƒˆã‚’ãƒªãƒ„ã‚¤ãƒ¼ãƒˆã—ãŸã‹
      * @since 1.0.0
      */
     boolean isRetweeted();
 
     /**
-     * @return ‚±‚ÌƒcƒC[ƒg‚ğ‚¨‹C‚É“ü‚è‚µ‚½‚©
+     * @return ã“ã®ãƒ„ã‚¤ãƒ¼ãƒˆã‚’ãŠæ°—ã«å…¥ã‚Šã—ãŸã‹
      * @since 1.0.0
      */
     boolean isFavorited();
 
     /**
-     * @return ƒcƒC[ƒg‚ÉŠÜ‚Ü‚ê‚éƒƒ“ƒVƒ‡ƒ“
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹ãƒ¡ãƒ³ã‚·ãƒ§ãƒ³
      * @since 1.0.0
      */
     List<UserMentionEntity> getMentions();
 
     /**
-     * @return ƒcƒC[ƒg‚ÉŠÜ‚Ü‚ê‚éURL
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹URL
      * @since 1.0.0
      */
     List<URLEntity> getUrls();
 
     /**
-     * @return ƒcƒC[ƒg‚ÉŠÜ‚Ü‚ê‚éƒnƒbƒVƒ…ƒ^ƒO
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°
      * @since 1.0.0
      */
     List<HashtagEntity> getHashtags();
 
     /**
-     * @return ƒcƒC[ƒg‚ÉŠÜ‚Ü‚ê‚éƒƒfƒBƒA
+     * @return ãƒ„ã‚¤ãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹ãƒ¡ãƒ‡ã‚£ã‚¢
      * @since 1.0.0
      */
     List<MediaEntity> getMedias();

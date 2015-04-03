@@ -1,6 +1,5 @@
 package net.orekyuu.javatter.api.service;
 
-import net.orekyuu.javatter.api.entity.Account;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import java.util.List;
@@ -18,31 +17,24 @@ public interface AccountService {
      * @param tokenSecret アクセストークンシークレット
      * @return 作成されたアカウント
      */
-    Account createAccount(String name, String token, String tokenSecret);
+    ClientUser createAccount(String name, String token, String tokenSecret);
 
     /**
      * スクリーンネームからアカウントを取得します。
      * @param screenName スクリーンネーム
-     * @return 見つかったスクリーンネーム
+     * @return 見つかったユーザー
      */
-    Optional<Account> findByScreenName(String screenName);
+    Optional<ClientUser> findByScreenName(String screenName);
 
     /**
      * すべてのアカウント情報を取得します。
      * @return 登録されているすべてのアカウント
      */
-    List<Account> findAll();
+    List<ClientUser> findAll();
 
     /**
      * アカウントを削除します。
      * @param account 削除するアカウント
      */
-    void removeAccount(Account account);
-
-    /**
-     * アカウントに紐付けされたClientUserを取得します。
-     * @param account アカウント
-     * @return ClientUser
-     */
-    ClientUser getClientUser(Account account);
+    void removeAccount(ClientUser account);
 }

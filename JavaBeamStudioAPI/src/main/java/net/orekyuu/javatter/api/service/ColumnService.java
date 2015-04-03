@@ -1,11 +1,12 @@
 package net.orekyuu.javatter.api.service;
 
 import net.orekyuu.javatter.api.column.Column;
-import net.orekyuu.javatter.api.entity.Account;
-import net.orekyuu.javatter.api.entity.OpenColumnEntity;
+import net.orekyuu.javatter.api.models.OpenColumnInfo;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * Javaビーム工房のカラムの機能を提供するサービスです
@@ -18,7 +19,7 @@ public interface ColumnService {
      * @param account 使用するアカウント
      * @return 作成されたColumn
      */
-    OpenColumnEntity create(Column column, Account account);
+    OpenColumnInfo create(Column column, ClientUser account);
 
     /**
      * カラムの状態を更新します。
@@ -27,7 +28,7 @@ public interface ColumnService {
      * @param account アカウント
      * @return 更新されたColumn
      */
-    OpenColumnEntity update(int index, Column column, Account account);
+    OpenColumnInfo update(int index, Column column, ClientUser account);
 
     /**
      * IDから現在開かれているColumnを取得します
@@ -35,19 +36,19 @@ public interface ColumnService {
      * @param columnId ColumnID
      * @return 一致するColumn
      */
-    Optional<OpenColumnEntity> findColumnById(String pluginId, String columnId);
+    Optional<OpenColumnInfo> findColumnById(String pluginId, String columnId);
 
     /**
      * 現在開かれているすべてのColumnを返します
      * @return 開かれているすべてのカラム
      */
-    List<OpenColumnEntity> findAllColumn();
+    List<OpenColumnInfo> findAllColumn();
 
     /**
      * 指定されたカラムを削除します。
      * @param entity 削除するカラム
      */
-    void remove(OpenColumnEntity entity);
+    void remove(OpenColumnInfo entity);
 
     /**
      * インデックスからカラムを削除します。

@@ -1,6 +1,6 @@
 package net.orekyuu.javatter.core.models;
 
-import net.orekyuu.javatter.api.entity.UserEntity;
+import net.orekyuu.javatter.core.entity.UserEntity;
 import twitter4j.User;
 
 import java.time.LocalDateTime;
