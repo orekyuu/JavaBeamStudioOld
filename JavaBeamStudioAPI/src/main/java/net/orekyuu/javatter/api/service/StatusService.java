@@ -1,7 +1,7 @@
 package net.orekyuu.javatter.api.service;
 
-import net.orekyuu.javatter.api.entity.StatusEntity;
-import twitter4j.Status;
+
+import net.orekyuu.javatter.api.models.Status;
 
 import java.util.Optional;
 
@@ -15,18 +15,18 @@ public interface StatusService {
      * @param status Status
      * @return 引数のstatusを元に作られたStatusEntity
      */
-    StatusEntity create(Status status);
+    Status create(Status status);
 
     /**
      * statusIDからStatusEntityを見つけます。
      * @param statusId ステータスID
      * @return キャッシュか永続化されたものから見つけたStatusEntity
      */
-    Optional<StatusEntity> findByID(long statusId);
+    Optional<Status> findByID(long statusId);
 
     /**
      * StatusEntityを永続化します。
      * @param status 永続化したいStatusEntity
      */
-    void persist(StatusEntity status);
+    void persist(Status status);
 }

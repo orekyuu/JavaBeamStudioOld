@@ -4,8 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.models.StatusModel;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.inject.Inject;
+import net.orekyuu.javatter.api.service.StatusService;
+import net.orekyuu.javatter.core.models.StatusModel;
+import net.orekyuu.javatter.api.models.User;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.column.TweetCell;
@@ -16,18 +18,21 @@ import twitter4j.TwitterException;
 
 public class FavoritesTab extends UserProfileTabBase {
     @FXML
-    private ListView<StatusModel> listView;
+    private ListView<net.orekyuu.javatter.api.models.Status> listView;
     private ClientUser clientUser;
 
     private int page = 1;
     private static final int REQUEST_COUNT = 40;
 
+    @Inject
+    private StatusService statusService;
+
     @Override
-    protected void initializeBackground(UserModel user) {
+    protected void initializeBackground(User user) {
         this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             ResponseList<Status> favorites = clientUser.getTwitter().getFavorites(user.getId(), new Paging(page, REQUEST_COUNT));
-            favorites.stream().map(StatusModel.Builder::build).forEach(listView.getItems()::add);
+            favorites.stream().map(StatusModel::new).forEach(listView.getItems()::add);
         } catch (TwitterException e) {
             e.printStackTrace();
         }
@@ -35,7 +40,7 @@ public class FavoritesTab extends UserProfileTabBase {
     }
 
     @Override
-    protected void initializeUI(UserModel user) {
+    protected void initializeUI(User user) {
         listView.setCellFactory(e -> new TweetCell(clientUser));
         StackPane stack = (StackPane) listView.getParent();
         listView.prefWidthProperty().bind(stack.widthProperty());

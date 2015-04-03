@@ -2,15 +2,13 @@ package net.orekyuu.javatter.core.userprofile;
 
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -47,10 +45,10 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
     private VBox rightPane;
 
     private Relationship friendship;
-    private UserModel user;
+    private User user;
 
     @Override
-    protected void initializeBackground(UserModel user) {
+    protected void initializeBackground(User user) {
         this.user = user;
         ClientUser currentUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
         try {
@@ -61,7 +59,7 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
     }
 
     @Override
-    protected void initializeUI(UserModel user) {
+    protected void initializeUI(User user) {
 
         tweet.setText(String.valueOf(user.getTweetCount()));
         follow.setText(String.valueOf(user.getFriendsCount()));

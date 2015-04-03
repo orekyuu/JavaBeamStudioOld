@@ -3,7 +3,7 @@ package net.orekyuu.javatter.api.util.tasks;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import net.orekyuu.javatter.api.cache.IconCache;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
 
 /**
  * ユーザーのアイコンを取得する非同期タスク
@@ -12,7 +12,7 @@ import net.orekyuu.javatter.api.models.UserModel;
  */
 public class GetIconTask extends Task<Image> {
 
-    private UserModel user;
+    private User user;
 
     /**
      * 指定のユーザーのアイコンを取得する非同期タスクを作成します。
@@ -20,7 +20,7 @@ public class GetIconTask extends Task<Image> {
      * @param user アイコンを取得するユーザー
      * @since 1.0.0
      */
-    public GetIconTask(UserModel user) {
+    public GetIconTask(User user) {
         this.user = user;
     }
 

@@ -17,15 +17,14 @@ import javafx.scene.text.Text;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
+import net.orekyuu.javatter.core.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
-import net.orekyuu.javatter.core.Main;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 
@@ -41,13 +40,13 @@ public class UserProfilePresenter implements Initializable {
     @FXML
     private TabPane tabpane;
 
-    private UserModel user;
+    private User user;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void setUser(UserModel userModel) {
+    public void setUser(User userModel) {
         this.user = userModel;
         Task<Image> task = new Task<Image>() {
             @Override

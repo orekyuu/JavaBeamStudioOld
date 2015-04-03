@@ -1,12 +1,44 @@
 package net.orekyuu.javatter.api.service;
 
-import net.orekyuu.javatter.api.entity.UserEntity;
-import twitter4j.User;
+import net.orekyuu.javatter.api.entity.Account;
+import net.orekyuu.javatter.api.models.User;
+
+import java.util.Optional;
 
 /**
  * Userの情報の操作を行うためのサービスです。
  */
 public interface UserService {
 
-    UserEntity create(User user);
+    /**
+     * UserEntityが存在しなければ新しくUserEntityを作成します。
+     * @param user User
+     * @param account 管理するアカウント
+     * @return 作成されたUserEntity またはすでにあるEntity
+     */
+    User createIfNotExist(twitter4j.User user, Account account);
+
+    /**
+     * UserEntityの情報を更新します。
+     * @param user User
+     * @param account 管理するアカウント
+     * @return 更新されたUser
+     */
+    User update(User user, Account account);
+
+    /**
+     * スクリーンネームからアカウントを検索します。
+     * @param screenName 検索するアカウント名
+     * @param account 検索を行うアカウント
+     * @return 検索結果
+     */
+    Optional<User> findByScreenName(String screenName, Account account);
+
+    /**
+     * IDからアカウントを検索します。
+     * @param id 検索するアカウントID
+     * @param account 検索を行うアカウント
+     * @return 検索結果
+     */
+    Optional<User> findByID(long id, Account account);
 }

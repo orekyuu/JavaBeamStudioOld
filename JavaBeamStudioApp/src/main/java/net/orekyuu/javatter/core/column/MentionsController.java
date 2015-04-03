@@ -5,7 +5,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import net.orekyuu.javatter.api.column.ColumnController;
-import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.core.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import twitter4j.Paging;
@@ -17,7 +17,7 @@ import java.util.*;
 
 public class MentionsController implements ColumnController {
     @FXML
-    private ListView<StatusModel> mentionsList;
+    private ListView<net.orekyuu.javatter.api.models.Status> mentionsList;
     private static final int INITIALIZING_LIMIT = 30;
     private static final int STATUSES_LIMIT = 100;
     private Optional<ClientUser> user;
@@ -47,7 +47,7 @@ public class MentionsController implements ColumnController {
                     List<Status> mentionsTimeline = getValue();
                     mentionsList.setCellFactory(cell -> new TweetCell(user));
                     mentionsTimeline.stream()
-                            .map(StatusModel.Builder::build)
+                            .map(StatusModel::new)
                             .forEachOrdered(mentionsList.getItems()::add);
                     user.getStream().addOnStatus(MentionsController.this::onStatus);
                 });
@@ -63,7 +63,7 @@ public class MentionsController implements ColumnController {
             if (match && !status.isRetweet()) {
                 Platform.runLater(() -> {
                     mentionsList.getItems().add(0,
-                            StatusModel.Builder.build(status));
+                            new StatusModel(status));
                     if (mentionsList.getItems().size() > STATUSES_LIMIT)
                         mentionsList.getItems().remove(STATUSES_LIMIT);
                 });

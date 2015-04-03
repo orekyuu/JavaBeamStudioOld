@@ -14,7 +14,8 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
+import net.orekyuu.javatter.core.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.Main;
@@ -39,7 +40,7 @@ public class UserCellController implements Initializable {
 
     private ClientUser clientUser;
 
-    private UserModel user;
+    private User user;
 
     private static NameDisplayType nameDisplayType;
     private static final double DESCRIPTION_LEFT_PADDING = 60.0;
@@ -89,7 +90,7 @@ public class UserCellController implements Initializable {
      * @param user ユーザー
      * @return フォーマットに合った表示
      */
-    private String getConfigFormatName(UserModel user) {
+    private String getConfigFormatName(User user) {
         switch (nameDisplayType) {
             case NAME:
                 return user.getName();
@@ -109,7 +110,7 @@ public class UserCellController implements Initializable {
      *
      * @param user ユーザーモデル
      */
-    public void updateUserCell(UserModel user) {
+    public void updateUserCell(User user) {
         this.user = user;
         name.setText(getConfigFormatName(this.user));
         description.setText(user.getDescription());

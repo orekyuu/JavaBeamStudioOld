@@ -4,7 +4,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Region;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,7 +60,7 @@ public abstract class UserProfileTabBase implements Initializable {
      * @param user 表示するユーザー
      * @since 1.0.0
      */
-    public final void setUser(UserModel user) {
+    public final void setUser(User user) {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -83,7 +83,7 @@ public abstract class UserProfileTabBase implements Initializable {
      * @param user 情報を表示するユーザー
      * @since 1.0.0
      */
-    protected abstract void initializeBackground(UserModel user);
+    protected abstract void initializeBackground(User user);
 
     /**
      * UIスレッドで行うべき処理をしてください。
@@ -91,7 +91,7 @@ public abstract class UserProfileTabBase implements Initializable {
      * @param user 情報を表示するユーザー
      * @since 1.0.0
      */
-    protected abstract void initializeUI(UserModel user);
+    protected abstract void initializeUI(User user);
 
     /**
      * タブの名前を返す

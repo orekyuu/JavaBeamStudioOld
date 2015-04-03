@@ -5,13 +5,14 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.api.models.Status;
+import net.orekyuu.javatter.core.models.StatusModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
 
 import java.io.IOException;
 
-public class TweetCell extends ListCell<StatusModel> {
+public class TweetCell extends ListCell<Status> {
     /**
      * 所定コントローラ
      */
@@ -35,7 +36,7 @@ public class TweetCell extends ListCell<StatusModel> {
      * @param empty  空かどうか
      */
     @Override
-    protected void updateItem(StatusModel status, boolean empty) {
+    protected void updateItem(Status status, boolean empty) {
         // スーパークラスから必要な機能を継承
         super.updateItem(status, empty);
         if (empty) {

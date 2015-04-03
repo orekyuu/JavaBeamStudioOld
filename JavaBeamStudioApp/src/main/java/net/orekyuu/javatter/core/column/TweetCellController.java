@@ -17,10 +17,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.entity.StatusEntity;
+import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.StatusModel;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.*;
+import net.orekyuu.javatter.api.models.Status;
+import net.orekyuu.javatter.api.service.StatusService;
+import net.orekyuu.javatter.api.service.UserService;
+import net.orekyuu.javatter.core.models.*;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -35,10 +39,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class TweetCellController implements Initializable {
 
@@ -75,19 +77,24 @@ public class TweetCellController implements Initializable {
      * timeラベル用の時刻フォーマット
      */
     private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
-    private StatusModel status;
+    private Status status;
 
     private Task<Image> imageTask;
+
+    @Inject
+    private UserService userService;
+    @Inject
+    private StatusService statusService;
 
     /**
      * アイテムの内容をStatusに従って切り替える
      *
      * @param status 受け取ったステータス
      */
-    public void updateTweetCell(StatusModel status) {
+    public void updateTweetCell(Status status) {
 
-        StatusModel retweetFrom = status.getRetweetFrom();
-        StatusModel s = retweetFrom == null ? status : retweetFrom;
+        Status retweetFrom = status.getRetweetFrom();
+        Status s = retweetFrom == null ? status : retweetFrom;
         this.status = s;
         name.setText(getConfigFormatName(s.getOwner()));
         time.setText(s.getCreatedAt().format(
@@ -113,12 +120,12 @@ public class TweetCellController implements Initializable {
 
         // リプライ先
         if (s.getReplyStatusId() != -1) {
-            Task<StatusModel> modelTask = new Task<StatusModel>() {
+            Task<Status> modelTask = new Task<Status>() {
                 @Override
-                protected StatusModel call() throws Exception {
-                    StatusModel model = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
-                    setReplyImage(model);
-                    return model;
+                protected Status call() throws Exception {
+                    Optional<Status> byID = statusService.findByID(s.getReplyStatusId());
+                    byID.ifPresent(TweetCellController.this::setReplyImage);
+                    return s;
                 }
 
                 @Override
@@ -142,7 +149,7 @@ public class TweetCellController implements Initializable {
 
     private GetIconTask sourceIconTask;
     private GetIconTask rtOwnerIconTask;
-    private void startRtweetIconTask(StatusModel status, StatusModel rt) {
+    private void startRtweetIconTask(Status status, Status rt) {
         if (sourceIconTask != null && sourceIconTask.isRunning()) {
             sourceIconTask.cancel();
         }
@@ -161,7 +168,7 @@ public class TweetCellController implements Initializable {
     }
 
     private GetIconTask replyIconTask;
-    private void setReplyImage(StatusModel status) {
+    private void setReplyImage(Status status) {
         if (replyIconTask != null && replyIconTask.isRunning()) {
             replyIconTask.cancel();
         }
@@ -171,7 +178,7 @@ public class TweetCellController implements Initializable {
         TaskUtil.startTask(replyIconTask);
     }
 
-    private void updateImagePreview(StatusModel status) {
+    private void updateImagePreview(Status status) {
         imgPreview.getChildren().clear();
         List<MediaEntity> medias = status.getMedias();
         for (MediaEntity e : medias) {
@@ -198,7 +205,7 @@ public class TweetCellController implements Initializable {
         }
     }
 
-    private void updateTweetTextFlow(StatusModel status, TextFlow textFlow) {
+    private void updateTweetTextFlow(Status status, TextFlow textFlow) {
         textFlow.getChildren().clear();
         List<TweetEntity> entities = new LinkedList<>();
         entities.addAll(status.getHashtags());
@@ -359,7 +366,7 @@ public class TweetCellController implements Initializable {
         root.layoutYProperty().addListener(e -> root.setLayoutY(0));
     }
 
-    private String getConfigFormatName(UserModel user) {
+    private String getConfigFormatName(net.orekyuu.javatter.api.models.User user) {
         switch (nameDisplayType) {
             case NAME:
                 return user.getName();
@@ -375,7 +382,8 @@ public class TweetCellController implements Initializable {
     }
 
     private void openUserProfile(long l) {
-        openUserProfile(UserModel.Builder.build(l, clientUser));
+        Optional<net.orekyuu.javatter.api.models.User> byID = userService.findByID(l, null);
+        byID.ifPresent(this::openUserProfile);
     }
 
     @FXML
@@ -383,7 +391,7 @@ public class TweetCellController implements Initializable {
         openUserProfile(status.getOwner());
     }
 
-    private void openUserProfile(UserModel usermodel) {
+    private void openUserProfile(net.orekyuu.javatter.api.models.User usermodel) {
         FxLoader loader = new FxLoader();
         try {
             Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));

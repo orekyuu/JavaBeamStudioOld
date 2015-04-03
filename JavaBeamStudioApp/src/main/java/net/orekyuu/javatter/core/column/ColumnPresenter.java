@@ -1,12 +1,10 @@
 package net.orekyuu.javatter.core.column;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
 import javafx.util.StringConverter;
@@ -16,7 +14,6 @@ import net.orekyuu.javatter.api.column.ColumnLoader;
 import net.orekyuu.javatter.api.entity.Account;
 import net.orekyuu.javatter.api.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.inject.Inject;
-import net.orekyuu.javatter.api.loader.FxLoader;
 import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.service.ColumnManager;
 import net.orekyuu.javatter.api.service.ColumnService;
@@ -25,10 +22,8 @@ import net.orekyuu.javatter.core.ApplicationImpl;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 public class ColumnPresenter implements Initializable {
     @FXML

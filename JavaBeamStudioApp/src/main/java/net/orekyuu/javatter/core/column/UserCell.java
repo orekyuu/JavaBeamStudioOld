@@ -5,13 +5,14 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.User;
+import net.orekyuu.javatter.core.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.core.Main;
 
 import java.io.IOException;
 
-public class UserCell extends ListCell<UserModel> {
+public class UserCell extends ListCell<User> {
     /**
      * 所定コントローラ
      */
@@ -35,7 +36,7 @@ public class UserCell extends ListCell<UserModel> {
      * @param empty 空かどうか
      */
     @Override
-    protected void updateItem(UserModel user, boolean empty) {
+    protected void updateItem(User user, boolean empty) {
         // スーパークラスから必要な機能を継承
         super.updateItem(user, empty);
         if (empty) {

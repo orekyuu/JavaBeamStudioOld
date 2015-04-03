@@ -5,16 +5,12 @@ import javafx.stage.Stage;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.application.FXApplication;
 import net.orekyuu.javatter.api.inject.InjectProperty;
-import net.orekyuu.javatter.api.service.AccountService;
-import net.orekyuu.javatter.api.service.ColumnManager;
-import net.orekyuu.javatter.api.service.ColumnService;
+import net.orekyuu.javatter.api.service.*;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 import net.orekyuu.javatter.core.notification.NotificationManager;
 import net.orekyuu.javatter.core.notification.NotificationTypeManager;
-import net.orekyuu.javatter.core.service.AccountServiceImpl;
-import net.orekyuu.javatter.core.service.ColumnManagerImpl;
-import net.orekyuu.javatter.core.service.ColumnServiceImpl;
+import net.orekyuu.javatter.core.service.*;
 import net.orekyuu.javatter.core.userprofile.UserProfileTabManager;
 
 import java.io.IOException;
@@ -28,6 +24,8 @@ public class Main extends FXApplication {
         property.in(AccountService.class).inject(AccountServiceImpl.class);
         property.in(ColumnService.class).inject(ColumnServiceImpl.class);
         property.in(ColumnManager.class).inject(ColumnManagerImpl.class);
+        property.in(StatusService.class).inject(StatusServiceImpl.class);
+        property.in(UserService.class).inject(UserServiceImpl.class);
     }
 
     @Override

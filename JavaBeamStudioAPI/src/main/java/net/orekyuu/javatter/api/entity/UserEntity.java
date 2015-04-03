@@ -1,9 +1,8 @@
 package net.orekyuu.javatter.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import twitter4j.User;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -11,12 +10,19 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "TWITTER_USER")
+@NamedQueries({
+        @NamedQuery(name = UserEntity.FIND_BY_ID_AND_ACCOUNT, query = "SELECT e FROM UserEntity e WHERE e.id = :id AND e.account = :account")
+})
 public class UserEntity {
 
+    public static final String FIND_BY_ID_AND_ACCOUNT = "UserEntity.findByIdAndAccount";
     @Id
+    @OrderBy
     private Long id;
     @Column(nullable = false)
     private Timestamp createdAt;
+
+    private Account account;
 
     private String description;
     @Column(nullable = false)
@@ -41,6 +47,24 @@ public class UserEntity {
     private String profileImageURL;
 
     public UserEntity() {
+
+    }
+
+    public UserEntity(Account account, User user) {
+        setCreatedAt(Timestamp.from(user.getCreatedAt().toInstant()));
+        setDescription(user.getDescription());
+        setFavCount(user.getFavouritesCount());
+        setFollowersCount(user.getFollowersCount());
+        setFriendsCount(user.getFriendsCount());
+        setId(user.getId());
+        setListedCount(user.getListedCount());
+        setLocation(user.getLocation());
+        setName(user.getName());
+        setScreenName(user.getScreenName());
+        setProfileImageURL(user.getProfileImageURL());
+        setTweetCount(user.getStatusesCount());
+        setWebSite(user.getURL());
+        setAccount(account);
     }
 
     public Long getId() {
@@ -145,6 +169,14 @@ public class UserEntity {
 
     public void setProfileImageURL(String profileImageURL) {
         this.profileImageURL = profileImageURL;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

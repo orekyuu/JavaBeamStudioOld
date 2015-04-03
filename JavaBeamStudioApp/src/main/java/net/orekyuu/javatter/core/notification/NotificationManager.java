@@ -11,9 +11,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.entity.StatusEntity;
+import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.loader.FxLoader;
-import net.orekyuu.javatter.api.models.StatusModel;
-import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.api.models.Status;
+import net.orekyuu.javatter.api.service.StatusService;
+import net.orekyuu.javatter.api.service.UserService;
+import net.orekyuu.javatter.core.models.StatusModel;
+import net.orekyuu.javatter.api.models.User;
+import net.orekyuu.javatter.core.models.UserModel;
 import net.orekyuu.javatter.api.notification.Notification;
 import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.api.notification.NotificationSender;
@@ -36,6 +42,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class NotificationManager implements NotificationSender {
     private BlockingQueue<Notification> notificationQueue = new LinkedBlockingQueue<>();
     private NotificationPopupPresenter presenter;
+
+    @Inject
+    private StatusService statusService;
+    @Inject
+    private UserService userService;
 
     @Override
     public void sendNotification(Notification notification) {
@@ -93,8 +104,9 @@ public class NotificationManager implements NotificationSender {
         List<ClientUser> users = Collections.emptyList();
         users.stream().map(ClientUser::getStream).forEach(stream -> {
             stream.addOnFavorite((user1, user2, status) -> {
-                StatusModel model = StatusModel.Builder.build(status);
-                UserModel userModel = UserModel.Builder.build(user1);
+                //TODO キャッシュ
+                StatusModel model = new StatusModel(status);
+                User userModel = new UserModel(user1);
                 if(users.stream().map(user -> user.getAccessToken().getUserId()).anyMatch(id->id == userModel.getId())){
                     return;
                 }
@@ -104,7 +116,7 @@ public class NotificationManager implements NotificationSender {
                         .setMessage(model.getText()).build();
                 sender.sendNotification(notification);
             }).addOnFollow((user, user2) -> {
-                UserModel model = UserModel.Builder.build(user);
+                User model = new UserModel(user);
                 Image image = IconCache.getImage(model.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.FOLLOW)
                         .setSubTitleImage(image).setSubTitle(model.getName())
@@ -113,9 +125,9 @@ public class NotificationManager implements NotificationSender {
             }).addOnStatus(status -> {
 
                 if (status.isRetweet()) {
-                    UserModel userModel = UserModel.Builder.build(status.getRetweetedStatus().getUser());
+                    User userModel = new UserModel(status.getRetweetedStatus().getUser());
                     if (users.stream().anyMatch(user -> user.getAccessToken().getUserId() == userModel.getId())) {
-                        StatusModel statusModel = StatusModel.Builder.build(status);
+                        Status statusModel = new StatusModel(status);
                         Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                         Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
                                 .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
@@ -131,7 +143,7 @@ public class NotificationManager implements NotificationSender {
                     }
                 }
                 if (matchUser && !status.isRetweet()) {
-                    StatusModel statusModel = StatusModel.Builder.build(status);
+                    StatusModel statusModel = new StatusModel(status);
                     Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
                             .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
@@ -139,7 +151,7 @@ public class NotificationManager implements NotificationSender {
                     sender.sendNotification(notification);
                 }
             }).addOnUserMemberAdditon((user, user2, userList) -> {
-                UserModel userModel = UserModel.Builder.build(user2);
+                User userModel = new UserModel(user2);
                 Image image = IconCache.getImage(userModel.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.ADDED_LIST)
                         .setSubTitleImage(image).setSubTitle(userModel.getName() + ":" + userList.getName())
