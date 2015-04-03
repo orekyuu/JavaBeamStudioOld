@@ -1,6 +1,8 @@
 package net.orekyuu.javatter.core.entity;
 
 import net.orekyuu.javatter.api.column.ColumnType;
+import net.orekyuu.javatter.api.models.OpenColumnInfo;
+import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import javax.persistence.*;
 
@@ -46,6 +48,19 @@ public class OpenColumnEntity implements Comparable<net.orekyuu.javatter.core.en
         this.columnId = columnId;
         this.columnType = columnType;
         this.path = path;
+    }
+
+    public OpenColumnEntity(OpenColumnInfo info) {
+        ClientUser clientUser = info.getClientUser().orElse(null);
+        Account account = null;
+        if (clientUser != null) {
+            account = new Account(clientUser.getName(), clientUser.getAccessToken().getToken(), clientUser.getAccessToken().getTokenSecret());
+        }
+        this.columnIndex = info.getColumnIndex();
+        this.account = account;
+        this.columnId = info.getColumnId();
+        this.columnType = info.getColumnType();
+        this.path = info.getPath();
     }
 
     public OpenColumnEntity() {

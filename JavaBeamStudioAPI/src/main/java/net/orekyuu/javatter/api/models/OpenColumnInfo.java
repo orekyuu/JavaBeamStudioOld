@@ -1,5 +1,6 @@
 package net.orekyuu.javatter.api.models;
 
+import net.orekyuu.javatter.api.column.ColumnType;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 
 import java.util.Optional;
@@ -26,4 +27,16 @@ public interface OpenColumnInfo {
      * @return Columnの所有者
      */
     Optional<ClientUser> getClientUser();
+
+    /**
+     * ColumnのFXMLのパス
+     * @return FXMLのファイルパス
+     */
+    String getPath();
+
+    /**
+     * Columnのタイプ
+     * @return Columnのタイプ
+     */
+    ColumnType getColumnType();
 }

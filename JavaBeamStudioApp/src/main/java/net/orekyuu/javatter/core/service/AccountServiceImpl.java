@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private final EntityManager entityManager;
+    private static final Map<String, ClientUser> userMap = new HashMap<>();
 
     public AccountServiceImpl() {
         JavatterEntityManagerFactory factory = new JavatterEntityManagerFactory();
@@ -31,7 +32,9 @@ public class AccountServiceImpl implements AccountService {
         } finally {
             transaction.commit();
         }
-        return new ClientUserImpl(account);
+        ClientUserImpl clientUser = new ClientUserImpl(account);
+        userMap.putIfAbsent(name, clientUser);
+        return clientUser;
     }
 
     @Override
@@ -42,7 +45,14 @@ public class AccountServiceImpl implements AccountService {
             return Optional.empty();
         }
         if (accounts.size() == 1) {
-            return Optional.of(new ClientUserImpl(accounts.get(0)));
+            Account account = accounts.get(0);
+            ClientUser clientUser = userMap.get(account.getScreenName());
+            if (clientUser != null) {
+                return Optional.of(clientUser);
+            }
+            ClientUserImpl user = new ClientUserImpl(accounts.get(0));
+            userMap.put(account.getScreenName(), user);
+            return Optional.of(user);
         }
         throw new NonUniqueResultException(screenName);
     }
@@ -58,7 +68,15 @@ public class AccountServiceImpl implements AccountService {
         } finally {
             transaction.commit();
         }
-        return result.stream().map(ClientUserImpl::new).collect(Collectors.toList());
+        return result.stream().map(account -> {
+            ClientUser clientUser = userMap.get(account.getScreenName());
+            if (clientUser != null) {
+                return clientUser;
+            }
+            ClientUserImpl user = new ClientUserImpl(account);
+            userMap.put(account.getScreenName(), user);
+            return user;
+        }).collect(Collectors.toList());
     }
 
     @Override

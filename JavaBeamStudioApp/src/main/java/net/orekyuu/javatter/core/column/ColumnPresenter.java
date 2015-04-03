@@ -12,8 +12,6 @@ import net.orekyuu.javatter.api.column.Column;
 import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.column.ColumnLoader;
 import net.orekyuu.javatter.api.models.OpenColumnInfo;
-import net.orekyuu.javatter.core.entity.Account;
-import net.orekyuu.javatter.core.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.inject.Inject;
 import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.service.ColumnManager;
@@ -23,6 +21,7 @@ import net.orekyuu.javatter.core.ApplicationImpl;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -121,9 +120,22 @@ public class ColumnPresenter implements Initializable {
 
     public void setColumn(OpenColumnInfo column) {
         index = column.getColumnIndex().intValue();
-        owner.set(column.getClientUser().orElse(null));
+        //ユーザーの変更を検査
+        ClientUser newClientUser = column.getClientUser().orElse(null);
+        String newName = newClientUser == null ? null : newClientUser.getName();
+        String oldName = owner.get() == null ? null : owner.get().getName();
+        if (!Objects.equals(newName, oldName)) {
+            System.out.println();
+            owner.set(column.getClientUser().orElse(null));
+        }
+
+        //Columnの種類の変更を検査
         Optional<Column> columnById = columnManager.findColumnById(column.getColumnId());
-        this.column.set(columnById.orElse(ApplicationImpl.EMPTY_COLUMN));
+        String newColumn = columnById.orElse(ApplicationImpl.EMPTY_COLUMN).getColumnId();
+        String oldColumn = column.getColumnId() == null ? ApplicationImpl.EMPTY_COLUMN.getColumnId() : column.getColumnId();
+        if (!Objects.equals(newColumn, oldColumn)) {
+            this.column.set(columnById.orElse(ApplicationImpl.EMPTY_COLUMN));
+        }
 
         Optional<ClientUser> clientUser = column.getClientUser();
         contentController.ifPresent(c -> c.setClientUser(clientUser));

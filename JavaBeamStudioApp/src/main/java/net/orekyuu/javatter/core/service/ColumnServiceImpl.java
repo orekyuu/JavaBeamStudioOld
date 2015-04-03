@@ -7,12 +7,13 @@ import net.orekyuu.javatter.core.entity.Account;
 import net.orekyuu.javatter.core.entity.OpenColumnEntity;
 import net.orekyuu.javatter.api.service.ColumnService;
 import net.orekyuu.javatter.core.jpa.JavatterEntityManagerFactory;
+import net.orekyuu.javatter.core.models.OpenColumnInfoImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ColumnServiceImpl implements ColumnService {
 
@@ -41,7 +42,7 @@ public class ColumnServiceImpl implements ColumnService {
         } finally {
             transaction.commit();
         }
-        return null;
+        return new OpenColumnInfoImpl(entity);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ColumnServiceImpl implements ColumnService {
         } finally {
             transaction.commit();
         }
-        return null;
+        return new OpenColumnInfoImpl(entity);
     }
 
     @Override
@@ -75,50 +76,48 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public List<OpenColumnInfo> findAllColumn() {
         List<OpenColumnEntity> resultList = em.createNamedQuery(OpenColumnEntity.FIND_ALL, OpenColumnEntity.class).getResultList();
-        return Collections.emptyList();
+        return resultList.stream().map(OpenColumnInfoImpl::new).collect(Collectors.toList());
     }
 
     @Override
     public void remove(OpenColumnInfo entity) {
-        //TODO
-//        EntityTransaction transaction = em.getTransaction();
-//        try {
-//            transaction.begin();
-//            em.remove(entity);
-//            em.flush();
-//            List<OpenColumnInfo> allColumn = findAllColumn();
-//            for (int i = 0; i < allColumn.size(); i++) {
-//                OpenColumnEntity e = allColumn.get(i);
-//                if (e.getColumnIndex() != i) {
-//                    e.setColumnIndex((long)i);
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            transaction.commit();
-//        }
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.remove(new OpenColumnEntity(entity));
+            em.flush();
+            List<OpenColumnInfo> allColumn = findAllColumn();
+            for (int i = 0; i < allColumn.size(); i++) {
+                OpenColumnEntity e = new OpenColumnEntity(allColumn.get(i));
+                if (e.getColumnIndex() != i) {
+                    e.setColumnIndex((long)i);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
     }
 
     @Override
     public void removeByIndex(int index) {
-        //TODO
-//        EntityTransaction transaction = em.getTransaction();
-//        try {
-//            transaction.begin();
-//            em.createNamedQuery(OpenColumnEntity.DELETE_BY_INDEX).setParameter("columnIndex", index).executeUpdate();
-//            em.flush();
-//            List<OpenColumnEntity> allColumn = findAllColumn();
-//            for (int i = 0; i < allColumn.size(); i++) {
-//                OpenColumnEntity e = allColumn.get(i);
-//                if (e.getColumnIndex() != i) {
-//                    e.setColumnIndex((long)i);
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            transaction.commit();
-//        }
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.createNamedQuery(OpenColumnEntity.DELETE_BY_INDEX).setParameter("columnIndex", index).executeUpdate();
+            em.flush();
+            List<OpenColumnEntity> allColumn = findAllColumn().stream().map(OpenColumnEntity::new).collect(Collectors.toList());
+            for (int i = 0; i < allColumn.size(); i++) {
+                OpenColumnEntity e = allColumn.get(i);
+                if (e.getColumnIndex() != i) {
+                    e.setColumnIndex((long)i);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
     }
 }
