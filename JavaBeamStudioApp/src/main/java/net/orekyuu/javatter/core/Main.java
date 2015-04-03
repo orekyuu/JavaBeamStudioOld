@@ -21,11 +21,11 @@ public class Main extends FXApplication {
 
     @Override
     public void setup(InjectProperty property) {
-        property.in(AccountService.class).inject(AccountServiceImpl.class);
-        property.in(ColumnService.class).inject(ColumnServiceImpl.class);
-        property.in(ColumnManager.class).inject(ColumnManagerImpl.class);
-        property.in(StatusService.class).inject(StatusServiceImpl.class);
-        property.in(UserService.class).inject(UserServiceImpl.class);
+        property.bind(AccountService.class).to(AccountServiceImpl.class);
+        property.bind(ColumnService.class).to(ColumnServiceImpl.class);
+        property.bind(ColumnManager.class).to(ColumnManagerImpl.class);
+        property.bind(StatusService.class).to(StatusServiceImpl.class);
+        property.bind(UserService.class).to(UserServiceImpl.class);
     }
 
     @Override

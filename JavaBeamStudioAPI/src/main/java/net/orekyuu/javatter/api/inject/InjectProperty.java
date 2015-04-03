@@ -16,7 +16,7 @@ public class InjectProperty {
      * @param <T> インターフェイスの型
      * @return {@link net.orekyuu.javatter.api.inject.InjectProperty.InjectMapping}
      */
-    public <T> InjectMapping<T> in(Class<T> interfaceClass) {
+    public <T> InjectMapping<T> bind(Class<T> interfaceClass) {
         InjectMapping<T> mapping = new InjectMapping<>();
         mapping.interfaceClass = interfaceClass;
         return mapping;
@@ -33,7 +33,7 @@ public class InjectProperty {
          * インジェクションするインスタンスの型
          * @param injectClass インジェクションするクラス
          */
-        public void inject(Class<? extends T> injectClass) {
+        public void to(Class<? extends T> injectClass) {
             InjectProperty.this.injectMap.put(interfaceClass, injectClass);
         }
     }
