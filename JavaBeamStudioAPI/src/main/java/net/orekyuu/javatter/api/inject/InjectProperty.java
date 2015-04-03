@@ -40,7 +40,7 @@ public class InjectProperty {
 
     /**
      * 引数のインスタンスに関連付けられるプロパティを返します。
-     * @param interfaceClass インスタンスの名前
+     * @param interfaceClass インスタンスとバインドされているクラス
      * @param <T> インターフェイスの型
      * @return 関連付けられたクラスのインスタンス
      * @throws net.orekyuu.javatter.api.inject.PropertyMissingException 関連付けされたDIプロパティが見つからなかった時

@@ -2,7 +2,9 @@ package net.orekyuu.javatter.core.models;
 
 import net.orekyuu.javatter.api.column.ColumnType;
 import net.orekyuu.javatter.api.models.OpenColumnInfo;
+import net.orekyuu.javatter.api.service.AccountService;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.entity.OpenColumnEntity;
 import net.orekyuu.javatter.core.service.AccountServiceImpl;
 
@@ -26,7 +28,7 @@ public class OpenColumnInfoImpl implements OpenColumnInfo {
 
     public OpenColumnInfoImpl(OpenColumnEntity entity) {
         this(entity.getColumnId(), entity.getColumnIndex(),
-                new AccountServiceImpl().findByScreenName(entity.getAccount().getScreenName()).get(),
+                Main.getInjector().getDependency(AccountService.class).findByScreenName(entity.getAccount().getScreenName()).get(),
                 entity.getPath(), entity.getColumnType());
     }
 

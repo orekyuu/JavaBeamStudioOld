@@ -43,4 +43,14 @@ public class Injector {
             }
         }
     }
+
+    /**
+     * 引数にバインドされているクラスのインスタンスを返します。
+     * @param interfaceClass インスタンスと結びつけらた型
+     * @param <T> インターフェイスの型
+     * @return バインドされているクラスのインスタンス
+     */
+    public <T> T getDependency(Class<T> interfaceClass) {
+        return property.getInstance(interfaceClass);
+    }
 }
