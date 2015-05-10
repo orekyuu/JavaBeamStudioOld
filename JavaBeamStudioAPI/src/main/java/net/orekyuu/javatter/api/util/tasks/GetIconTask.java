@@ -26,6 +26,6 @@ public class GetIconTask extends Task<Image> {
 
     @Override
     protected Image call() throws Exception {
-        return IconCache.getImage(user.getProfileImageURL());
+        return null;//IconCache.getImage(user.getProfileImageURL());
     }
 }

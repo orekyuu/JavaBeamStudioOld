@@ -12,11 +12,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
+
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.config.GeneralConfigHelper;
 import net.orekyuu.javatter.core.config.NameDisplayType;
@@ -44,6 +47,11 @@ public class UserCellController implements Initializable {
     private static NameDisplayType nameDisplayType;
     private static final double DESCRIPTION_LEFT_PADDING = 60.0;
 
+    @Inject
+    private Application application;
+    @Inject
+    private IconCache iconCache;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (nameDisplayType == null) {
@@ -57,7 +65,7 @@ public class UserCellController implements Initializable {
 
     @FXML
     private void openUserProfile() {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent root = loader.load(Main.class
                     .getResourceAsStream("userprofile.fxml"));
@@ -66,7 +74,7 @@ public class UserCellController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle(user.getName() + "さんのプロファイル");
-            stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
+            stage.initOwner(application.getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
@@ -118,7 +126,7 @@ public class UserCellController implements Initializable {
         Task<Image> imageTask = new Task<Image>() {
             @Override
             protected Image call() throws Exception {
-                return IconCache.getImage(user.getProfileImageURL());
+                return iconCache.getImage(user.getProfileImageURL());
             }
 
             @Override

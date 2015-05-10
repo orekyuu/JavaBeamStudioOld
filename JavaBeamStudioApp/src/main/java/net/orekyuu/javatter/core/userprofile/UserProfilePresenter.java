@@ -15,17 +15,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import net.orekyuu.javatter.api.API;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.userprofile.UserProfileRegister;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
-import net.orekyuu.javatter.core.Main;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 
@@ -43,6 +42,11 @@ public class UserProfilePresenter implements Initializable {
 
     private UserModel user;
 
+    @Inject
+    private UserProfileRegister userProfileRegister;
+    @Inject
+    private IconCache iconCache;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
@@ -52,7 +56,7 @@ public class UserProfilePresenter implements Initializable {
         Task<Image> task = new Task<Image>() {
             @Override
             protected Image call() throws Exception {
-                return IconCache.getImage(userModel.getProfileImageURL());
+                return iconCache.getImage(userModel.getProfileImageURL());
             }
 
             @Override
@@ -65,7 +69,6 @@ public class UserProfilePresenter implements Initializable {
         };
         Executors.newSingleThreadExecutor().submit(task);
 
-        UserProfileRegister userProfileRegister = API.getInstance().getUserProfileRegister();
         UserProfileTabManager manager = (UserProfileTabManager) userProfileRegister;
         manager.getRegisteredTabs().stream().map(this::createTab).forEach(tabpane.getTabs()::add);
     }
@@ -80,7 +83,7 @@ public class UserProfilePresenter implements Initializable {
         indicator.getStyleClass().add("progress-indicator");
 
         tab.setContent(stackPane);
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent root = loader.load(stream);
             UserProfileTabBase presenter = loader.getController();

@@ -1,15 +1,18 @@
-package net.orekyuu.javatter.api.models;
+package net.orekyuu.javatter.core.model;
 
 import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
+import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import org.junit.Before;
 import org.junit.Test;
 import twitter4j.User;
+
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class UserModelTest {
 
@@ -43,7 +46,7 @@ public class UserModelTest {
 
     @Test
     public void testCreate() {
-        UserModel model = UserModel.Builder.build(user);
+        UserModel model = UserModelImpl.Builder.build(user);
         assertNotNull(model);
         assertEquals(model.getId(), user.getId());
         assertEquals(model.getScreenName(), user.getScreenName());
@@ -52,8 +55,8 @@ public class UserModelTest {
 
     @Test
     public void testCache(@Mocked ClientUser clientUser) {
-        UserModel model = UserModel.Builder.build(user);
-        UserModel cache = UserModel.Builder.build(1, clientUser);
+        UserModel model = UserModelImpl.Builder.build(user);
+        UserModel cache = UserModelImpl.Builder.build(1, clientUser);
         assertEquals(model.getId(), cache.getId());
     }
 }

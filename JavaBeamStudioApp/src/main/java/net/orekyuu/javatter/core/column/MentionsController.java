@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import net.orekyuu.javatter.api.column.ColumnController;
 import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.core.model.StatusModelImpl;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
 import twitter4j.Paging;
@@ -45,7 +46,7 @@ public class MentionsController implements ColumnController {
                 List<Status> mentionsTimeline = getValue();
                 mentionsList.setCellFactory(cell -> new TweetCell(clientUser));
                 mentionsTimeline.stream()
-                        .map(StatusModel.Builder::build)
+                        .map(StatusModelImpl.Builder::build)
                         .forEachOrdered(mentionsList.getItems()::add);
                 clientUser.getStream().addOnStatus(MentionsController.this::onStatus);
             }
@@ -59,7 +60,7 @@ public class MentionsController implements ColumnController {
         if (match && !status.isRetweet()) {
             Platform.runLater(() -> {
                 mentionsList.getItems().add(0,
-                        StatusModel.Builder.build(status));
+                        StatusModelImpl.Builder.build(status));
                 if (mentionsList.getItems().size() > STATUSES_LIMIT)
                     mentionsList.getItems().remove(STATUSES_LIMIT);
             });

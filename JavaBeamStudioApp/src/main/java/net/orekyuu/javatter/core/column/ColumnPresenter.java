@@ -7,11 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TitledPane;
-import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.column.ColumnController;
+import net.orekyuu.javatter.api.column.ColumnRegister;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -29,6 +31,9 @@ public class ColumnPresenter implements Initializable {
     private Optional<ColumnState> columnState = Optional.empty();
     private Consumer<String> onColumnChange;
 
+    @Inject
+    private ColumnRegister columnRegister;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ClientUserRegister.getInstance().registeredUserList()
@@ -37,7 +42,7 @@ public class ColumnPresenter implements Initializable {
                 .forEach(account.getItems()::add);
         root.setCollapsible(false);
 
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) columnRegister;
         manager.getRegisteredColumns().stream().map(Column::getName).forEach(columnType.getItems()::add);
 
         columnType.getSelectionModel().selectedItemProperty().addListener(listener -> changeColumn());
@@ -59,7 +64,7 @@ public class ColumnPresenter implements Initializable {
     }
 
     private void changeColumn() {
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) columnRegister;
         String name = columnType.getSelectionModel().selectedItemProperty().get();
         Optional<Column> column = manager.findColumn(name);
         String userName = account.getSelectionModel().getSelectedItem();
@@ -90,7 +95,7 @@ public class ColumnPresenter implements Initializable {
         }
 
         user.ifPresent(u -> columnState = Optional.of(new ColumnState(column.get().getName(), user.get())));
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent p = loader.load(column.get().createInputStream());
             Object controller = loader.getController();

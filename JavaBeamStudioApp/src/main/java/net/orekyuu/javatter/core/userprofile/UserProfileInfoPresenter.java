@@ -2,14 +2,13 @@ package net.orekyuu.javatter.core.userprofile;
 
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
@@ -49,10 +48,13 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
     private Relationship friendship;
     private UserModel user;
 
+    @Inject
+    private Application application;
+
     @Override
     protected void initializeBackground(UserModel user) {
         this.user = user;
-        ClientUser currentUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        ClientUser currentUser = application.getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             friendship = currentUser.getTwitter().showFriendship(currentUser.getTwitter().getId(), user.getId());
         } catch (TwitterException e) {
@@ -118,7 +120,7 @@ public class UserProfileInfoPresenter extends UserProfileTabBase {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() {
-                ClientUser clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+                ClientUser clientUser = application.getCurrentWindow().getCurrentUserProperty().getValue();
                 if (followButton.isSelected()) {
                     try {
                         clientUser.getTwitter().createFriendship(user.getId());

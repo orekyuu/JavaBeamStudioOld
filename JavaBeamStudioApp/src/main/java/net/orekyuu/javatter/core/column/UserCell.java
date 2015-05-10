@@ -7,6 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 import net.orekyuu.javatter.core.Main;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class UserCell extends ListCell<UserModel> {
             // 空でない場合は
             // 名前の取得と表示
             if (userCellController == null) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
+                FXMLLoader fxmlLoader = new JavatterFXMLLoader();
                 try {
                     AnchorPane root = fxmlLoader.load(Main.class
                             .getResourceAsStream("usercell.fxml"));

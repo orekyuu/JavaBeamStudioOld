@@ -3,8 +3,10 @@ package net.orekyuu.javatter.core.userprofile;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.core.model.StatusModelImpl;
 import net.orekyuu.javatter.api.models.UserModel;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
@@ -22,12 +24,15 @@ public class TweetTab extends UserProfileTabBase {
     private int page = 1;
     private static final int REQUEST_COUNT = 40;
 
+    @Inject
+    private Application application;
+
     @Override
     protected void initializeBackground(UserModel user) {
-        this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        this.clientUser = application.getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             ResponseList<Status> statuses = clientUser.getTwitter().getUserTimeline(user.getId(), new Paging(page, REQUEST_COUNT));
-            statuses.stream().map(StatusModel.Builder::build).forEach(listView.getItems()::add);
+            statuses.stream().map(StatusModelImpl.Builder::build).forEach(listView.getItems()::add);
         } catch (TwitterException e) {
             e.printStackTrace();
         }

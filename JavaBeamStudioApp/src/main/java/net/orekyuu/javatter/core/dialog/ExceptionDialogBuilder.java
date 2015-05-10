@@ -3,6 +3,7 @@ package net.orekyuu.javatter.core.dialog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 import net.orekyuu.javatter.core.Main;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class ExceptionDialogBuilder {
      */
     public static void create(Exception exception) {
         //Main.getPrimaryStage().close();
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Scene scene = new Scene(loader.load(Main.class.getResourceAsStream("ExceptionDialog.fxml")));
             ExceptionDialogController controller = loader.getController();

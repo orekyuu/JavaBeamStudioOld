@@ -15,6 +15,7 @@ import net.orekyuu.javatter.api.config.ConfigPageBase;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
 import net.orekyuu.javatter.core.Main;
 import net.orekyuu.javatter.core.twitter.LocalClientUser;
 
@@ -49,7 +50,7 @@ public class AccountController extends ConfigPageBase {
 
     @FXML
     private void addAccount() {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent parent = loader.load(Main.class.getResourceAsStream("Signin.fxml"));
             SigninController controller = loader.getController();

@@ -10,10 +10,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
+
 import net.orekyuu.javatter.api.cache.IconCache;
 import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
+import net.orekyuu.javatter.core.model.StatusModelImpl;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.core.model.UserModelImpl;
 import net.orekyuu.javatter.api.notification.Notification;
 import net.orekyuu.javatter.api.notification.NotificationBuilder;
 import net.orekyuu.javatter.api.notification.NotificationSender;
@@ -37,13 +42,21 @@ public class NotificationManager implements NotificationSender {
     private BlockingQueue<Notification> notificationQueue = new LinkedBlockingQueue<>();
     private NotificationPopupPresenter presenter;
 
+    @Inject
+    private NotificationTypeManager typeManager;
+    @Inject
+    private Application application;
+    @Inject
+    private NotificationSender sender;
+    @Inject
+    private IconCache iconCache;
+
     @Override
     public void sendNotification(Notification notification) {
-        NotificationTypeManager manager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
-        if (!manager.isNotice(notification.getType()))
+        if (!typeManager.isNotice(notification.getType()))
             return;
         try {
-            NotificationTypeManager.NotificationSoundData notificationSoundData = manager.getNotificationSoundData();
+            NotificationTypeManager.NotificationSoundData notificationSoundData = typeManager.getNotificationSoundData();
             if (!notificationSoundData.getNotificationSoundPath().isEmpty()) {
                 Path path = Paths.get(notificationSoundData.getNotificationSoundPath());
                 if (Files.exists(path)) {
@@ -60,7 +73,7 @@ public class NotificationManager implements NotificationSender {
     }
 
     public void initializeNotificationManager() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         VBox root = loader.load(Main.class.getResourceAsStream("notification.fxml"));
         presenter = loader.getController();
         presenter.setNotificationQueue(notificationQueue);
@@ -73,7 +86,7 @@ public class NotificationManager implements NotificationSender {
 
         stage.setX(screen.getWidth() - root.getPrefWidth());
         stage.setY(screen.getHeight() - root.getPrefHeight());
-        stage.initOwner(API.getInstance().getApplication().getPrimaryStage());
+        stage.initOwner(application.getPrimaryStage());
         stage.setAlwaysOnTop(true);
         stage.show();
 
@@ -88,38 +101,37 @@ public class NotificationManager implements NotificationSender {
     }
 
     private void setupNotification() {
-        NotificationSender sender = API.getInstance().getNotificationSender();
         List<ClientUser> users = ClientUserRegister.getInstance().getUsers(s -> true);
         users.stream().map(ClientUser::getStream).forEach(stream -> {
             stream.addOnFavorite((user1, user2, status) -> {
-                StatusModel model = StatusModel.Builder.build(status);
-                UserModel userModel = UserModel.Builder.build(user1);
+                StatusModel model = StatusModelImpl.Builder.build(status);
+                UserModel userModel = UserModelImpl.Builder.build(user1);
                 if(users.stream().map(user -> user.getAccessToken().getUserId()).anyMatch(id->id == userModel.getId())){
                     return;
                 }
-                javafx.scene.image.Image image = IconCache.getImage(userModel.getProfileImageURL());
+                javafx.scene.image.Image image = iconCache.getImage(userModel.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.FAVORITE)
                         .setSubTitleImage(image).setSubTitle(userModel.getName())
                         .setMessage(model.getText()).build();
-                sender.sendNotification(notification);
+                this.sender.sendNotification(notification);
             }).addOnFollow((user, user2) -> {
-                UserModel model = UserModel.Builder.build(user);
-                Image image = IconCache.getImage(model.getProfileImageURL());
+                UserModel model = UserModelImpl.Builder.build(user);
+                Image image = iconCache.getImage(model.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.FOLLOW)
                         .setSubTitleImage(image).setSubTitle(model.getName())
                         .setMessage(model.getDescription()).build();
-                sender.sendNotification(notification);
+                this.sender.sendNotification(notification);
             }).addOnStatus(status -> {
 
                 if (status.isRetweet()) {
-                    UserModel userModel = UserModel.Builder.build(status.getRetweetedStatus().getUser());
+                    UserModel userModel = UserModelImpl.Builder.build(status.getRetweetedStatus().getUser());
                     if (users.stream().anyMatch(user -> user.getAccessToken().getUserId() == userModel.getId())) {
-                        StatusModel statusModel = StatusModel.Builder.build(status);
-                        Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
+                        StatusModel statusModel = StatusModelImpl.Builder.build(status);
+                        Image image = iconCache.getImage(statusModel.getOwner().getProfileImageURL());
                         Notification notification = new NotificationBuilder(NotificationTypes.RETWEET)
                                 .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
                                 .setMessage(statusModel.getOwner().getName() + "さんにリツイートされました\n" + statusModel.getRetweetFrom().getText()).build();
-                        sender.sendNotification(notification);
+                        this.sender.sendNotification(notification);
                     }
                 }
                 boolean matchUser = false;
@@ -130,20 +142,20 @@ public class NotificationManager implements NotificationSender {
                     }
                 }
                 if (matchUser && !status.isRetweet()) {
-                    StatusModel statusModel = StatusModel.Builder.build(status);
-                    Image image = IconCache.getImage(statusModel.getOwner().getProfileImageURL());
+                    StatusModel statusModel = StatusModelImpl.Builder.build(status);
+                    Image image = iconCache.getImage(statusModel.getOwner().getProfileImageURL());
                     Notification notification = new NotificationBuilder(NotificationTypes.MENTION)
                             .setSubTitleImage(image).setSubTitle(statusModel.getOwner().getName())
                             .setMessage(statusModel.getOwner().getName() + "さんからのリプライ\n" + statusModel.getText()).build();
-                    sender.sendNotification(notification);
+                    this.sender.sendNotification(notification);
                 }
             }).addOnUserMemberAdditon((user, user2, userList) -> {
-                UserModel userModel = UserModel.Builder.build(user2);
-                Image image = IconCache.getImage(userModel.getProfileImageURL());
+                UserModel userModel = UserModelImpl.Builder.build(user2);
+                Image image = iconCache.getImage(userModel.getProfileImageURL());
                 Notification notification = new NotificationBuilder(NotificationTypes.ADDED_LIST)
                         .setSubTitleImage(image).setSubTitle(userModel.getName() + ":" + userList.getName())
                         .setMessage(user.getName() + "さんは" + userModel.getName() + "さんのリスト:" + "「" + userList.getName() + "」" + "に追加されました").build();
-                sender.sendNotification(notification);
+                this.sender.sendNotification(notification);
             });
         });
     }

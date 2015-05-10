@@ -4,9 +4,11 @@ import com.sun.javafx.css.StyleManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.API;
 import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
+import javax.inject.Inject;
+import net.orekyuu.javatter.api.column.ColumnRegister;
+import net.orekyuu.javatter.api.notification.NotificationSender;
 import net.orekyuu.javatter.api.notification.NotificationTypeRegister;
 import net.orekyuu.javatter.api.notification.NotificationTypes;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
@@ -24,9 +26,16 @@ public class ApplicationImpl implements Application {
     private Main main;
     private MainWindowPresenter mainWindowPresenter;
     private Stage primaryStage;
+    @Inject
+    private NotificationTypeRegister notificationTypeRegister;
+    @Inject
+    private ColumnRegister columnRegister;
+    @Inject
+    private NotificationSender notificationSender;
 
     public ApplicationImpl(Main main) {
         this.main = main;
+        Main.getInjector().injectMembers(this);
     }
 
     @Override
@@ -41,7 +50,6 @@ public class ApplicationImpl implements Application {
         registerColumns();
         PluginManager.getInstance().load();
 
-        NotificationTypeRegister notificationTypeRegister = API.getInstance().getNotificationTypeRegister();
         Arrays.stream(NotificationTypes.values()).forEach(notificationTypeRegister::register);
 
         ((NotificationTypeManager) notificationTypeRegister).initialize();
@@ -69,18 +77,17 @@ public class ApplicationImpl implements Application {
     }
 
     private void registerColumns() {
-        API.getInstance().getColumnRegister().registerColumn("タイムライン", Main.class, "userstream.fxml");
-        API.getInstance().getColumnRegister().registerColumn("Mentions", Main.class, "mentions.fxml");
+        columnRegister.registerColumn("タイムライン", Main.class, "userstream.fxml");
+        columnRegister.registerColumn("Mentions", Main.class, "mentions.fxml");
     }
 
     @Override
     public void onCreate(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Scene scene = new Scene(loader.load(getClass().getResourceAsStream("root.fxml")));
-            MainWindowPresenter presenter = loader.getController();
-            mainWindowPresenter = presenter;
+            mainWindowPresenter = loader.getController();
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,7 +98,7 @@ public class ApplicationImpl implements Application {
         primaryStage.show();
 
         try {
-            ((NotificationManager) API.getInstance().getNotificationSender())
+            ((NotificationManager) notificationSender)
                     .initializeNotificationManager();
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,9 +107,8 @@ public class ApplicationImpl implements Application {
 
     @Override
     public CurrentWindow getCurrentWindow() {
-        if (null != mainWindowPresenter
-                && mainWindowPresenter instanceof CurrentWindow) {
-            return (CurrentWindow) mainWindowPresenter;
+        if (null != mainWindowPresenter) {
+            return mainWindowPresenter;
         } else {
             throw new InternalError("返されるオブジェクトがCurrentWindowを実装していない。もしくは何らかの理由でnullになっています。");
         }

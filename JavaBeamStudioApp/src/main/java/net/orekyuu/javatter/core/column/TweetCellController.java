@@ -17,10 +17,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.API;
-import net.orekyuu.javatter.api.cache.IconCache;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.models.StatusModel;
+import net.orekyuu.javatter.core.JavatterFXMLLoader;
+import net.orekyuu.javatter.core.model.StatusModelImpl;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.core.model.UserModelImpl;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.util.tasks.GetIconTask;
 import net.orekyuu.javatter.api.util.tasks.TaskUtil;
@@ -71,6 +74,9 @@ public class TweetCellController implements Initializable {
 
     private ClientUser clientUser;
 
+    @Inject
+    private Application application;
+
     /**
      * timeラベル用の時刻フォーマット
      */
@@ -116,7 +122,7 @@ public class TweetCellController implements Initializable {
             Task<StatusModel> modelTask = new Task<StatusModel>() {
                 @Override
                 protected StatusModel call() throws Exception {
-                    StatusModel model = StatusModel.Builder.build(s.getReplyStatusId(), clientUser);
+                    StatusModel model = StatusModelImpl.Builder.build(s.getReplyStatusId(), clientUser);
                     setReplyImage(model);
                     return model;
                 }
@@ -272,9 +278,7 @@ public class TweetCellController implements Initializable {
      */
     @FXML
     private void reply() {
-        API
-                .getInstance()
-                .getApplication()
+        application
                 .getCurrentWindow()
                 .setReply(status.getStatusId(),
                         "@" + status.getOwner().getScreenName() + " ");
@@ -375,7 +379,7 @@ public class TweetCellController implements Initializable {
     }
 
     private void openUserProfile(long l) {
-        openUserProfile(UserModel.Builder.build(l, clientUser));
+        openUserProfile(UserModelImpl.Builder.build(l, clientUser));
     }
 
     @FXML
@@ -384,7 +388,7 @@ public class TweetCellController implements Initializable {
     }
 
     private void openUserProfile(UserModel usermodel) {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent root = loader.load(Main.class.getResourceAsStream("userprofile.fxml"));
             UserProfilePresenter presenter = loader.getController();
@@ -392,7 +396,7 @@ public class TweetCellController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle(usermodel.getName() + "さんのプロファイル");
-            stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
+            stage.initOwner(application.getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {

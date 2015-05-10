@@ -27,6 +27,6 @@ public class GetStatusModelTask extends Task<StatusModel> {
 
     @Override
     protected StatusModel call() throws Exception {
-        return StatusModel.Builder.build(id, user);
+        return null;//StatusModelImpl.Builder.build(id, user);
     }
 }

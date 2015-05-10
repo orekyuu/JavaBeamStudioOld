@@ -1,6 +1,7 @@
 package net.orekyuu.javatter.core.plugin.loader;
 
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.util.VersionComparator;
 import net.orekyuu.javatter.core.dialog.ExceptionDialogBuilder;
 
@@ -27,6 +28,9 @@ public class JavatterPluginLoader {
 //            new ZipPluginLoader(),
 //            new TarPluginLoader(),
     };
+
+    @Inject
+    private Application application;
 
     /**
      * プラグインディレクトリを読み込みます
@@ -56,7 +60,7 @@ public class JavatterPluginLoader {
             }
         }
 
-        String version = API.getInstance().getApplication().getVersion();
+        String version = application.getVersion();
         VersionComparator comparator = new VersionComparator();
         containers.stream().filter(container -> comparator.compare(version, container.getRequireVersion()) < 0).forEach(container -> {
             loadError(container.getName() + "(" + container.getVersion() + ")は" + container.getRequireVersion() + "以上のJavaビーム工房でしか使えません。");
@@ -66,7 +70,7 @@ public class JavatterPluginLoader {
     private void loadError(String message) {
         ExceptionDialogBuilder.create(new PluginLoadException(message));
         //プラグインの読み込みに失敗したらアプリケーション終了
-        API.getInstance().getApplication().getPrimaryStage().close();
+        application.getPrimaryStage().close();
     }
 
     private void loadPath(Path path, LinkedList<PluginContainer> containers) {

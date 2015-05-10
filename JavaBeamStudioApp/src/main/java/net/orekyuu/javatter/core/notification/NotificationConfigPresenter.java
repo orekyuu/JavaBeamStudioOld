@@ -13,7 +13,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.config.ConfigPageBase;
 
 import java.io.File;
@@ -35,18 +36,19 @@ public class NotificationConfigPresenter extends ConfigPageBase {
     private List<NotificationTypeManager.NotificationConfig> previousConfigList = new LinkedList<>();
     private NotificationTypeManager.NotificationSoundData previousSoundData = new NotificationTypeManager.NotificationSoundData();
     private NotificationTypeManager.NotificationSoundData currentSoundData = new NotificationTypeManager.NotificationSoundData();
+    @Inject
     private NotificationTypeManager typeManager;
+    @Inject
+    private Application application;
 
     @Override
     protected void initializeBackground() {
-        typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         previousSoundData = typeManager.loadNotificationSoundData().orElse(new NotificationTypeManager.NotificationSoundData());
     }
 
     @Override
     protected void initializeUI() {
         Bindings.bindBidirectional(volumeText.textProperty(), volumeSlider.valueProperty(), new NumberStringConverter());
-        NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         previousSoundData = typeManager.loadNotificationSoundData().orElse(previousSoundData);
         if (typeManager.soundDataIsEmpty()) {
             notificationSoundFileName.textProperty().setValue("ファイルを選択してください");
@@ -86,7 +88,7 @@ public class NotificationConfigPresenter extends ConfigPageBase {
     private void selectNotificationSound() {
         FileChooser chooser = new FileChooser();
 
-        Stage stage = API.getInstance().getApplication().getPrimaryStage();
+        Stage stage = application.getPrimaryStage();
 
         chooser.setTitle("ファイル選択");
 
@@ -113,7 +115,6 @@ public class NotificationConfigPresenter extends ConfigPageBase {
 
     @FXML
     private void save() {
-        NotificationTypeManager typeManager = (NotificationTypeManager) API.getInstance().getNotificationTypeRegister();
         typeManager.saveNotificationConfigs(notificationList.getItems());
 
         currentSoundData.setNotificationSoundVolume(Double.parseDouble(volumeText.getText()));

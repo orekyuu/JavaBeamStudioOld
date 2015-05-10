@@ -21,8 +21,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
 import net.orekyuu.javatter.api.CurrentWindow;
+import javax.inject.Inject;
+import net.orekyuu.javatter.api.column.ColumnRegister;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.twitter.ClientUserRegister;
 import net.orekyuu.javatter.api.twitter.TweetBuilder;
@@ -77,6 +79,11 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     private boolean isReply = false;
     private long destinationId;
     private List<ColumnPresenter> columnPresenterList = new LinkedList<>();
+
+    @Inject
+    private Application application;
+    @Inject
+    private ColumnRegister register;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -134,7 +141,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     private void initColumns() {
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) register;
         List<ColumnState> columnStates = manager.loadColumnState();
         for (ColumnState state : columnStates) {
             Optional<ClientUser> user = ClientUserRegister.getInstance().getUsers(u -> u.getName().equals(state.getUserName())).stream().findFirst();
@@ -170,8 +177,8 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
     }
 
     private void addColumn(String columnName, Optional<ClientUser> user, boolean useSave) {
-        FXMLLoader loader = new FXMLLoader();
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        FXMLLoader loader = new JavatterFXMLLoader();
+        ColumnManager manager = (ColumnManager) register;
         Optional<Column> column = manager.findColumn(columnName);
         try {
             Node node = loader.load(getClass().getResourceAsStream(
@@ -208,7 +215,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
                 .filter(p -> p.getColumnState().isPresent())
                 .map(p -> p.getColumnState().get())
                 .collect(Collectors.toList());
-        ColumnManager manager = (ColumnManager) API.getInstance().getColumnRegister();
+        ColumnManager manager = (ColumnManager) register;
         manager.saveColumnState(states);
         System.out.println("saveColumn");
         states.forEach(System.out::println);
@@ -216,7 +223,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
 
     @FXML
     private void openConfig() {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new JavatterFXMLLoader();
         try {
             Parent parent = loader.load(getClass().getResourceAsStream(
                     "config.fxml"));
@@ -224,7 +231,7 @@ public class MainWindowPresenter implements Initializable, CurrentWindow {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("設定");
-            stage.initOwner(API.getInstance().getApplication().getPrimaryStage().getScene().getWindow());
+            stage.initOwner(application.getPrimaryStage().getScene().getWindow());
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {

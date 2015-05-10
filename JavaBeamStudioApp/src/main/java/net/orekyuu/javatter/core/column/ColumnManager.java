@@ -7,6 +7,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.TableUtils;
 import net.orekyuu.javatter.api.column.ColumnRegister;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -22,6 +23,7 @@ import java.util.Optional;
 /**
  * Columnの管理クラス
  */
+@Singleton
 public class ColumnManager implements ColumnRegister {
 
     private List<Column> columns = new LinkedList<>();

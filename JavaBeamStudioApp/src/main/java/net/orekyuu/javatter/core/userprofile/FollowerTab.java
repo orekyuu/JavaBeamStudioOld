@@ -3,8 +3,10 @@ package net.orekyuu.javatter.core.userprofile;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
-import net.orekyuu.javatter.api.API;
+import net.orekyuu.javatter.api.Application;
+import javax.inject.Inject;
 import net.orekyuu.javatter.api.models.UserModel;
+import net.orekyuu.javatter.core.model.UserModelImpl;
 import net.orekyuu.javatter.api.twitter.ClientUser;
 import net.orekyuu.javatter.api.userprofile.UserProfileTabBase;
 import net.orekyuu.javatter.core.column.UserCell;
@@ -19,9 +21,12 @@ public class FollowerTab extends UserProfileTabBase {
     private static final int FOLLOWERS_LIMIT = 30;
     private ResponseList<User> users;
 
+    @Inject
+    private Application application;
+
     @Override
     protected void initializeBackground(UserModel user) {
-        this.clientUser = API.getInstance().getApplication().getCurrentWindow().getCurrentUserProperty().getValue();
+        this.clientUser = application.getCurrentWindow().getCurrentUserProperty().getValue();
         try {
             users = clientUser.getTwitter().getFollowersList(user.getId(), -1L, FOLLOWERS_LIMIT);
         } catch (TwitterException e) {
@@ -32,7 +37,7 @@ public class FollowerTab extends UserProfileTabBase {
     @Override
     protected void initializeUI(UserModel user) {
         listView.setCellFactory(e -> new UserCell(clientUser));
-        users.stream().map(UserModel.Builder::build).forEach(listView.getItems()::add);
+        users.stream().map(UserModelImpl.Builder::build).forEach(listView.getItems()::add);
         StackPane stack = (StackPane) listView.getParent();
         listView.prefWidthProperty().bind(stack.widthProperty());
         listView.prefHeightProperty().bind(stack.heightProperty());
